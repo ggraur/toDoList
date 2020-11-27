@@ -1,9 +1,9 @@
-﻿{
+{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:54323",
+      "applicationUrl": "http://localhost:54324",
       "sslPort": 0
     }
   },
@@ -12,17 +12,17 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Staging",
-       "MyKey": "Value of my key from lunch env Settings.json" 
+        "MyKey": "Value of my key from lunch env Settings.json",
+        "ASPNETCORE_ENVIRONMENT": "Staging"
       }
     },
     "toDoList": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5000"
     }
   }
 }
