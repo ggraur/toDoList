@@ -26,7 +26,7 @@ namespace toDoList
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddMvc(options => options.EnableEndpointRouting = false);
-            services.AddMvcCore  (options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
+            services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
             services.AddSingleton<IUserRepository,MockUserRepository>();
             services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
         }

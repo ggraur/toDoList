@@ -23,7 +23,7 @@ namespace toDoList.Controllers
         {
             User model = _userRepository.GetUser(1);
 
-            return View(model);
+            return View("Details");
         }
     }
 }
