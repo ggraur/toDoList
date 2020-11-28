@@ -26,7 +26,6 @@ namespace toDoList.Controllers
             return View("~/Views/User/GetUsers.cshtml", model);
         }
 
-
         [Route("Details/{id?}")]
         public ViewResult GetUserDetails(int? Id)
         {
