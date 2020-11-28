@@ -22,6 +22,8 @@ namespace toDoList.Controllers
         public ViewResult Details()
         {
             User model = _userRepository.GetUser(1);
+            ViewData["User"] = model;
+            ViewData["PageTitle"] = "User Details";
 
             return View("Details");
         }

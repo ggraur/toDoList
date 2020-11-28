@@ -1,7 +1,31 @@
-﻿
-@{
-    ViewData["Title"] = "Details";
-}
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <h3>@ViewData["PageTitle"]</h3>
 
-<h1>Details</h1>
+    @{
+        var user = ViewData["User"] as toDoList.Models.User;
+    }
+    <div>
+        ID: @user.UserID;
+    </div>
+    <div>
+        User Name: @user.UserName;
+    </div>
+    <div>
+        User Password: @user.UserPass;
+    </div>
+    <div>
+        Role ID: @user.RoleId;
+    </div>
+    <div>
+        User Email: @user.UserEmail;
+    </div>
+</body>
+</html>
+ 
+
+
 
