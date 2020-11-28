@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using toDoList.Models;
 
 namespace toDoList
 {
@@ -25,7 +26,9 @@ namespace toDoList
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddMvc(options => options.EnableEndpointRouting = false);
-            services.AddMvcCore  (options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
+            services.AddSingleton<IUserRepository,MockUserRepository>();
+            services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
