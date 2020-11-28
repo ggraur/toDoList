@@ -1,14 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using toDoList.Models;
 
 namespace toDoList
@@ -44,21 +38,26 @@ namespace toDoList
             }
 
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+            //app.UseMvcWithDefaultRoute();
 
-            //app.UseMvc(routes=> {
-            //    routes.MapRoute("default", "{controller}/{action}/{id}");
-            //});
+            app.UseMvc(routes => {
+            routes.MapRoute("default","{controller=Home}/{action=Index}/{id?}");
+            });
 
             //app.UseRouting();
 
             //app.UseEndpoints(endpoints =>
             //{
-            //    endpoints.MapGet("/", async context =>
-            //    {
-            //        //await context.Response.WriteAsync("hosting environment: " + env.EnvironmentName);
-            //        await context.Response.WriteAsync("Hello World!");
-            //    });
+            //    endpoints.MapControllerRoute(
+            //        name:"default",
+            //        pattern:"{controller=Home}/{action=Index}/{id?}");
+
+
+            //    //endpoints.MapGet("/", async context =>
+            //    //{
+            //    //    //await context.Response.WriteAsync("hosting environment: " + env.EnvironmentName);
+            //    //    await context.Response.WriteAsync("Hello World!");
+            //    //});
             //});
 
         }

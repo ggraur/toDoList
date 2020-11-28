@@ -8,6 +8,7 @@ using toDoList.ViewModels;
 
 namespace toDoList.Controllers
 {
+    [Route("[controller]")]
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
@@ -16,19 +17,20 @@ namespace toDoList.Controllers
         {
             _userRepository = new MockUserRepository();
         }
- 
+        [Route("")]
+        [Route("Index")]
+        [Route("~")]
         public ViewResult GetUsers()
         {
             var model = _userRepository.GetUsers();
             return View("~/Views/User/GetUsers.cshtml", model);
-   
         }
 
-        //public ViewResult UserDetails(int Id)
-        public ViewResult GetUserDetails(int Id)
+        [Route("Details/{id?}")]
+        public ViewResult GetUserDetails(int? Id)
         {
             UserDetailsViewModel userDetailsViewModel = new UserDetailsViewModel();
-            userDetailsViewModel.User = _userRepository.GetUserDetails(Id);
+            userDetailsViewModel.User = _userRepository.GetUserDetails(Id ?? 1);
             userDetailsViewModel.PageTitle = "User Details";
             return View("~/Views/User/GetUserDetails.cshtml", userDetailsViewModel);
         }
