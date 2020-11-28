@@ -20,14 +20,17 @@ namespace toDoList.Models
             };
         }
 
+      
+
         public IEnumerable<User> GetUsers()
         {
             return _usersList;
         }
 
-        public User GetUser(int UserID)
+        public User GetUserDetails(int Id)
         {
-            return _usersList.FirstOrDefault(e => e.UserID == UserID);
+            var b = _usersList.FirstOrDefault(e => e.UserID == Id);
+            return b;
         }
     }
 }

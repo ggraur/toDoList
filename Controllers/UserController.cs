@@ -16,27 +16,21 @@ namespace toDoList.Controllers
         {
             _userRepository = new MockUserRepository();
         }
-        public string Index()
-        {
-            return _userRepository.GetUser(1).UserName;
-        }
+ 
         public ViewResult GetUsers()
         {
             var model = _userRepository.GetUsers();
             return View("~/Views/User/GetUsers.cshtml", model);
-
-            //UserDetailsViewModel userDetailsViewModel = new UserDetailsViewModel();
-            //userDetailsViewModel.GetUsers = _userRepository.GetUsers();
-            //userDetailsViewModel.PageTitle = "All Users Registries";
-            //return View("~/Views/User/GetUsers.cshtml", userDetailsViewModel);
+   
         }
 
-        public ViewResult UserDetails()
+        //public ViewResult UserDetails(int Id)
+        public ViewResult GetUserDetails(int Id)
         {
             UserDetailsViewModel userDetailsViewModel = new UserDetailsViewModel();
-            userDetailsViewModel.User = _userRepository.GetUser(1);
+            userDetailsViewModel.User = _userRepository.GetUserDetails(Id);
             userDetailsViewModel.PageTitle = "User Details";
-            return View("~/Views/User/UserDetails.cshtml", userDetailsViewModel);
+            return View("~/Views/User/GetUserDetails.cshtml", userDetailsViewModel);
         }
     }
 }
