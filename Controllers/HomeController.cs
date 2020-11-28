@@ -10,9 +10,10 @@ namespace toDoList.Controllers
     public class HomeController : Controller
     {
         
-        public string Index()
+        public ViewResult Index()
         {
-            return "Home Controller!";
+            
+            return View("~/Views/Home/Index.cshtml");
         }
     }
 }
