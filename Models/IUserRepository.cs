@@ -8,7 +8,7 @@ namespace toDoList.Models
 {
     public interface IUserRepository
     {
-       public User GetUser(int UserID);
+       public User GetUserDetails(int UserID);
        public IEnumerable<User> GetUsers();
     }
 }

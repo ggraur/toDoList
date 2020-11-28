@@ -46,6 +46,10 @@ namespace toDoList
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
 
+            //app.UseMvc(routes=> {
+            //    routes.MapRoute("default", "{controller}/{action}/{id}");
+            //});
+
             //app.UseRouting();
 
             //app.UseEndpoints(endpoints =>

@@ -1,15 +1,13 @@
-﻿@model toDoList.ViewModels.UserRoleViewModel
+﻿@model UserRoleViewModel
 
 @{ 
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Role Details";
 }
 
     <h3>@Html.DisplayFor(model => model.PageTitle)</h3>
     <hr />
     <div>
-        <h4>User Role</h4>
-        <hr />
+ 
         <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.UserRole.RoleId)
