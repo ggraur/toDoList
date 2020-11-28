@@ -19,6 +19,12 @@ namespace toDoList.Models
             new User(){UserID = 5, UserName = "Ann"  , UserPass ="annPass"  , RoleId = 2, UserEmail ="Ann@gmail.com" }
             };
         }
+
+        public IEnumerable<User> GetUsers()
+        {
+            return _usersList;
+        }
+
         public User GetUser(int UserID)
         {
             return _usersList.FirstOrDefault(e => e.UserID == UserID);

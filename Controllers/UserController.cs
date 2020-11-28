@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using toDoList.Models;
+using toDoList.ViewModels;
 
 namespace toDoList.Controllers
 {
@@ -19,13 +20,23 @@ namespace toDoList.Controllers
         {
             return _userRepository.GetUser(1).UserName;
         }
-        public ViewResult Details()
+        public ViewResult GetUsers()
         {
-            User model = _userRepository.GetUser(1);
-            ViewData["User"] = model;
-            ViewData["PageTitle"] = "User Details";
+            var model = _userRepository.GetUsers();
+            return View("~/Views/User/GetUsers.cshtml", model);
 
-            return View("Details");
+            //UserDetailsViewModel userDetailsViewModel = new UserDetailsViewModel();
+            //userDetailsViewModel.GetUsers = _userRepository.GetUsers();
+            //userDetailsViewModel.PageTitle = "All Users Registries";
+            //return View("~/Views/User/GetUsers.cshtml", userDetailsViewModel);
+        }
+
+        public ViewResult UserDetails()
+        {
+            UserDetailsViewModel userDetailsViewModel = new UserDetailsViewModel();
+            userDetailsViewModel.User = _userRepository.GetUser(1);
+            userDetailsViewModel.PageTitle = "User Details";
+            return View("~/Views/User/UserDetails.cshtml", userDetailsViewModel);
         }
     }
 }
