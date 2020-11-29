@@ -13,7 +13,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "MyKey": "Value of my key from lunch env Settings.json",
-        "ASPNETCORE_ENVIRONMENT": "Staging"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "toDoList": {

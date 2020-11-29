@@ -5,8 +5,30 @@
 }
 
 <h3>Existing Users</h3>
+           <hr />
 
-<table class="table">
+<div class="card-deck">
+    @foreach (var user in Model)
+    { 
+    <div class="card m-3">
+        <div class="card-header">
+            <h3>@user.UserName</h3>
+        </div>
+        <img class="card-img-top" src="~/images/noimage.jpg" asp-append-version="true"/>
+        <div class="card-footer text-center">
+            <a asp-controller="user" asp-action="details" asp-route-id="@user.UserID" class="btn btn-info">Show</a>
+            <a href="#" class="btn btn-warning">Edit</a>
+            <a href="#" class="btn btn-danger">Delete</a>
+            <a href="#" class="btn btn-info ">
+                <span class="glyphicon glyphicon-pencil">&nbsp;<span class="glyphicon glyphicon-th-list"></span></span>&nbsp;Do List
+            </a>
+        </div>
+    </div>
+    }
+</div>
+
+
+@*<table class="table">
     <thead>
         <tr>
             <th>
@@ -54,5 +76,5 @@
         </tr>
             }
     </tbody>
-</table>
+</table>*@
 
