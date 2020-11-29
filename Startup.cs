@@ -25,7 +25,11 @@ namespace toDoList
                 options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
             //services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
-            services.AddSingleton<IUserRepository,MockUserRepository>();
+            
+            services.AddScoped<IUserRepository, SQLUserRepository>();
+            
+            //services.AddSingleton<IUserRepository,MockUserRepository>();// memory repository used for test
+            
             services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
         }
 
