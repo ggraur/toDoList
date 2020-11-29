@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using toDoClassLibrary;
 
 namespace toDoList.Models
 {
@@ -16,7 +17,6 @@ namespace toDoList.Models
             new UserRole(){RoleId = 2, RoleDesc = "PowerUser",Active =1  },
             new UserRole(){RoleId = 3, RoleDesc = "User",Active =1  }
             };
-
         }
 
         public IEnumerable<UserRole> GetRoles()
