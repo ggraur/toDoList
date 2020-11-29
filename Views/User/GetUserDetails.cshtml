@@ -13,25 +13,23 @@
         </div>
     </div>
     <div class="card-body text-center">
-        @*<img class="card-img-top" src="~/images/noimage.jpg" asp-append-version="true" />*@
         <div style=" width: 50vh; height: auto; margin: 0 auto; padding: 10px; position: relative;">
             <img class="card-img-top" src="~/images/noimage.jpg" asp-append-version="true" />
-            <div >
+            <div>
                 <h4> User ID: @Model.User.UserID </h4>
                 <h4> User Email: @Model.User.UserEmail </h4>
-                <h4> User Role: @Model.User.RoleId </h4>
+                <h4> User Role: @Model.User.UserRole </h4>
             </div>
         </div>
     </div>
     <div class="card-footer text-center" style="position:fixed;bottom:0px;">
-    @*<div style="position:fixed; bottom:0px;">*@
-        <a asp-controller="user" asp-action="index" class="btn btn-primary">Back</a>
-        <a class="btn btn-warning">Edit</a>
-        <a class="btn btn-danger">Delete</a>
+        <a asp-controller="user" asp-action="index" class="btn btn-primary m-1">Back</a>
+        <a class="btn btn-warning m-1">Edit</a>
+        <a class="btn btn-danger m-1">Delete</a>
     </div>
 
 </div>
- 
+
 @section Scripts{
     <script src="~/js/CustomScript.js"></script>
 }
