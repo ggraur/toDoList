@@ -9,8 +9,8 @@ using toDoList;
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201129225148_MySecond1Migration")]
-    partial class MySecond1Migration
+    [Migration("20201129230757_MyFirstMigration")]
+    partial class MyFirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

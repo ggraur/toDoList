@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using toDoList;
 
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201129223634_MyFirstMigration")]
-    partial class MyFirstMigration
+    [Migration("20201129233025_MyFirst2Migration")]
+    partial class MyFirst2Migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +46,16 @@ namespace toDoList.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserID = 1,
+                            UserEmail = "mary@gmail.com",
+                            UserName = "Mary",
+                            UserPass = "maryPass",
+                            UserRole = 1
+                        });
                 });
 #pragma warning restore 612, 618
         }

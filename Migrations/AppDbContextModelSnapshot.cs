@@ -44,6 +44,16 @@ namespace toDoList.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserID = 1,
+                            UserEmail = "mary@gmail.com",
+                            UserName = "Mary",
+                            UserPass = "maryPass",
+                            UserRole = 1
+                        });
                 });
 #pragma warning restore 612, 618
         }

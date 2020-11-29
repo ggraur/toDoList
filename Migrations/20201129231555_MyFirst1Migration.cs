@@ -2,7 +2,7 @@
 
 namespace toDoList.Migrations
 {
-    public partial class MySecond1Migration : Migration
+    public partial class MyFirst1Migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

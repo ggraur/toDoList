@@ -22,7 +22,13 @@ namespace toDoList
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(
-                options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
+                options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")
+                                    //,sqlServerOptionsAction: sqlOption =>
+                                    // {
+                                    //     sqlOption.EnableRetryOnFailure();
+                                    // }                
+                ));
+
             //services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
             
