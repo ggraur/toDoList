@@ -8,5 +8,6 @@ namespace toDoList.Models
     public interface IUserRoleRepository
     {
         UserRole GetUserRole(int RoleID);
+        public IEnumerable<UserRole> GetRoles();
     }
 }

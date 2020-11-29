@@ -18,7 +18,12 @@ namespace toDoList.Models
             };
 
         }
-  
+
+        public IEnumerable<UserRole> GetRoles()
+        {
+            return _usersRoleList;
+        }
+
         public UserRole GetUserRole(int RoleID)
         {
             return _usersRoleList.FirstOrDefault(e=>e.RoleId == RoleID);

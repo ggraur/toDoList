@@ -8,6 +8,7 @@ using toDoList.ViewModels;
 
 namespace toDoList.Controllers
 {
+    [Route("[controller]")]
     public class UserRoleController : Controller
     {
         private IUserRoleRepository _userRoleRepository;
@@ -16,15 +17,22 @@ namespace toDoList.Controllers
         {
             _userRoleRepository =new MockUserRoleRepository();
         }
-        public string Index()
+        
+        [Route("Index")]
+        [Route("~")]
+        public ViewResult Index()
         {
-            return _userRoleRepository.GetUserRole(1).RoleDesc;
+            //return _userRoleRepository.GetUserRole(1).RoleDesc;
+            var model = _userRoleRepository.GetRoles();
+            return View("~/Views/UserRole/Roles.cshtml", model);
         }
-        public ViewResult RoleDetails()
+
+        [Route("Details/{id?}")]
+        public ViewResult RoleDetails(int? Id)
         {
             UserRoleViewModel userRoleViewModel = new UserRoleViewModel();
 
-            userRoleViewModel.UserRole= _userRoleRepository.GetUserRole(1);
+            userRoleViewModel.UserRole= _userRoleRepository.GetUserRole(Id ?? 1);
             userRoleViewModel.PageTitle = "User Role Details";
             return View("~/Views/UserRole/RoleDetails.cshtml", userRoleViewModel);
         }
