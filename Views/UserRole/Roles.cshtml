@@ -1,0 +1,25 @@
+﻿@model IEnumerable<UserRole>
+
+@{
+    ViewBag.Title = "Existing Roles";
+}
+
+<h3>Existing Roles</h3>
+<hr />
+
+<div class="card-deck">
+    @foreach (var userRole in Model)
+    {
+        <div class="card m-3">
+            <div class="card-header">
+                <h3>@userRole.RoleDesc</h3>
+                <h3>Role Is Active: @userRole.Active</h3>
+            </div>
+            <div class="card-footer text-center">
+                <a asp-controller="UserRole" asp-action="details" asp-route-id="@userRole.RoleId" class="btn btn-info">Show</a>
+                <a href="#" class="btn btn-warning">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    }
+</div>
