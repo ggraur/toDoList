@@ -7,6 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Controllers\UserRoleController.cs" />
+      <Compile Remove="Models\MockUserRepository.cs" />
+      <Compile Remove="Models\MockUserRoleRepository.cs" />
       <Compile Remove="Models\Task.cs" />
       <Compile Remove="Models\User.cs" />
       <Compile Remove="Models\UserRole.cs" />

@@ -22,12 +22,7 @@ namespace toDoList
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(
-                options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")
-                                    //,sqlServerOptionsAction: sqlOption =>
-                                    // {
-                                    //     sqlOption.EnableRetryOnFailure();
-                                    // }                
-                ));
+                options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
 
             //services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
@@ -36,7 +31,7 @@ namespace toDoList
             
             //services.AddSingleton<IUserRepository,MockUserRepository>();// memory repository used for test
             
-            services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
+           // services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

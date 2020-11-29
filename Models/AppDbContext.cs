@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using toDoClassLibrary;
+using toDoList.Models;
+
 namespace toDoList
 {
     public class AppDbContext :DbContext
@@ -15,9 +17,7 @@ namespace toDoList
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasData(
-                     new User() { UserID = 1, UserName = "Mary", UserPass = "maryPass", UserRole = UserRoleEnum.Administrator, UserEmail = "mary@gmail.com" }
-                );
+            modelBuilder.Seed();
         }
     }
 }
