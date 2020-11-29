@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using toDoList.Models;
-//using toDoList.Models;
+using toDoClassLibrary; 
 
 namespace toDoList.ViewModels
 {
