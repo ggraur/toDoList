@@ -9,14 +9,20 @@ namespace toDoList.Models
     public class User
     {
         public int UserID { get; set; }
+
         [Required]
+        [MaxLength(30,ErrorMessage ="Name cannot exceed 50 characters")]
         public string UserName { get; set; }
+        
         [Required]
         public string UserPass { get; set; }
+        
         [Required]
         public UserRoleEnum UserRole { get; set; }
+        
         [Required]
         [EmailAddress]
+        [RegularExpression(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", ErrorMessage = "Invalid e-mail format, please correct it!")]
         public string UserEmail { get; set; }
 
     }

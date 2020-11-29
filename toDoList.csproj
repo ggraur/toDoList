@@ -7,6 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Models\User.cs" />
+      <Compile Remove="Models\UserRoleEnum.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="node_modules\bootstrap-icons\package.json" />
       <Content Include="obj\project.assets.json" />
     </ItemGroup>
@@ -1178,5 +1183,10 @@
       <PackageReference Include="Bower" Version="1.3.11" />
       <PackageReference Include="jquery" Version="3.5.1" />
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\toDoClassLibrary\toDoClassLibrary.csproj" />
+      <ProjectReference Include="..\toDoManagementDataAccess\toDoManagementDataAccess.csproj" />
     </ItemGroup>
 </Project>

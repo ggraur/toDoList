@@ -21,34 +21,35 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container col-md-10 offset-1">
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <a class="navbar-brand float-left" asp-action="index" asp-controller="home" style="width:100px">
+            <a class="navbar-brand float-left" asp-action="index" asp-controller="home" >
                 <img src="~/favicon.ico" />
             </a>
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavBar" style="right:0px;top:10px;">
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavBar"  >
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="collapsibleNavBar" style="right:0px;top:10px;">
+            <div class="collapse navbar-collapse" id="collapsibleNavBar" >
                 <div class="navbar-nav">
                     <div class="nav-item">
                         <a class="nav-link" asp-action="" asp-controller="">To Do List</a>
                     </div>
                     <div class="nav-item">
                         <a class="nav-link" asp-action="index" asp-controller="User">Users</a>
-                    </div>
-                        <div class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                Users
-                            </a>
-                            <div id="dropIdList" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" asp-action="create" asp-controller="User" >Create New User</a>
-                                <a class="dropdown-item" asp-action="index"  asp-controller="User">View Users</a>
-                            </div>
+                    </div> 
+                    @*<div class="nav-item">
+                        <a class="nav-link overflow-hidden" asp-action="index" asp-controller="UserRole">Roles</a>
+                    </div>*@
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Users
+                        </a>
+                        <div id="dropIdList" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" asp-action="Create" asp-controller="User">Create New User</a>
+                            <a class="dropdown-item" asp-action="index" asp-controller="User">View Users</a>
                         </div>
-                    <div class="nav-item">
-                        <a class="nav-link" asp-action="index" asp-controller="UserRole">Roles</a>
                     </div>
+
                 </div>
             </div>
         </nav>

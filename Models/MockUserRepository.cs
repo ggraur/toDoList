@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using toDoClassLibrary;
 
 namespace toDoList.Models
 {
     public class MockUserRepository : IUserRepository
     {
         private List<User> _usersList;
-         public MockUserRepository()
+        public MockUserRepository()
         {
             _usersList = new List<User>()
             {
@@ -37,5 +38,6 @@ namespace toDoList.Models
             _usersList.Add(user);
             return user;
         }
+ 
     }
 }

@@ -1,5 +1,5 @@
 ﻿@model toDoList.Models.User
-
+@inject IUserRepository _userRepo
 <h3 class="text-center">Create New User</h3>
 
 <hr />
@@ -9,34 +9,51 @@
         <label asp-for="UserName" class="col-sm-2 col-form-label">User Name</label>
         <div class="col-sm-10">
             <input asp-for="UserName" class="form-control" placeholder="User Name" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group row">
         <label asp-for="UserPass" class="col-sm-2 col-form-label">User Pass</label>
         <div class="col-sm-10">
             <input asp-for="UserPass" class="form-control" placeholder="User Password" type="password" />
+            <span asp-validation-for="UserPass" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group row">
         <label asp-for="UserEmail" class="col-sm-2 col-form-label">User Email</label>
         <div class="col-sm-10">
             <input asp-for="UserEmail" class="form-control" placeholder="User Email" />
+            <span asp-validation-for="UserEmail" title="User Email" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group row">
         <label asp-for="UserRole" class="col-sm-2 col-form-label">User Role</label>
         <div class="col-sm-10 font-weight-bold">
             <select asp-for="UserRole" class="custom-select mr-sm-2" style="font-weight:bold;height:35px;"
-                    asp-items="@Html.GetEnumSelectList<UserRoleEnum>()"></select>
+                    asp-items="@Html.GetEnumSelectList<UserRoleEnum>()">
+                <option value="" class="active">Please Select</option>
+            </select>
+            <span asp-validation-for="UserRole" title="User Role" class="text-danger"></span>
+        </div>
+
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group row  float-right">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-success float-right">Create</button>
         </div>
     </div>
 
-    <div class="form-group row  float-right">
-        <button type="submit" class="btn btn-success float-right">Create</button>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            Total Employees Count= @_userRepo.GetUsers().Count()
+        </div>
     </div>
+
 </form>
 
 <div>
-    <a asp-action="Index" asp-controller="User">Back to List</a>
+    <a asp-action="Index" asp-controller="User">Back to List Users</a>
 </div>
- 
