@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using toDoList.Models;
 using toDoList.ViewModels;
 using toDoClassLibrary;
+using Microsoft.EntityFrameworkCore;
 
 namespace toDoList.Controllers
 {
@@ -17,7 +18,7 @@ namespace toDoList.Controllers
         public UserController(IUserRepository userRepository)
         {
            //  _userRepository = new MockUserRepository();
-            _userRepository = new SQLUserRepository();
+            _userRepository =   userRepository ;
         }
         [Route("")]
         [Route("~")]

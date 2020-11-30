@@ -9,8 +9,8 @@ using toDoList;
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201129233025_MyFirst2Migration")]
-    partial class MyFirst2Migration
+    [Migration("20201130002533_MyFirst1Migration")]
+    partial class MyFirst1Migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,9 @@ namespace toDoList.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<string>("PhotoPath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserEmail")
                         .IsRequired()
@@ -55,6 +58,46 @@ namespace toDoList.Migrations
                             UserName = "Mary",
                             UserPass = "maryPass",
                             UserRole = 1
+                        },
+                        new
+                        {
+                            UserID = 2,
+                            UserEmail = "Karl@gmail.com",
+                            UserName = "Karl",
+                            UserPass = "karlPass",
+                            UserRole = 2
+                        },
+                        new
+                        {
+                            UserID = 3,
+                            UserEmail = "Eric@gmail.com",
+                            UserName = "Eric",
+                            UserPass = "ericPass",
+                            UserRole = 2
+                        },
+                        new
+                        {
+                            UserID = 4,
+                            UserEmail = "Jorge@gmail.com",
+                            UserName = "Jorge",
+                            UserPass = "jorgePass",
+                            UserRole = 0
+                        },
+                        new
+                        {
+                            UserID = 5,
+                            UserEmail = "Ann@gmail.com",
+                            UserName = "Ann",
+                            UserPass = "annPass",
+                            UserRole = 3
+                        },
+                        new
+                        {
+                            UserID = 6,
+                            UserEmail = "Annette@gmail.com",
+                            UserName = "Annette",
+                            UserPass = "annPass",
+                            UserRole = 3
                         });
                 });
 #pragma warning restore 612, 618
