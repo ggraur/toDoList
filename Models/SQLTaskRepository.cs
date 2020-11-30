@@ -22,7 +22,7 @@ namespace toDoList.Models
 
         public ToDoTask Details(int TaskId)
         {
-            return context.Task.Find(TaskId);
+            return context.Tasks.Find(TaskId);
         }
 
         public IEnumerable<ToDoTask> Tasks()

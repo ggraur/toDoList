@@ -11,8 +11,7 @@ namespace toDoList.Models
         public ToDoList Details(int ToDoListID);
         public ToDoList Add(ToDoList toDoList);
         public ToDoList Update(ToDoList toDoList);
-        public IEnumerable<ToDoTask> UpdateTaskList(IEnumerable<ToDoTask> toDoTasksList);
-        public IEnumerable<ToDoTask> AddTaskList(IEnumerable<ToDoTask> toDoTasksList);
+              public IEnumerable<ToDoTask> AddTaskList(IEnumerable<ToDoTask> toDoTasksList);
 
     }
 }

@@ -17,27 +17,31 @@ namespace toDoList.Models
 
         public ToDoList Add(ToDoList toDoList)
         {
-            throw new NotImplementedException();
+            context.Add(toDoList);
+            context.SaveChanges();
+            return toDoList;
         }
 
         public IEnumerable<ToDoTask> AddTaskList(IEnumerable<ToDoTask> toDoTasksList)
         {
-            throw new NotImplementedException();
+            context.Add(toDoTasksList);
+            context.SaveChanges();
+            return toDoTasksList;
         }
 
         public ToDoList Details(int ToDoListID)
         {
-            throw new NotImplementedException();
+            return context.ToDoLists.Find(ToDoListID);
         }
 
         public ToDoList Update(ToDoList toDoList)
         {
-            throw new NotImplementedException();
+            var _todoList = context.ToDoLists.Attach(toDoList);
+            _todoList.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            context.SaveChanges();
+            return toDoList;
         }
 
-        public IEnumerable<ToDoTask> UpdateTaskList(IEnumerable<ToDoTask> toDoTasksList)
-        {
-            throw new NotImplementedException();
-        }
+     
     }
 }

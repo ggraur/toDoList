@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>General Error</h1>
+
+<h3> An Error occured while processing your request.
+    The support team is notified and we are working on the fix</h3>
+<h5> Please contact us on indo23md@yahoo.com </h5>
+<hr />
+<h3>Exception Details:</h3>
+<div class="alert alert-danger ">
+    <h5>Exception Path</h5>
+    <hr/>
+    <p>@ViewBag.ExceptionPath</p>
+</div>
+<div class="alert alert-danger ">
+    <h5>Exception Message</h5>
+    <hr />
+    <p>@ViewBag.ExceptionMessage</p>
+</div>
+<div class="alert alert-danger ">
+    <h5>Exception Stack Path</h5>
+    <hr />
+    <p>@ViewBag.StackTrace</p>
+</div>
+
+
