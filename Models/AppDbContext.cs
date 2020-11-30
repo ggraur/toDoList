@@ -2,6 +2,7 @@
 using System;
 using toDoClassLibrary;
 using toDoList.Models;
+using toDoList.ViewModels;
 
 namespace toDoList
 {
@@ -14,10 +15,15 @@ namespace toDoList
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<ToDoTask> Tasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
         }
+
+        public DbSet<toDoClassLibrary.ToDoTask> Task { get; set; }
+
+        public DbSet<toDoList.ViewModels.TaskCreateViewModel> TaskCreateViewModel { get; set; }
     }
 }

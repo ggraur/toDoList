@@ -7,6 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Views\UserRole\**" />
+      <Content Remove="Views\UserRole\**" />
+      <EmbeddedResource Remove="Views\UserRole\**" />
+      <None Remove="Views\UserRole\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Compile Remove="Controllers\UserRoleController.cs" />
       <Compile Remove="Models\MockUserRepository.cs" />
       <Compile Remove="Models\MockUserRoleRepository.cs" />
@@ -23,6 +30,7 @@
 
     <ItemGroup>
       <Folder Include="Migrations\" />
+      <Folder Include="Views\ToDoList\" />
       <Folder Include="wwwroot\Pages\" />
     </ItemGroup>
 

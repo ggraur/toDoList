@@ -28,10 +28,11 @@ namespace toDoList
             services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
             
             services.AddScoped<IUserRepository, SQLUserRepository>();
-            
+            services.AddScoped<ITaskRepository, SQLTaskRepository>();
+
             //services.AddSingleton<IUserRepository,MockUserRepository>();// memory repository used for test
-            
-           // services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
+
+            // services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

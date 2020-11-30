@@ -12,5 +12,6 @@ namespace toDoList.Models
         public User GetUserDetails(int UserID);
         public IEnumerable<User> GetUsers();
         public User Add(User user);
+        public User Update(User user);
     }
 }
