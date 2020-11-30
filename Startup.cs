@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using toDoList.Models;
-using toDoManagementDataAccess;
+
 
 namespace toDoList
 {
@@ -23,10 +23,15 @@ namespace toDoList
         {
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
+
             //services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
-            services.AddSingleton<IUserRepository,MockUserRepository>();
-            services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
+            
+            services.AddScoped<IUserRepository, SQLUserRepository>();
+            
+            //services.AddSingleton<IUserRepository,MockUserRepository>();// memory repository used for test
+            
+           // services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -16,7 +16,8 @@ namespace toDoList.Controllers
 
         public UserController(IUserRepository userRepository)
         {
-            _userRepository = new MockUserRepository();
+           //  _userRepository = new MockUserRepository();
+            _userRepository = new SQLUserRepository();
         }
         [Route("")]
         [Route("~")]

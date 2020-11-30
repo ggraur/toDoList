@@ -7,6 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Controllers\UserRoleController.cs" />
+      <Compile Remove="Models\MockUserRepository.cs" />
+      <Compile Remove="Models\MockUserRoleRepository.cs" />
       <Compile Remove="Models\Task.cs" />
       <Compile Remove="Models\User.cs" />
       <Compile Remove="Models\UserRole.cs" />
@@ -19,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Migrations\" />
       <Folder Include="wwwroot\Pages\" />
     </ItemGroup>
 
@@ -1184,11 +1188,34 @@
       <PackageReference Include="bootstrap.sass" Version="4.5.3" />
       <PackageReference Include="Bower" Version="1.3.11" />
       <PackageReference Include="jquery" Version="3.5.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\toDoClassLibrary\toDoClassLibrary.csproj" />
-      <ProjectReference Include="..\toDoManagementDataAccess\toDoManagementDataAccess.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Properties\Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Properties\Resources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>
