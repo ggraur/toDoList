@@ -12,9 +12,9 @@ namespace toDoList.Models
     {
         private readonly AppDbContext context;
 
-        public SQLUserRepository(AppDbContext _context)
+        public SQLUserRepository(AppDbContext context)
         {
-            this.context = _context;
+            this.context = context;
         }
         public User Add(User user)
         {
