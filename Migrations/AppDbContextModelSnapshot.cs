@@ -18,6 +18,30 @@ namespace toDoList.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
+            modelBuilder.Entity("toDoClassLibrary.ToDoTask", b =>
+                {
+                    b.Property<int>("TaskID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<short>("TaskActive")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("TaskDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("pp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TaskID");
+
+                    b.ToTable("ToDoTask");
+                });
+
             modelBuilder.Entity("toDoClassLibrary.User", b =>
                 {
                     b.Property<int>("UserID")

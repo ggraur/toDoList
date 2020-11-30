@@ -9,8 +9,8 @@ using toDoList;
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201130002533_MyFirst1Migration")]
-    partial class MyFirst1Migration
+    [Migration("20201130150057_todomodel_added1")]
+    partial class todomodel_added1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,6 +19,30 @@ namespace toDoList.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
+
+            modelBuilder.Entity("toDoClassLibrary.ToDoTask", b =>
+                {
+                    b.Property<int>("TaskID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<short>("TaskActive")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("TaskDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("pp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TaskID");
+
+                    b.ToTable("ToDoTask");
+                });
 
             modelBuilder.Entity("toDoClassLibrary.User", b =>
                 {

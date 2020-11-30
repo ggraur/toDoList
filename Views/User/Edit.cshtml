@@ -1,10 +1,21 @@
-﻿@model UserCreateViewModel
+﻿@model toDoList.ViewModels.UserEditViewModel
 
-<h3 class="text-center">Create New User</h3>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Existing Users";
+    var photoPath = "../Images/" + (Model.ExistingPhotoPath?? "noimage.jpg");
+}
 
+<h3>Edit User: @Model.UserName</h3>
 <hr />
 
-<form enctype="multipart/form-data" asp-controller="User" asp-action="create" method="post">
+<form enctype="multipart/form-data" asp-controller="user" asp-action="edit" method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group" hidden>
+        <input hidden  asp-for="UserID" class="form-control" />
+        <input hidden  asp-for="ExistingPhotoPath" />
+    </div>
+
     <div class="form-group row">
         <label asp-for="UserName" class="col-sm-2 col-form-label">User Name</label>
         <div class="col-sm-10">
@@ -40,25 +51,27 @@
 
     <div class="form-group row">
         <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
-        <div class="custom-file" style="padding-left:15px;width:500px; float:right !important; right:0px">
+        <div class="custom-file" style="padding-left:15px ;width:500px; float:right !important; right:0px">
             <div class="col-sm-10">
-                <input asp-for="Photo" class="form-control custom-file-input"  />
-                <label class="custom-file-label">Choose File...</label>
+                <input asp-for="Photo" class="form-control custom-file-input" />
+                <label class="custom-file-label">Please click here to select new photo</label>
             </div>
         </div>
     </div>
 
+
+    <div class="form-group row col-sm-4 offset-4">
+        <img src="@photoPath" class="imageThumbnail" asp-append-version="true" />
+    </div>
+
     <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="form-group row  float-right">
+    <div class="form-group row">
         <div class="col-sm-10">
-            <button type="submit" class="btn btn-success float-right">Create</button>
+            <button style="display:inline;" type="submit" class="btn btn-success float-right" asp-controller="user" asp-action="edit" formmethod="post">Update</button>
+            <button style="display: inline;" type="submit" class="btn btn-info float-right" asp-controller="user" asp-action="index">Cancel</button>
         </div>
     </div>
-    <div>
-        <a asp-action="Index" asp-controller="User">Back to List Users</a>
-    </div>
-
 
     @section Scripts{
         <script>
@@ -70,8 +83,8 @@
                 });
             });
         </script>
+ 
     }
 
 </form>
-
 

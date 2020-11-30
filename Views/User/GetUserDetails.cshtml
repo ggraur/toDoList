@@ -1,7 +1,23 @@
-﻿@model UserDetailsViewModel
+﻿
+
+@model UserDetailsViewModel
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "User Details";
+    var photoPath = "~/images/" + (Model.User.PhotoPath ?? "noimage.jpg");
 }
+
+<link href="../css/bootstrap.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<link href="../lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<link href="~/css/site.css" rel="stylesheet" />
+<link href="../css/site.css" rel="stylesheet" />
+<script src="~/js/bootstrap.js"></script>
+<script src="~/js/bootstrap.js"></script>
+<script src="~/lib/jquery/jquery.js"></script>
+<script src="../lib/jquery/jquery.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="../lib/bootstrap/js/bootstrap.min.js"></script>
 
 <h3>@Html.DisplayFor(model => model.PageTitle)</h3>
 <hr />
@@ -10,11 +26,13 @@
     <div class="col-sm-8">
         <div class="card">
             <h1>@Model.User.UserName</h1>
+
         </div>
     </div>
     <div class="card-body text-center">
-        <div style=" width: 50vh; height: auto; margin: 0 auto; padding: 10px; position: relative;">
-            <img class="card-img-top" src="~/images/noimage.jpg" asp-append-version="true" />
+        <div style=" width: 220px !important; height: 180px !important; margin: 0 auto; padding: 10px; position: relative;">
+
+            <img class="card-img-top imageThumbnail" src=@photoPath asp-append-version="true" />
             <div>
                 <h4> User ID: @Model.User.UserID </h4>
                 <h4> User Email: @Model.User.UserEmail </h4>
@@ -24,12 +42,12 @@
     </div>
     <div class="card-footer text-center" style="position:fixed;bottom:0px;">
         <a asp-controller="user" asp-action="index" class="btn btn-primary m-1">Back</a>
-        <a class="btn btn-warning m-1">Edit</a>
+        <a asp-action="edit" asp-controller="user" asp-route-id="@Model.User.UserID" class="btn btn-warning m-1">Edit</a>
+        <a asp-action="index" asp-controller="todolist" asp-route-id="@Model.User.UserID">Add To Do List</a>
+
         <a class="btn btn-danger m-1">Delete</a>
     </div>
 
 </div>
 
-@section Scripts{
-    <script src="~/js/CustomScript.js"></script>
-}
+
