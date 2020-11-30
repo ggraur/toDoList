@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using toDoList.Models;
-
 
 namespace toDoList
 {
@@ -24,7 +25,19 @@ namespace toDoList
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
 
-            //services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+                options.Password.RequiredLength = 10;
+                options.Password.RequiredUniqueChars = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.SignIn.RequireConfirmedEmail = true;
+
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+
+            }).AddEntityFrameworkStores<AppDbContext>()
+              .AddDefaultTokenProviders();
+
+ 
             services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
             
             services.AddScoped<IUserRepository, SQLUserRepository>();
@@ -43,13 +56,16 @@ namespace toDoList
             {
                 app.UseDeveloperExceptionPage();
             }
-            else if (env.IsStaging() || env.IsProduction() || env.IsEnvironment("UAT"))
+            else //if (env.IsStaging() || env.IsProduction() || env.IsEnvironment("UAT"))
             {
+                app.UseExceptionHandler("/Error");
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");
             }
 
             app.UseStaticFiles();
             //app.UseMvcWithDefaultRoute();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes => {
             routes.MapRoute("default","{controller=Home}/{action=Index}/{id?}");

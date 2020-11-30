@@ -15,12 +15,18 @@
 
     <ItemGroup>
       <Compile Remove="Controllers\UserRoleController.cs" />
+      <Compile Remove="Models\IUserRoleRepository.cs" />
       <Compile Remove="Models\MockUserRepository.cs" />
       <Compile Remove="Models\MockUserRoleRepository.cs" />
       <Compile Remove="Models\Task.cs" />
       <Compile Remove="Models\User.cs" />
       <Compile Remove="Models\UserRole.cs" />
       <Compile Remove="Models\UserRoleEnum.cs" />
+      <Compile Remove="ViewModels\AddPasswordViewModel.cs" />
+      <Compile Remove="ViewModels\ChangePasswordViewModel.cs" />
+      <Compile Remove="ViewModels\ForgotPasswordViewModel.cs" />
+      <Compile Remove="ViewModels\ResetPasswordViewModel.cs" />
+      <Compile Remove="ViewModels\UserRoleViewModel.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -1196,6 +1202,8 @@
       <PackageReference Include="bootstrap.sass" Version="4.5.3" />
       <PackageReference Include="Bower" Version="1.3.11" />
       <PackageReference Include="jquery" Version="3.5.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Owin" Version="3.1.10" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
