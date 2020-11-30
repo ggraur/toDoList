@@ -38,28 +38,6 @@ namespace toDoList.Models
             _usersList.Add(user);
             return user;
         }
-
-        public User Update(User userChanges)
-        {
-            User _user = _usersList.FirstOrDefault(x => x.UserID == userChanges.UserID);
-            if (_user != null)
-            {
-                _user.UserName = userChanges.UserName;
-                _user.UserPass = userChanges.UserPass;
-                _user.UserRole = userChanges.UserRole;
-                _user.UserEmail = userChanges.UserEmail;
-            }
-            return _user;
-        }
-
-        public User Delete(int id)
-        {
-            User user = _usersList.FirstOrDefault(x => x.UserID == id);
-            if (user != null)
-            {
-                _usersList.Remove(user);
-            }
-            return user;
-        }
+ 
     }
 }
