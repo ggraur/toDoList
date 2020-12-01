@@ -13,5 +13,6 @@ namespace toDoList.Models
         public IEnumerable<ToDoTask> ActiveTasks();
         public ToDoTask Add(ToDoTask task);
         public ToDoTask Update(ToDoTask task);
+        public ToDoTask Delete(ToDoTask task);
     }
 }
