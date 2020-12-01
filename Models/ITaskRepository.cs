@@ -10,6 +10,7 @@ namespace toDoList.Models
     {
         public ToDoTask Details(int TaskId);
         public IEnumerable<ToDoTask> Tasks();
+        public IEnumerable<ToDoTask> ActiveTasks();
         public ToDoTask Add(ToDoTask task);
         public ToDoTask Update(ToDoTask task);
     }

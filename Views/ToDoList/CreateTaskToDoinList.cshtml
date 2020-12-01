@@ -1,0 +1,35 @@
+﻿@using toDoClassLibrary
+
+@model List<TasksViewModel>
+@inject ITaskRepository _taskRepo
+
+@{
+    ViewBag.Title = "Existing Task in List";
+}
+ 
+<hr />
+
+<div class="card-deck">
+    <table>
+        <thead>
+            <tr>
+                <td>Check Task</td>
+                <td>Task To Do</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model )
+            {
+              <tr>
+                  <td>
+                      <input type="checkbox"/>
+                  </td>
+                  <td>task.</td>
+              </tr>
+            }
+        </tbody>
+        </table>
+   
+</div>
+
+

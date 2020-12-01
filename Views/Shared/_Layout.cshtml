@@ -1,5 +1,5 @@
-﻿
-@inject SignInManager<ApplicationUser> signInManager;
+﻿@*@inject SignInManager<ApplicationUser> signInManager;*@  @*--getiing error*@
+
 
 <!DOCTYPE html>
 
@@ -38,8 +38,8 @@
                         <a class="nav-link" asp-action="" asp-controller="">To Do List</a>
                     </div>
                     @*<div class="nav-item">
-                            <a class="nav-link" asp-action="index" asp-controller="User">Users</a>
-                        </div>*@
+            <a class="nav-link" asp-action="index" asp-controller="User">Users</a>
+        </div>*@
 
                     <div class="dropdown">
                         <a class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -59,30 +59,39 @@
                             <a class="dropdown-item" asp-action="index" asp-controller="Task">View Tasks</a>
                         </div>
                     </div>
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" id="idTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Tasks
+                        </a>
+                        <div id="dropIdToDoList" class="dropdown-menu" aria-labelledby="idTask">
+                            <a class="dropdown-item" asp-action="Create" asp-controller="ToDoList">Create To Do List</a>
+                            <a class="dropdown-item" asp-action="index" asp-controller="ToDoList">Existing To Do List</a>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="navbar-nav ml-auto float-right">
 
                     <ul class="navbar-nav ml-auto">
-                        @if (signInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <form method="post" asp-action="logout" asp-controller="account">
-                                    <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
-                                        Logout @User.Identity.Name
-                                    </button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a asp-action="register" asp-controller="account" class="nav-link">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-action="login" asp-controller="account" class="nav-link">Login</a>
-                            </li>
-                        }
+                        @*@if (signInManager.IsSignedIn(User))
+                            {*@
+                        <li class="nav-item">
+                            <form method="post" asp-action="logout" asp-controller="account">
+                                <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
+                                    Logout @User.Identity.Name
+                                </button>
+                            </form>
+                        </li>
+                        @*}
+                            else
+                            {*@
+                        <li class="nav-item">
+                            <a asp-action="register" asp-controller="account" class="nav-link">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="login" asp-controller="account" class="nav-link">Login</a>
+                        </li>
+                        @*}*@
                     </ul>
 
                 </div>

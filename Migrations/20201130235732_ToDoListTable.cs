@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace toDoList.Migrations
 {
-    public partial class AddingIdentity : Migration
+    public partial class ToDoListTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,24 @@ namespace toDoList.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tasks",
+                columns: table => new
+                {
+                    TaskID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TaskName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TaskDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TaskActive = table.Column<short>(type: "smallint", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TaskChecked = table.Column<bool>(type: "bit", nullable: true),
+                    PageTitle = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tasks", x => x.TaskID);
                 });
 
             migrationBuilder.CreateTable(
@@ -186,29 +204,6 @@ namespace toDoList.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Tasks",
-                columns: table => new
-                {
-                    TaskID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TaskName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TaskDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TaskActive = table.Column<short>(type: "smallint", nullable: false),
-                    pp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ToDoListID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tasks", x => x.TaskID);
-                    table.ForeignKey(
-                        name: "FK_Tasks_ToDoLists_ToDoListID",
-                        column: x => x.ToDoListID,
-                        principalTable: "ToDoLists",
-                        principalColumn: "ToDoListID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "PhotoPath", "UserEmail", "UserName", "UserPass", "UserRole" },
@@ -260,11 +255,6 @@ namespace toDoList.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_ToDoListID",
-                table: "Tasks",
-                column: "ToDoListID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -288,6 +278,9 @@ namespace toDoList.Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
+                name: "ToDoLists");
+
+            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
@@ -295,9 +288,6 @@ namespace toDoList.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "ToDoLists");
         }
     }
 }
