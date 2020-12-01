@@ -39,7 +39,7 @@ namespace toDoList.Controllers
         {
             UserDetailsViewModel userDetailsViewModel = new UserDetailsViewModel();
 
-            User _tmpUser = _userRepository.GetUserDetails((int)Id);
+            MyUser _tmpUser = _userRepository.GetUserDetails((int)Id);
             if (_tmpUser == null)
             {
                 Response.StatusCode = 404;
@@ -78,7 +78,7 @@ namespace toDoList.Controllers
             if (ModelState.IsValid)
             {
                 string uniqueFileName = ProcessUploadedFile(model);
-                User _newUser = new User
+                MyUser _newUser = new MyUser
                 {
                     UserName = model.UserName,
                     UserPass = model.UserPass,
@@ -98,7 +98,7 @@ namespace toDoList.Controllers
         [Route("Edit")]
         public IActionResult Edit(UserEditViewModel model)
         {
-            User user = _userRepository.GetUserDetails(model.UserID);
+            MyUser user = _userRepository.GetUserDetails(model.UserID);
             bool modelHasNoPhotoBefore = false;
             if (model.ExistingPhotoPath == null && model.Photo.FileName != null)
             {
@@ -151,7 +151,7 @@ namespace toDoList.Controllers
         [Route("Edit")]
         public ViewResult Edit(int id)
         {
-            User user = _userRepository.GetUserDetails(id);
+            MyUser user = _userRepository.GetUserDetails(id);
             if (user == null)
             {
                 Response.StatusCode = 404;

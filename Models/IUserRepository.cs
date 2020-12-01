@@ -9,9 +9,9 @@ namespace toDoList.Models
 {
     public interface IUserRepository
     {
-        public User GetUserDetails(int UserID);
-        public IEnumerable<User> GetUsers();
-        public User Add(User user);
-        public User Update(User user);
+        public MyUser GetUserDetails(int UserID);
+        public IEnumerable<MyUser> GetUsers();
+        public MyUser Add(MyUser user);
+        public MyUser Update(MyUser user);
     }
 }

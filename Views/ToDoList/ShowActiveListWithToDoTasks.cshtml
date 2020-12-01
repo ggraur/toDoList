@@ -1,0 +1,79 @@
+﻿@using toDoList.ViewModels
+@model IEnumerable<AddTask_To_ToDoList>
+
+@{
+    ViewData["Title"] =  ViewBag.ListName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewBag.ListName</h1>
+<hr />
+<h3>Assigned to: @ViewBag.AssignedTo</h3>
+<hr />
+<h3>Assigned By: @ViewBag.AssignedBy</h3>
+<hr />
+<p>
+    <a asp-action="Create">Add New task to that List</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.ToDoListID)
+            </th>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.IsChecked)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaskID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaskName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaskDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaskStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.ToDoListID)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.IsChecked)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaskID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaskName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaskDescription)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.TaskStatus)*@
+                 
+                    <div class="col-sm-10 font-weight-bold">
+                        <select asp-for="@item.TaskStatus" class="custom-select mr-sm-2"  
+                                asp-items="@Html.GetEnumSelectList<StatusTask>()">
+                            <option value="" class="active">Please Select</option>
+                        </select>
+                        <span asp-validation-for="@item.TaskStatus" title="Task Status" class="text-danger"></span>
+                    </div>
+                </td>
+                <td>
+                    <a asp-action="EditTask" asp-controller="ToDoList" asp-route-id="@item.ListTaskID" >Update</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ListTaskID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

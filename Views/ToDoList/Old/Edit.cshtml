@@ -1,30 +1,28 @@
 ﻿@model toDoClassLibrary.ToDoList
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
 <h4>ToDoList</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <input hidden asp-for="ToDoListID" class="form-control" />
-            </div>
+            <input type="hidden" asp-for="ToDoListID" />
             <div class="form-group">
                 <label asp-for="ToDoListName" class="control-label"></label>
                 <input asp-for="ToDoListName" class="form-control" />
-                @*<span asp-validation-for="ToDoListName" class="text-danger"></span>*@
+                <span asp-validation-for="ToDoListName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CreatedToDoListDatetime" class="control-label"></label>
                 <input asp-for="CreatedToDoListDatetime" class="form-control" />
-                @*<span asp-validation-for="CreatedToDoListDatetime" class="text-danger"></span>*@
+                <span asp-validation-for="CreatedToDoListDatetime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FinalizationDatetime" class="control-label"></label>
@@ -42,8 +40,9 @@
                 <span asp-validation-for="UserIDExecutor" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" asp-action="Save" asp-controller="ToDoList" class="btn btn-primary" formmethod="post" />
-                @*<input type="submit" value="Add Task" asp-action="AddTask" asp-controller="ToDoList" class="btn btn-primary" formmethod="post" />*@
+                <input type="submit" value="Update" asp-controller="ToDoList" 
+                        asp-action="edit"
+                        asp-route-id="@Model.ToDoListID" class="btn btn-primary" />
             </div>
         </form>
     </div>

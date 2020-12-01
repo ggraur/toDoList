@@ -9,7 +9,7 @@ namespace toDoList.ViewModels
 {
     public class UserDetailsViewModel
     {
-        public User User { get; set; }
+        public MyUser User { get; set; }
         //public IEnumerable<User> GetUsers { get;set;}
         public string PageTitle { get; set; }
     }

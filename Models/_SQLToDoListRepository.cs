@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using toDoClassLibrary;
+using toDoList.ViewModels;
 
 namespace toDoList.Models
 {
@@ -15,7 +16,7 @@ namespace toDoList.Models
             this.context = context;
         }
 
-        public ToDoList Add(ToDoList toDoList)
+        public ToDoListCreateViewModel Add(ToDoListCreateViewModel toDoList)
         {
             context.Add(toDoList);
             context.SaveChanges();
@@ -46,6 +47,14 @@ namespace toDoList.Models
             return toDoList;
         }
 
-     
+        public ToDoList Delete(ToDoList toDoList)
+        {
+            context.Attach(toDoList);
+            context.Remove(toDoList);
+            context.SaveChanges();
+            return toDoList;
+        }
+
+        
     }
 }

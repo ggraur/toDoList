@@ -1,5 +1,5 @@
 ﻿@using toDoClassLibrary
-@model IEnumerable<User >
+@model IEnumerable<MyUser >
 @inject IUserRepository _userRepo
 
 @{
@@ -20,11 +20,15 @@
             </div>
             <img class="card-img-top imageThumbnail" src="@photoPath" asp-append-version="true" />
             <div class="card-footer text-center">
-                <a asp-action="details" asp-controller="user"  asp-route-id="@user.UserID" class="btn btn-info">Show</a>
-                <a asp-action=   "edit" asp-controller="user"  asp-route-id="@user.UserID" class="btn btn-warning m-1">Edit</a>
-                <a href="#" class="btn btn-danger m-1">Delete</a>
-                <a href="#" class="btn btn-info  m-1">
-                    <span class="glyphicon glyphicon-th-list"></span>&nbsp;Do List
+                <a asp-action="details" asp-controller="user" asp-route-id="@user.UserID" class="btn btn-info">Show</a>
+                <a asp-action="edit" asp-controller="user" asp-route-id="@user.UserID" class="btn btn-warning m-1">Edit</a>
+                @*<a href="#" class="btn btn-danger m-1">Delete</a>*@
+                <a class="btn btn-info  m-1 " asp-action="create" asp-controller="ToDoList" asp-route-id="@user.UserID">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;Do List
+                </a>
+
+                <a class="btn btn-info  m-1 " asp-action="ShowAllListsToDo" asp-controller="ToDoList" asp-route-id="@user.UserID">
+                    <span class="glyphicon glyphicon-th-list"></span>&nbsp;Show All Lists
                 </a>
             </div>
         </div>

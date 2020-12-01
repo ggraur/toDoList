@@ -25,7 +25,12 @@ namespace toDoList
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+            //services.AddDbContextPool<ApplicationDbContext>(options =>
+            //                options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
+
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
                 options.Password.RequiredLength = 10;
                 options.Password.RequiredUniqueChars = 3;
                 options.Password.RequireNonAlphanumeric = false;
@@ -37,12 +42,12 @@ namespace toDoList
             }).AddEntityFrameworkStores<AppDbContext>()
               .AddDefaultTokenProviders();
 
- 
+
             services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
-            
+
             services.AddScoped<IUserRepository, SQLUserRepository>();
             services.AddScoped<ITaskRepository, SQLTaskRepository>();
-            services.AddScoped<IToDoListRepository, SQLToDoListRepository>();
+            services.AddScoped<IToDoListRepository, SQLToDoRepository>();
 
             //services.AddSingleton<IUserRepository,MockUserRepository>();// memory repository used for test
 
@@ -67,8 +72,9 @@ namespace toDoList
 
             app.UseAuthentication();
 
-            app.UseMvc(routes => {
-            routes.MapRoute("default","{controller=Home}/{action=Index}/{id?}");
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
             //app.UseRouting();

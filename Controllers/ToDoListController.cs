@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,118 +11,182 @@ using toDoList.ViewModels;
 
 namespace toDoList.Controllers
 {
-    [Route("controller")]
+    [Route("[controller]")]
     public class ToDoListController : Controller
     {
-        private readonly IToDoListRepository toDoListRepository;
-        private readonly ITaskRepository taskRepository;
-        public ToDoListController(IToDoListRepository _toDoListRepository, ITaskRepository _taskRepository)
-        {
-            this.toDoListRepository = _toDoListRepository;
-            this.taskRepository = _taskRepository;
-        }
 
-        [HttpGet]
-        public ViewResult Index()
-        {
-            var model = toDoListRepository.Details();
-            return View("~/Views/ToDoList/Index.cshtml", model);
-        }
+        private IConfiguration _config;
 
-        [Route("Details/{id?}")]
-        public ViewResult Details(int? Id)
+        private readonly IToDoListRepository _toDoListRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ITaskRepository  _taskRepository;
+        public ToDoListController(IConfiguration config, 
+                                  IToDoListRepository toDoRepository, 
+                                  IUserRepository userRepository,
+                                  ITaskRepository taskRepository)
         {
-            ToDoListDetailsViewModel todoList= new ToDoListDetailsViewModel();
-
-            ToDoList  _tmpToDo = toDoListRepository.Details((int)Id);
-            if (_tmpToDo == null)
-            {
-                Response.StatusCode = 404;
-                return View("NotFound", Id);
-            }
-             todoList.Tasks = taskRepository.ActiveTasks();
-             todoList.ToDoList = _tmpToDo;
-             todoList.PageTitle = "ToDo List Details";
-            return View("~/Views/ToDoList/Details.cshtml"  , todoList);
+            _config = config;
+            this._toDoListRepository = toDoRepository;
+            this._userRepository = userRepository;
+            this._taskRepository = taskRepository;
         }
-        [HttpGet]
-        [Route("Create")]
-        public ViewResult Create()
+        // GET: ToDoListController
+        public ActionResult Index()
         {
-            return View("~/Views/ToDoList/Create.cshtml");
-        }
-
-        //// POST: TaskController/Create
-        [HttpPost]
-        [Route("Create")]
-        public IActionResult Create(ToDoListCreateViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                ToDoList _newList = new ToDoList
-                {
-                    ToDoListName = model.ToDoListName,
-                    CreatedToDoListDatetime = model.CreatedToDoListDatetime,
-                    FinalizationDatetime = model.FinalizationDatetime,
-                    //ToDoTasks = new List<ToDoTask>(),
-                    UserIDCreator = model.UserIDCreator,
-                    UserIDExecutor=model.UserIDExecutor
-                };
-                toDoListRepository.Add(_newList );
-                return RedirectToAction("Details", new { id = _newList.ToDoListID });
-                //return View("~/Views/ToDoList/_Layout.cshtml", new { id = _newList.ToDoListID });
-            }
             return View();
         }
 
-        // GET: TaskController/Edit/5
-        [HttpGet]
-        [Route("Edit")]
-        public ActionResult Edit(int id)
+        // GET: ToDoListController/Details/5
+        public ActionResult Details(int id)
         {
-            //ToDoTask _newTask = _taskRepository.Details(id);
-
-            //if (_newTask == null)
-            //{
-            //    Response.StatusCode = 404;
-            //    return View("TaskNotFound", id);
-            //}
-
-            //TaskCreateViewModel taskCreateViewModel = new TaskCreateViewModel()
-            //{
-            //    TaskID = _newTask.TaskID,
-            //    TaskName = _newTask.TaskName,
-            //    TaskDescription = _newTask.TaskDescription,
-            //    TaskActive = _newTask.TaskActive
-            //};
-
-            return View("~/Views/ToDoList/Edit.cshtml");//, taskCreateViewModel);
+            return View();
         }
 
-        // POST: TaskController/Edit/5
+        [HttpGet]
+        [Route("AddTask")]
+        public ActionResult AddTask()
+        {
+            return View( "~/Views/ToDoList/AddTask.cshtml");
+        }
+
+
+        [HttpGet]
+        [Route("Create/{id?}")]
+        // GET: ToDoListController/Create
+        public ActionResult Create(int id)
+        {
+            var _tmpUser = _userRepository.GetUserDetails(id);
+            if (_tmpUser != null)
+            {
+                ToDoList tmp_toDoList = _toDoListRepository.Add(
+                        new ToDoList
+                        {
+                            ToDoListName = _tmpUser.UserName + "'s To Do List",
+                            UserIDCreator = _config["LogedUser"],
+                            IDCreator = Convert.ToInt32( _config["LogedUserID"].ToString()),
+                            UserIDExecutor = _tmpUser.UserName,
+                            IDExecutor = _tmpUser.UserID,
+                            CreatedToDoListDatetime = DateTime.Now,
+                            FinalizationDatetime = DateTime.Now.AddDays(1)
+                        }
+                     );
+
+                IEnumerable<ToDoTask> tasks = _taskRepository.ActiveTasks();
+                List<AddTask_To_ToDoList> c =  _toDoListRepository.AddTasksToList(tasks.ToList(), tmp_toDoList);
+                IEnumerable<AddTask_To_ToDoList> model = _toDoListRepository.GetToDoListById(tmp_toDoList.ToDoListID);
+                ViewBag.ListName = tmp_toDoList.ToDoListName;
+                ViewBag.AssignedTo = tmp_toDoList.UserIDExecutor;
+                ViewBag.AssignedBy = tmp_toDoList.UserIDCreator;
+                return View("~/Views/ToDoList/ShowActiveListWithToDoTasks.cshtml", c);
+            }
+            return View("Index");
+        }
+
+        [HttpGet]
+        [Route("ShowAllListsToDo/{id?}")]
+        public ActionResult ShowAllListsToDo(int id) {
+            
+            IEnumerable<AddTask_To_ToDoList> c = _toDoListRepository.GetListByAssignedUserId(id);
+            //ViewBag.AssignedTo = c.ToList()[0]..UserIDExecutor;
+            return View("~/Views/ToDoList/ShowActiveListWithToDoTasks.cshtml", c);
+        }
+
+        //[HttpGet]
+        //[Route("ShowTask/{id?}")]
+        //public ActionResult ShowTask(int id)
+        //{
+        //    IEnumerable<ToDoList>  _toDoList = _toDoListRepository.GetListById(id);
+
+        //    ToDoList _tmptoDoList = new ToDoList();
+
+
+
+        //                ToDoTask toDoTask = new ToDoTask() { 
+
+        //    };
+
+        //    return View();
+        //}
+        //[HttpPost]
+        //[Route("EditTask/{id?}")]
+        //public ActionResult EditTask(int id)
+        //{
+
+        //    return View("~/Views/ToDoList/Index.cshtml");
+        //}
+        [HttpGet]
+        [Route("EditTask/{id?}")]
+        public ActionResult EditTask(int id)
+        {
+           IEnumerable< AddTask_To_ToDoList> addTask_To_ToDo = _toDoListRepository.GetToDoListById(id);
+
+            return View();
+        }
+
+        // POST: ToDoListController/Create
         [HttpPost]
-        [Route("Edit")]
-        public ActionResult Edit(ToDoListCreateViewModel model)
+        //[ValidateAntiForgeryToken]
+        [Route("Save")]
+        public ActionResult Save(ToDoList toDoList)
+        {
+            List<ToDoList> lst = _toDoListRepository.GetListById(toDoList.ToDoListID).ToList();
+             
+            if (lst.Count ==1 ) 
+            {
+                try
+                {
+                    IEnumerable<ToDoList> allToDoList = _toDoListRepository.GetListByCreatorByAssignedToUser(lst[0].IDCreator, lst[0].IDExecutor);
+                    return View("~/Views/ToDoList/Index.cshtml", allToDoList);
+                }
+                catch
+                {
+                    return View();
+                }
+            }
+            return View();
+
+        }
+
+        // GET: ToDoListController/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: ToDoListController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                //    ToDoTask _todoTask = new ToDoTask();
-                //    _todoTask = _taskRepository.Details(model.TaskID);
-                //    if (ModelState.IsValid && _todoTask != null)
-                //    {
-                //        _todoTask.TaskID = model.TaskID;
-                //        _todoTask.TaskName = model.TaskName;
-                //        _todoTask.TaskDescription = model.TaskDescription;
-                //        _todoTask.TaskActive = model.TaskActive;
-
-                //    }
-                //    _taskRepository.Update(_todoTask);
-                return RedirectToAction("Details");//, _todoTask.TaskID);
-        }
+                return RedirectToAction(nameof(Index));
+            }
             catch
             {
                 return View();
-    }
-}
+            }
+        }
+
+        // GET: ToDoListController/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: ToDoListController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }
