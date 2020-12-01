@@ -46,6 +46,14 @@ namespace toDoList.Models
             return toDoList;
         }
 
-     
+        public ToDoList Delete(ToDoList toDoList)
+        {
+            context.Attach(toDoList);
+            context.Remove(toDoList);
+            context.SaveChanges();
+            return toDoList;
+        }
+
+        
     }
 }

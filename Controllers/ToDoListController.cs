@@ -31,18 +31,18 @@ namespace toDoList.Controllers
         [Route("Details/{id?}")]
         public ViewResult Details(int? Id)
         {
-            ToDoListDetailsViewModel todoList= new ToDoListDetailsViewModel();
+            ToDoListDetailsViewModel todoList = new ToDoListDetailsViewModel();
 
-            ToDoList  _tmpToDo = toDoListRepository.Details((int)Id);
+            ToDoList _tmpToDo = toDoListRepository.Details((int)Id);
             if (_tmpToDo == null)
             {
                 Response.StatusCode = 404;
                 return View("NotFound", Id);
             }
-             todoList.Tasks = taskRepository.ActiveTasks();
-             todoList.ToDoList = _tmpToDo;
-             todoList.PageTitle = "ToDo List Details";
-            return View("~/Views/ToDoList/Details.cshtml"  , todoList);
+            todoList.Tasks = taskRepository.ActiveTasks();
+            todoList.ToDoList = _tmpToDo;
+            todoList.PageTitle = "ToDo List Details";
+            return View("~/Views/ToDoList/Details.cshtml", todoList);
         }
         [HttpGet]
         [Route("Create")]
@@ -65,9 +65,9 @@ namespace toDoList.Controllers
                     FinalizationDatetime = model.FinalizationDatetime,
                     //ToDoTasks = new List<ToDoTask>(),
                     UserIDCreator = model.UserIDCreator,
-                    UserIDExecutor=model.UserIDExecutor
+                    UserIDExecutor = model.UserIDExecutor
                 };
-                toDoListRepository.Add(_newList );
+                toDoListRepository.Add(_newList);
                 return RedirectToAction("Details", new { id = _newList.ToDoListID });
                 //return View("~/Views/ToDoList/_Layout.cshtml", new { id = _newList.ToDoListID });
             }
@@ -117,11 +117,45 @@ namespace toDoList.Controllers
                 //    }
                 //    _taskRepository.Update(_todoTask);
                 return RedirectToAction("Details");//, _todoTask.TaskID);
-        }
+            }
             catch
             {
                 return View();
-    }
-}
+            }
+        }
+
+        // GET: TaskController/Delete/5
+        [Route("Delete")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                ToDoList _newTask = new ToDoList();
+                _newTask = toDoListRepository.Details(id);
+                return View("~/Views/ToDoList/Delete.cshtml", _newTask);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // POST: TaskController/Delete/5
+        [HttpPost]
+        [Route("Delete")]
+        public ActionResult Delete(ToDoList model)
+        {
+            try
+            {
+                ToDoList _newTask = new ToDoList();
+                _newTask = toDoListRepository.Details(model.ToDoListID);
+                toDoListRepository.Delete(_newTask);
+                return RedirectToAction("index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }
