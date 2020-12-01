@@ -67,7 +67,7 @@ namespace toDoList.Controllers
                 {
                     TaskName = model.TaskName,
                     TaskDescription = model.TaskDescription,
-                    TaskActive=model.TaskActive
+                    TaskActive = model.TaskActive
 
                 };
                 _taskRepository.Add(_newTask);
@@ -94,8 +94,8 @@ namespace toDoList.Controllers
             {
                 TaskID = _newTask.TaskID,
                 TaskName = _newTask.TaskName,
-                TaskDescription= _newTask.TaskDescription,
-                TaskActive=_newTask.TaskActive
+                TaskDescription = _newTask.TaskDescription,
+                TaskActive = _newTask.TaskActive
             };
 
             return View("~/Views/Task/Edit.cshtml", taskCreateViewModel);
@@ -127,24 +127,41 @@ namespace toDoList.Controllers
             }
         }
 
- 
+
 
 
 
         // GET: TaskController/Delete/5
+        [Route("Delete")]
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                ToDoTask _newTask = new ToDoTask();
+                _newTask = _taskRepository.Details(id);
+                 
+                return View("~/Views/Task/Delete.cshtml", _newTask);
+            }
+            catch
+            {
+                return View();
+            }
+            
         }
 
         // POST: TaskController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [Route("Delete")]
+        public ActionResult Delete(TaskCreateViewModel model)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ToDoTask _newTask = new ToDoTask();
+                _newTask = _taskRepository.Details(model.TaskID);
+               
+                    _taskRepository.Delete(_newTask);
+    
+                return RedirectToAction("index", "task");
             }
             catch
             {

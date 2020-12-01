@@ -42,5 +42,12 @@ namespace toDoList.Models
             context.SaveChanges();
             return taskChanges;
         }
+        public ToDoTask Delete(ToDoTask task)
+        {
+            context.Attach(task);
+            context.Remove(task);
+            context.SaveChanges();
+            return task;
+        }
     }
 }
