@@ -42,7 +42,7 @@ namespace toDoList
             
             services.AddScoped<IUserRepository, SQLUserRepository>();
             services.AddScoped<ITaskRepository, SQLTaskRepository>();
-            services.AddScoped<IToDoListRepository, SQLToDoListRepository>();
+          //  services.AddScoped<IToDoListRepository, SQLToDoListRepository>();
 
             //services.AddSingleton<IUserRepository,MockUserRepository>();// memory repository used for test
 

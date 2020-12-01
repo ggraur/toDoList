@@ -1,18 +1,19 @@
-﻿@model toDoList.ViewModels.ToDoListCreateViewModel
+﻿@model toDoClassLibrary.ToDoList
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
-<h4>ToDoListCreateViewModel</h4>
+<h4>ToDoList</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ToDoListID" />
             <div class="form-group">
                 <label asp-for="ToDoListName" class="control-label"></label>
                 <input asp-for="ToDoListName" class="form-control" />
@@ -35,13 +36,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserIDExecutor" class="control-label"></label>
-                <input asp-for="UserIDExecutor" class="form-control" value="@Model.UserIDExecutor" disabled />
+                <input asp-for="UserIDExecutor" class="form-control" />
                 <span asp-validation-for="UserIDExecutor" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" 
-                       asp-action="SaveListToDo" asp-controller="ToDoList"
-                       class="btn btn-primary" />
+                <input type="submit" value="Update" asp-controller="ToDoList" 
+                        asp-action="edit"
+                        asp-route-id="@Model.ToDoListID" class="btn btn-primary" />
             </div>
         </form>
     </div>

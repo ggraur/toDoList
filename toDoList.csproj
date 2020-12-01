@@ -14,19 +14,32 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="Controllers\ToDoListController.cs" />
       <Compile Remove="Controllers\UserRoleController.cs" />
+      <Compile Remove="Controllers\_ToDoListController.cs" />
+      <Compile Remove="Models\IToDoListRepository.cs" />
       <Compile Remove="Models\IUserRoleRepository.cs" />
       <Compile Remove="Models\MockUserRepository.cs" />
       <Compile Remove="Models\MockUserRoleRepository.cs" />
+      <Compile Remove="Models\SQLToDoListRepository.cs" />
       <Compile Remove="Models\Task.cs" />
       <Compile Remove="Models\User.cs" />
       <Compile Remove="Models\UserRole.cs" />
       <Compile Remove="Models\UserRoleEnum.cs" />
+      <Compile Remove="Models\_IToDoListRepository.cs" />
+      <Compile Remove="Models\_SQLToDoListRepository.cs" />
       <Compile Remove="ViewModels\AddPasswordViewModel.cs" />
       <Compile Remove="ViewModels\ChangePasswordViewModel.cs" />
       <Compile Remove="ViewModels\ForgotPasswordViewModel.cs" />
       <Compile Remove="ViewModels\ResetPasswordViewModel.cs" />
+      <Compile Remove="ViewModels\ToDoListCreateViewModel.cs" />
       <Compile Remove="ViewModels\UserRoleViewModel.cs" />
+      <Compile Remove="ViewModels\_ToDoListCreateViewModel.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Views\ToDoList\Create.cshtml" />
+      <Content Remove="Views\ToDoList\_Create.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

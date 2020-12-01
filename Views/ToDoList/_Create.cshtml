@@ -1,4 +1,4 @@
-﻿@model toDoList.ViewModels.ToDoListCreateViewModel
+﻿@model ToDoListCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -7,11 +7,11 @@
 
 <h1>Create</h1>
 
-<h4>ToDoListCreateViewModel</h4>
+<h4>ToDoList</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="SaveListToDo">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ToDoListName" class="control-label"></label>
@@ -35,11 +35,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserIDExecutor" class="control-label"></label>
-                <input asp-for="UserIDExecutor" class="form-control" value="@Model.UserIDExecutor" disabled />
-                <span asp-validation-for="UserIDExecutor" class="text-danger"></span>
+                <input asp-for="UserIDExecutor" class="form-control " value="@Model.UserIDExecutor" disabled />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" 
+                <input type="submit" value="Save"
                        asp-action="SaveListToDo" asp-controller="ToDoList"
                        class="btn btn-primary" />
             </div>

@@ -44,6 +44,11 @@ namespace toDoList
         //public DbSet<toDoList.ViewModels.TaskCreateViewModel> TaskCreateViewModel { get; set; }
 
         public DbSet<toDoList.ViewModels.TasksViewModel> TasksViewModel { get; set; }
+        //public DbSet<toDoClassLibrary.ToDoTask> Task { get; set; }
+
+        //public DbSet<toDoList.ViewModels.TaskCreateViewModel> TaskCreateViewModel { get; set; }
+
+        public DbSet<toDoList.ViewModels.ToDoListCreateViewModel> ToDoListCreateViewModel { get; set; }
 
  
     }
