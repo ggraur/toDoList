@@ -41,7 +41,7 @@
                             <a class="nav-link" asp-action="index" asp-controller="User">Users</a>
                         </div>*@
 
-                    <div class="dropdown" style="background-color:#FF343A40">
+                    @*<div class="dropdown" style="background-color:#FF343A40">
                         <a class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Users
                         </a>
@@ -58,7 +58,7 @@
                             <a class="dropdown-item" asp-action="Create" asp-controller="Task">Create New Task</a>
                             <a class="dropdown-item" asp-action="index" asp-controller="Task">View Tasks</a>
                         </div>
-                    </div>
+                    </div>*@
                     @*<div class="dropdown">
                             <a class="btn btn-secondary dropdown-toggle" id="idTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 ToDo List
@@ -75,7 +75,11 @@
                     <ul class="navbar-nav ml-auto">
                         @if (signInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item d-inline-block">
+                            <li class="nav-item"><a class="dropdown-item" asp-action="Create" asp-controller="User">Create New User</a></li>
+                            <li class="nav-item"><a class="dropdown-item" asp-action="index" asp-controller="User">View Users</a></li>
+                            <li class="nav-item"><a class="dropdown-item" asp-action="Create" asp-controller="Task">Create New Task</a></li>
+                            <li class="nav-item"><a class="dropdown-item" asp-action="index" asp-controller="Task">View Tasks</a></li>
+                            <li class="nav-item">
                                 <form method="post" asp-action="logout" asp-controller="account">
                                     <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
                                         Logout @User.Identity.Name
@@ -86,11 +90,13 @@
                         else
                         {
                             <li class="nav-item">
-                                <a asp-action="register" asp-controller="account" class="nav-link">Register</a>
+                                <a asp-action="register" asp-controller="account" class="nav-link"><span class="glyphicon glyphicon-user"></span>&nbsp;Register&nbsp;</a>
                             </li>
                             <li class="nav-item">
-                                <a asp-action="login" asp-controller="account" class="nav-link">Login</a>
+                                <a asp-action="login" asp-controller="account" class="nav-link"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login&nbsp;</a>
                             </li>
+
+
                         }
                     </ul>
 
