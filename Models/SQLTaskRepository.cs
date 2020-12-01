@@ -30,6 +30,11 @@ namespace toDoList.Models
             return context.Tasks;
         }
 
+        public IEnumerable<ToDoTask> ActiveTasks()
+        {
+            return context.Tasks.Where(x=>x.TaskActive==0); //0- active, 1- inactive
+        }
+
         public ToDoTask Update(ToDoTask taskChanges)
         {
             var _task = context.Tasks.Attach(taskChanges);

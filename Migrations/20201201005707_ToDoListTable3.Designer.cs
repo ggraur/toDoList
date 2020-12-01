@@ -10,8 +10,8 @@ using toDoList;
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201130183017_AddingIdentity")]
-    partial class AddingIdentity
+    [Migration("20201201005707_ToDoListTable3")]
+    partial class ToDoListTable3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -233,11 +233,11 @@ namespace toDoList.Migrations
                     b.Property<string>("ToDoListName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserIDCreator")
-                        .HasColumnType("int");
+                    b.Property<string>("UserIDCreator")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserIDExecutor")
-                        .HasColumnType("int");
+                    b.Property<string>("UserIDExecutor")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ToDoListID");
 
@@ -251,8 +251,12 @@ namespace toDoList.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<short>("TaskActive")
-                        .HasColumnType("smallint");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TaskActive")
+                        .HasColumnType("int");
 
                     b.Property<string>("TaskDescription")
                         .HasColumnType("nvarchar(max)");
@@ -260,17 +264,11 @@ namespace toDoList.Migrations
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ToDoListID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("pp")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("TaskID");
 
-                    b.HasIndex("ToDoListID");
-
                     b.ToTable("Tasks");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ToDoTask");
                 });
 
             modelBuilder.Entity("toDoClassLibrary.User", b =>
@@ -354,12 +352,25 @@ namespace toDoList.Migrations
                         });
                 });
 
+            modelBuilder.Entity("toDoList.ViewModels.TasksViewModel", b =>
+                {
+                    b.HasBaseType("toDoClassLibrary.ToDoTask");
+
+                    b.Property<string>("PageTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TaskChecked")
+                        .HasColumnType("bit");
+
+                    b.HasDiscriminator().HasValue("TasksViewModel");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -368,7 +379,7 @@ namespace toDoList.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -377,7 +388,7 @@ namespace toDoList.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -386,13 +397,13 @@ namespace toDoList.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -401,20 +412,8 @@ namespace toDoList.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("toDoClassLibrary.ToDoTask", b =>
-                {
-                    b.HasOne("toDoClassLibrary.ToDoList", null)
-                        .WithMany("ToDoTasks")
-                        .HasForeignKey("ToDoListID");
-                });
-
-            modelBuilder.Entity("toDoClassLibrary.ToDoList", b =>
-                {
-                    b.Navigation("ToDoTasks");
                 });
 #pragma warning restore 612, 618
         }

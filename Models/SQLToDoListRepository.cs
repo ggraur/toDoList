@@ -29,6 +29,10 @@ namespace toDoList.Models
             return toDoTasksList;
         }
 
+        public IEnumerable<ToDoList> Details()
+        {
+            return context.ToDoLists;
+        }
         public ToDoList Details(int ToDoListID)
         {
             return context.ToDoLists.Find(ToDoListID);

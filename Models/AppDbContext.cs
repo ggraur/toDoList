@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using System;
+using System.Linq;
 using toDoClassLibrary;
 using toDoList.Models;
 using toDoList.ViewModels;
@@ -16,9 +17,9 @@ namespace toDoList
 
         }
 
- #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+ 
         public DbSet<User> Users { get; set; }
- #pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+  
        public DbSet<ToDoTask> Tasks { get; set; }
          public DbSet<ToDoList> ToDoLists { get; set; }
         //public DbSet<toDoClassLibrary.ToDoTask> Task { get; set; }
@@ -32,7 +33,17 @@ namespace toDoList
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
+        //public DbSet<toDoClassLibrary.ToDoTask> Task { get; set; }
+
+        //public DbSet<toDoList.ViewModels.TaskCreateViewModel> TaskCreateViewModel { get; set; }
+
+        public DbSet<toDoList.ViewModels.TasksViewModel> TasksViewModel { get; set; }
 
  
     }

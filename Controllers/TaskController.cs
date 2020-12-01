@@ -29,6 +29,7 @@ namespace toDoList.Controllers
         }
 
         // GET: TaskController/Details/5
+        [HttpGet]
         [Route("Details/{id?}")]
         public ViewResult Details(int? Id)
         {
@@ -107,24 +108,28 @@ namespace toDoList.Controllers
         {
             try
             {
-                ToDoTask _todoTask = new ToDoTask();
-                _todoTask = _taskRepository.Details(model.TaskID);
-                if (ModelState.IsValid && _todoTask!=null)
+                ToDoTask _newTask = new ToDoTask();
+                _newTask = _taskRepository.Details(model.TaskID);
+                if (ModelState.IsValid && _newTask != null)
                 {
-                    _todoTask.TaskID = model.TaskID;
-                    _todoTask.TaskName = model.TaskName;
-                    _todoTask.TaskDescription = model.TaskDescription;
-                    _todoTask.TaskActive = model.TaskActive;
-                    
+                    _newTask.TaskID = model.TaskID;
+                    _newTask.TaskName = model.TaskName;
+                    _newTask.TaskDescription = model.TaskDescription;
+                    _newTask.TaskActive = model.TaskActive;
                 }
-                _taskRepository.Update(_todoTask);
-                return RedirectToAction("Details",_todoTask.TaskID);
+                _taskRepository.Update(_newTask);
+                //return RedirectToAction("Details", model.TaskID);
+                return RedirectToAction("Details", new { id = model.TaskID });
             }
             catch
             {
                 return View();
             }
         }
+
+ 
+
+
 
         // GET: TaskController/Delete/5
         public ActionResult Delete(int id)

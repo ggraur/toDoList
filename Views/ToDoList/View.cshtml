@@ -1,11 +1,11 @@
-﻿@model IEnumerable<toDoClassLibrary.ToDoTask>
+﻿@model IEnumerable<toDoList.ViewModels.TasksViewModel>
 
 @{
-    ViewData["Title"] = "Existing Tasks";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "View";
+    Layout = "~/Views/ToDoList/Details.cshtml";
 }
 
-<h1>Index</h1>
+<h1>View</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -14,14 +14,21 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.TaskChecked)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PageTitle)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.TaskName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TaskDescription)
             </th>
             <th>
-                @Html.DisplayNameFor( model => model.TaskActive)
+                @Html.DisplayNameFor(model => model.TaskActive)
             </th>
+         
             <th></th>
         </tr>
     </thead>
@@ -29,16 +36,23 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.TaskChecked)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PageTitle)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.TaskName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TaskDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem =>  item.TaskActive  )
+                @Html.DisplayFor(modelItem => item.TaskActive)
             </td>
+      
             <td>
-                <a asp-action="Edit" asp-controller="Task" asp-route-id="@item.TaskID">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.TaskID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.TaskID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.TaskID">Delete</a>
             </td>

@@ -10,8 +10,8 @@ using toDoList;
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201130192138_AddingIdentity1")]
-    partial class AddingIdentity1
+    [Migration("20201130235732_ToDoListTable")]
+    partial class ToDoListTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -251,6 +251,10 @@ namespace toDoList.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<short>("TaskActive")
                         .HasColumnType("smallint");
 
@@ -260,17 +264,11 @@ namespace toDoList.Migrations
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ToDoListID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("pp")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("TaskID");
 
-                    b.HasIndex("ToDoListID");
-
                     b.ToTable("Tasks");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ToDoTask");
                 });
 
             modelBuilder.Entity("toDoClassLibrary.User", b =>
@@ -354,6 +352,19 @@ namespace toDoList.Migrations
                         });
                 });
 
+            modelBuilder.Entity("toDoList.ViewModels.TasksViewModel", b =>
+                {
+                    b.HasBaseType("toDoClassLibrary.ToDoTask");
+
+                    b.Property<string>("PageTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TaskChecked")
+                        .HasColumnType("bit");
+
+                    b.HasDiscriminator().HasValue("TasksViewModel");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -403,18 +414,6 @@ namespace toDoList.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("toDoClassLibrary.ToDoTask", b =>
-                {
-                    b.HasOne("toDoClassLibrary.ToDoList", null)
-                        .WithMany("ToDoTasks")
-                        .HasForeignKey("ToDoListID");
-                });
-
-            modelBuilder.Entity("toDoClassLibrary.ToDoList", b =>
-                {
-                    b.Navigation("ToDoTasks");
                 });
 #pragma warning restore 612, 618
         }
