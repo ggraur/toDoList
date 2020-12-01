@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using toDoList;
 
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201201153926_MyFirstMigration2")]
+    partial class MyFirstMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,6 +70,71 @@ namespace toDoList.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -150,87 +217,6 @@ namespace toDoList.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("toDoClassLibrary.MyUser", b =>
-                {
-                    b.Property<int>("UserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("PhotoPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("UserPass")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserRole")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserID");
-
-                    b.ToTable("MyUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            UserID = 1,
-                            UserEmail = "mary@gmail.com",
-                            UserName = "Mary",
-                            UserPass = "maryPass",
-                            UserRole = 1
-                        },
-                        new
-                        {
-                            UserID = 2,
-                            UserEmail = "Karl@gmail.com",
-                            UserName = "Karl",
-                            UserPass = "karlPass",
-                            UserRole = 2
-                        },
-                        new
-                        {
-                            UserID = 3,
-                            UserEmail = "Eric@gmail.com",
-                            UserName = "Eric",
-                            UserPass = "ericPass",
-                            UserRole = 2
-                        },
-                        new
-                        {
-                            UserID = 4,
-                            UserEmail = "Jorge@gmail.com",
-                            UserName = "Jorge",
-                            UserPass = "jorgePass",
-                            UserRole = 0
-                        },
-                        new
-                        {
-                            UserID = 5,
-                            UserEmail = "Ann@gmail.com",
-                            UserName = "Ann",
-                            UserPass = "annPass",
-                            UserRole = 3
-                        },
-                        new
-                        {
-                            UserID = 6,
-                            UserEmail = "Annette@gmail.com",
-                            UserName = "Annette",
-                            UserPass = "annPass",
-                            UserRole = 3
-                        });
-                });
-
             modelBuilder.Entity("toDoClassLibrary.ToDoList", b =>
                 {
                     b.Property<int>("ToDoListID")
@@ -285,69 +271,85 @@ namespace toDoList.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("toDoList.Models.ApplicationUser", b =>
+            modelBuilder.Entity("toDoClassLibrary.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("UserID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
+                    b.Property<string>("PhotoPath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserPass")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                    b.Property<int>("UserRole")
+                        .HasColumnType("int");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                    b.HasKey("UserID");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserID = 1,
+                            UserEmail = "mary@gmail.com",
+                            UserName = "Mary",
+                            UserPass = "maryPass",
+                            UserRole = 1
+                        },
+                        new
+                        {
+                            UserID = 2,
+                            UserEmail = "Karl@gmail.com",
+                            UserName = "Karl",
+                            UserPass = "karlPass",
+                            UserRole = 2
+                        },
+                        new
+                        {
+                            UserID = 3,
+                            UserEmail = "Eric@gmail.com",
+                            UserName = "Eric",
+                            UserPass = "ericPass",
+                            UserRole = 2
+                        },
+                        new
+                        {
+                            UserID = 4,
+                            UserEmail = "Jorge@gmail.com",
+                            UserName = "Jorge",
+                            UserPass = "jorgePass",
+                            UserRole = 0
+                        },
+                        new
+                        {
+                            UserID = 5,
+                            UserEmail = "Ann@gmail.com",
+                            UserName = "Ann",
+                            UserPass = "annPass",
+                            UserRole = 3
+                        },
+                        new
+                        {
+                            UserID = 6,
+                            UserEmail = "Annette@gmail.com",
+                            UserName = "Annette",
+                            UserPass = "annPass",
+                            UserRole = 3
+                        });
                 });
 
             modelBuilder.Entity("toDoList.ViewModels.AddTask_To_ToDoList", b =>
@@ -357,11 +359,11 @@ namespace toDoList.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("IDExecutor")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsChecked")
                         .HasColumnType("bit");
+
+                    b.Property<int>("TaskActive")
+                        .HasColumnType("int");
 
                     b.Property<string>("TaskDescription")
                         .HasColumnType("nvarchar(max)");
@@ -371,9 +373,6 @@ namespace toDoList.Migrations
 
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TaskStatus")
-                        .HasColumnType("int");
 
                     b.Property<int>("ToDoListID")
                         .HasColumnType("int");
@@ -394,7 +393,7 @@ namespace toDoList.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("toDoList.Models.ApplicationUser", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -403,7 +402,7 @@ namespace toDoList.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("toDoList.Models.ApplicationUser", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -418,7 +417,7 @@ namespace toDoList.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("toDoList.Models.ApplicationUser", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -427,7 +426,7 @@ namespace toDoList.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("toDoList.Models.ApplicationUser", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)

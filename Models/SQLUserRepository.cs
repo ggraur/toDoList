@@ -16,37 +16,37 @@ namespace toDoList.Models
         {
             this.context = context;
         }
-        public User Add(User user)
+        public MyUser Add(MyUser user)
         {
-            context.Users.Add(user);
+            context.MyUsers.Add(user);
             context.SaveChanges();
             return user;
         }
 
-        public User Delete(int id)
+        public MyUser Delete(int id)
         {
-            User _user = context.Users.Find(id);
+            MyUser _user = context.MyUsers.Find(id);
             if (_user != null)
             {
-                context.Users.Remove(_user);
+                context.MyUsers.Remove(_user);
                 context.SaveChanges();
             }
             return _user;
         }
 
-        public User GetUserDetails(int UserID)
+        public MyUser GetUserDetails(int UserID)
         {
-            return context.Users.Find(UserID);
+            return context.MyUsers.Find(UserID);
         }
 
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<MyUser> GetUsers()
         {
-            return context.Users;
+            return context.MyUsers;
         }
 
-        public User Update(User userChanges)
+        public MyUser Update(MyUser userChanges)
         {
-           var _user = context.Users.Attach(userChanges);
+           var _user = context.MyUsers.Attach(userChanges);
             _user.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
             return userChanges;

@@ -9,7 +9,7 @@ using toDoList.ViewModels;
 
 namespace toDoList
 {
-    public class AppDbContext :IdentityDbContext
+    public class AppDbContext :  IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             :base(options) 
@@ -17,14 +17,10 @@ namespace toDoList
 
         }
 
- 
-        public DbSet<User> Users { get; set; }
+        public DbSet<MyUser> MyUsers { get; set; }
   
        public DbSet<ToDoTask> Tasks { get; set; }
          public DbSet<ToDoList> ToDoLists { get; set; }
-        //public DbSet<toDoClassLibrary.ToDoTask> Task { get; set; }
-
-        //public DbSet<toDoList.ViewModels.TaskCreateViewModel> TaskCreateViewModel { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,17 +35,9 @@ namespace toDoList
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
         }
-        //public DbSet<toDoClassLibrary.ToDoTask> Task { get; set; }
 
-        //public DbSet<toDoList.ViewModels.TaskCreateViewModel> TaskCreateViewModel { get; set; }
+        public DbSet<toDoList.ViewModels.AddTask_To_ToDoList> AddTask_To_ToDoList { get; set; }
 
-        public DbSet<toDoList.ViewModels.TasksViewModel> TasksViewModel { get; set; }
-        //public DbSet<toDoClassLibrary.ToDoTask> Task { get; set; }
-
-        //public DbSet<toDoList.ViewModels.TaskCreateViewModel> TaskCreateViewModel { get; set; }
-
-        public DbSet<toDoList.ViewModels.ToDoListCreateViewModel> ToDoListCreateViewModel { get; set; }
-
- 
+       
     }
 }

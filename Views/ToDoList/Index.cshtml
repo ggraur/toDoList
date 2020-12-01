@@ -1,4 +1,6 @@
-﻿@model IEnumerable<ToDoList>
+﻿@inject IToDoListRepository   _repoToDoList
+@model IEnumerable<toDoClassLibrary.ToDoList>
+
 
 @{
     ViewData["Title"] = "Index";
@@ -7,53 +9,86 @@
 
 <h1>Index</h1>
 
-<div>
-    <h4>ToDoList</h4>
-    <hr />
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<input id="lstID" type="text" />
 
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ToDoListID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToDoListName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedToDoListDatetime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FinalizationDatetime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserIDCreator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserIDExecutor)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>
-                    <label>List Name</label>
-                </th>
-                <th>
-                    <label>Created Date</label>
-                </th>
-                <th>
-                    <label>Finalization Date</label>
-                </th>
-                <th>
-                    <label>Assigned to</label>
-                </th>
-                
-                <th></th>
+                <td>
+                    <label clas="lstId">@item.ToDoListID</label>
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ToDoListName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedToDoListDatetime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FinalizationDatetime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserIDCreator)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserIDExecutor)
+                </td>
+                <td>
+                    <a asp-controller="ToDoList" asp-action="ShowTask" asp-route-id="@item.ToDoListID">
+                   
+                        <span class="glyphicon glyphicon-search"></span>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.ToDoListID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ToDoListID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ToDoListID">Delete</a>
+
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ToDoListName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedToDoListDatetime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FinalizationDatetime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserIDExecutor)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-controller="ToDoList" asp-route-id="@item.ToDoListID">Edit</a> |
-                        <a asp-action="Details" asp-controller="ToDoList" asp-route-id="@item.ToDoListID">Details</a> |
-                        <a asp-action="Delete" asp-controller="ToDoList" asp-route-id="@item.ToDoListID">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-      </table>
-       
-</div>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('span.glyphicon-search').click(function () {
+                var a = $(this).closest('tr').find('td label').html();
+                $('#lstID').val(a);
+                var url = "~/Views/ToDoList/ShowTask?NestId=" + a;
+                window.location.href = url; 
+            });
+        });
+
+
+
+    </script>
+
+}
