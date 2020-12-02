@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var p = Model.IDExecutor;
+
 }
 
 <h1>Edit</h1>
@@ -26,36 +26,29 @@
                 </label>
             </div>
             <div class="form-group" hidden>
-                <label asp-for="TaskID" class="control-label"></label>
+                <label asp-for="TaskID" class="control-label" ></label>
                 <input asp-for="TaskID" class="form-control" />
                 <span asp-validation-for="TaskID" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TaskStatus" class="control-label">Task Status</label>
-                <div class="col-sm-10 font-weight-bold">
-                    <select asp-for=" TaskStatus" class="custom-select mr-sm-2"
-                            asp-items="@Html.GetEnumSelectList<StatusTask>()">
-                        <option value="" class="active">Please Select</option>
-                    </select>
-                    <span asp-validation-for="TaskStatus" title="Task Status" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
+            <div class="form-group"  >
                 <label asp-for="TaskName" class="control-label"></label>
                 <input asp-for="TaskName" class="form-control" />
                 <span asp-validation-for="TaskName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group"  >
                 <label asp-for="TaskDescription" class="control-label"></label>
                 <input asp-for="TaskDescription" class="form-control" />
                 <span asp-validation-for="TaskDescription" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <label asp-for="IDExecutor" class="control-label"></label>
-                <input asp-for="IDExecutor" class="form-control" />
-                <span asp-validation-for="IDExecutor" class="text-danger"></span>
+            <div class="form-group"  >
+                <label asp-for="TaskStatus" class="control-label"></label>
+                <select asp-for="TaskStatus" class="form-control" asp-items="@Html.GetEnumSelectList<TaskStatus>()"></select>
+                <span asp-validation-for="TaskStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="IDExecutor" class="control-label"  ></label>
+                <input asp-for="IDExecutor" class="form-control"  />
+                <span asp-validation-for="IDExecutor" class="text-danger"  ></span>
             </div>
             <div class="form-group">
                 <label asp-for="CreatedDate" class="control-label"></label>
@@ -68,13 +61,13 @@
                 <span asp-validation-for="UpdatedDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Update" asp-action="Edit" asp-controller="ToDoList" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-controller="ToDoList" asp-action="ShowAllListsToDo" asp-route-for="@p" >Back to List</a>
+    <a asp-action="ShowAllListsToDo" asp-controller="ToDoList">Back to List</a>
 </div>
 

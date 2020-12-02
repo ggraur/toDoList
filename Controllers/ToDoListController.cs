@@ -156,7 +156,7 @@ namespace toDoList.Controllers
                 try
                 {
                     IEnumerable<ToDoList> allToDoList = _toDoListRepository.GetListByCreatorByAssignedToUser(lst[0].IDCreator, lst[0].IDExecutor);
-                    return View("~/Views/ToDoList/Index.cshtml", allToDoList);
+                    return RedirectToAction("../Views/ToDoList/Index.cshtml", allToDoList);
                 }
                 catch
                 {
@@ -176,13 +176,35 @@ namespace toDoList.Controllers
         // POST: ToDoListController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Edit/{id?}")]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                List<ToDoList> lst = _toDoListRepository.GetListById(id).ToList();
+
+                AddTask_To_ToDoList tsk = new AddTask_To_ToDoList();
+                tsk.ToDoListID = Convert.ToInt32(collection["ToDoListID"].ToString());
+                tsk.ListTaskID = Convert.ToInt32(collection["ListTaskID"].ToString());
+                tsk.IDExecutor = Convert.ToInt32(collection["IDExecutor"].ToString());
+                string b = collection["IsChecked"].ToString();
+                
+                tsk.IsChecked = (b==""?false:true);
+                tsk.TaskDescription= collection["TaskDescription"].ToString();
+                tsk.TaskID  = Convert.ToInt32(collection["TaskID"].ToString()); ;
+                tsk.TaskName = collection["TaskName"].ToString();
+                tsk.TaskStatus = (StatusTask)Convert.ToInt32(collection["TaskStatus"].ToString());
+                tsk.UpdatedDate =Convert.ToDateTime( collection["UpdatedDate"]);
+                tsk.CreatedDate = Convert.ToDateTime(collection["CreatedDate"]);
+
+                AddTask_To_ToDoList  tsk1 = _toDoListRepository.Update(tsk);
+
+               IEnumerable<AddTask_To_ToDoList> lst1 = _toDoListRepository.GetListByAssignedUserId(tsk1.IDExecutor);
+
+                @ViewBag.AssignedId = tsk1.IDExecutor;
+                return View("~/Views/ToDoList/ShowActiveListWithToDoTasks.cshtml",  lst1);
             }
-            catch
+            catch   (Exception ex )
             {
                 return View();
             }

@@ -13,7 +13,7 @@
 <h3>Assigned By: @ViewBag.AssignedBy</h3>
 <hr />
 <p>
-    <a asp-action="Create">Add New task to that List</a>
+    <a asp-action="Create" asp-controller="ToDoList" asp-route-id="@ViewBag.AssignedId">Add New task to that List</a>
 </p>
 <table class="table">
     <thead>
