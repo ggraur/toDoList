@@ -156,7 +156,7 @@ namespace toDoList.Controllers
                 try
                 {
                     IEnumerable<ToDoList> allToDoList = _toDoListRepository.GetListByCreatorByAssignedToUser(lst[0].IDCreator, lst[0].IDExecutor);
-                    return View("~/Views/ToDoList/Index.cshtml", allToDoList);
+                    return RedirectToAction("../Views/ToDoList/Index.cshtml", allToDoList);
                 }
                 catch
                 {
@@ -197,13 +197,14 @@ namespace toDoList.Controllers
                 tsk.UpdatedDate =Convert.ToDateTime( collection["UpdatedDate"]);
                 tsk.CreatedDate = Convert.ToDateTime(collection["CreatedDate"]);
 
-                IEnumerable<AddTask_To_ToDoList> tsk1 = _toDoListRepository.Update(tsk);
+                AddTask_To_ToDoList  tsk1 = _toDoListRepository.Update(tsk);
 
-                var value = collection["2"];
+               IEnumerable<AddTask_To_ToDoList> lst1 = _toDoListRepository.GetListByAssignedUserId(tsk1.IDExecutor);
 
-                return RedirectToAction(nameof(Index),new { id = lst[0].IDExecutor });
+                @ViewBag.AssignedId = tsk1.IDExecutor;
+                return View("~/Views/ToDoList/ShowActiveListWithToDoTasks.cshtml",  lst1);
             }
-            catch
+            catch   (Exception ex )
             {
                 return View();
             }

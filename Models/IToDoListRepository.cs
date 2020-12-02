@@ -13,7 +13,7 @@ namespace toDoList.Models
 
         public List<AddTask_To_ToDoList> AddTasksToList(List<ToDoTask> tasks, ToDoList toDoList);
 
-        public IEnumerable<AddTask_To_ToDoList> Update(AddTask_To_ToDoList AddTask_To_ToDoList);
+        public AddTask_To_ToDoList  Update(AddTask_To_ToDoList AddTask_To_ToDoList);
         public ToDoList Delete(ToDoList toDoList);
 
         public IEnumerable<ToDoList> GetList();

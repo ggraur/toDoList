@@ -31,12 +31,12 @@ namespace toDoList.Models
             return toDoList;
         }
 
-        public IEnumerable<AddTask_To_ToDoList> Update(AddTask_To_ToDoList AddTask_To_ToDoList)
+        public  AddTask_To_ToDoList  Update(AddTask_To_ToDoList addTask_To_ToDoList)
         {
-            var _todoList = context.AddTask_To_ToDoList.Attach(AddTask_To_ToDoList);
-            _todoList.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            var _task = context.AddTask_To_ToDoList.Attach(addTask_To_ToDoList);
+            _task.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
-            return (IEnumerable<AddTask_To_ToDoList>)_todoList;
+            return addTask_To_ToDoList;
         }
         public IEnumerable<ToDoList> GetList()
         {
@@ -93,7 +93,7 @@ namespace toDoList.Models
                 tmp.IsChecked = true;
                 tmp.TaskName = tsk.TaskName;
                 tmp.TaskDescription = tsk.TaskDescription;
-                tmp.TaskStatus = StatusTask.NotYet;
+                tmp.TaskStatus = StatusTask.Created;
                 tmp.CreatedDate = toDoList.CreatedToDoListDatetime;
                 tmp.UpdatedDate = DateTime.Now;
                 context.AddTask_To_ToDoList.Add(tmp);
