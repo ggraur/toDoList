@@ -43,6 +43,20 @@ namespace toDoList.Models
             return context.ToDoLists;
         }
 
+        public AddTask_To_ToDoList DeleteListItemByIdItem(int ItemID)
+        {
+            AddTask_To_ToDoList _tdItem = context.AddTask_To_ToDoList.Find(ItemID);
+            if (_tdItem != null)
+            {
+                context.AddTask_To_ToDoList.RemoveRange(_tdItem);
+                context.SaveChanges();
+            }
+            return _tdItem;
+        }
+        public IEnumerable<AddTask_To_ToDoList> GetListItemByIdItem(int ItemID)
+        {
+            return context.AddTask_To_ToDoList.Where(x => x.ListTaskID == ItemID);
+        }
         public IEnumerable<ToDoList> GetListById(int ListID)
         {
             return context.ToDoLists.Where(x=>x.ToDoListID == ListID);
@@ -50,7 +64,7 @@ namespace toDoList.Models
 
         public IEnumerable<AddTask_To_ToDoList> GetToDoListById(int ListID)
         {
-            return context.AddTask_To_ToDoList.Where(x => x.ToDoListID == ListID);
+            return context.AddTask_To_ToDoList.Where(x => x.ListTaskID == ListID);
         }
 
         public IEnumerable<ToDoList> GetListByCreatorUser(int UserID)
@@ -80,6 +94,8 @@ namespace toDoList.Models
                 tmp.TaskName = tsk.TaskName;
                 tmp.TaskDescription = tsk.TaskDescription;
                 tmp.TaskStatus = StatusTask.NotYet;
+                tmp.CreatedDate = toDoList.CreatedToDoListDatetime;
+                tmp.UpdatedDate = DateTime.Now;
                 context.AddTask_To_ToDoList.Add(tmp);
                 context.SaveChanges();
                 tmpAdd.Add(tmp);

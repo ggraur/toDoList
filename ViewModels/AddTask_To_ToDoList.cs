@@ -23,6 +23,8 @@ namespace toDoList.ViewModels
         public StatusTask TaskStatus { get; set; }
 
         public int IDExecutor { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
 
     }
 }

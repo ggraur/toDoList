@@ -25,6 +25,6 @@ namespace toDoList.ViewModels
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-
+        public string PhotoPath { get; set; }
     }
 }

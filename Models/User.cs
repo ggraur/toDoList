@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using toDoClassLibrary;
+using toDoList.ViewModels;
 
 namespace toDoList.Models
 {
-    public class User
+    public class MyUser: LoginViewModel
     {
         public int UserID { get; set; }
 
