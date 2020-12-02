@@ -42,9 +42,7 @@
 
     <ItemGroup>
       <Content Remove="Views\ToDoList\CreateTaskToDoinList.cshtml" />
-      <Content Remove="Views\ToDoList\Delete.cshtml" />
       <Content Remove="Views\ToDoList\Details.cshtml" />
-      <Content Remove="Views\ToDoList\Edit.cshtml" />
       <Content Remove="Views\ToDoList\View.cshtml" />
       <Content Remove="Views\ToDoList\_Create.cshtml" />
     </ItemGroup>

@@ -18,6 +18,8 @@ namespace toDoList.Models
 
         public IEnumerable<ToDoList> GetList();
         public IEnumerable<ToDoList> GetListById(int ListID);
+        public IEnumerable<AddTask_To_ToDoList> GetListItemByIdItem(int ItemID);
+        public AddTask_To_ToDoList DeleteListItemByIdItem(int ItemID);
         public IEnumerable<AddTask_To_ToDoList> GetToDoListById(int ListID);
         public IEnumerable<ToDoList> GetListByCreatorUser(int UserID);
         public IEnumerable<AddTask_To_ToDoList> GetListByAssignedUserId(int UserID);
