@@ -176,11 +176,32 @@ namespace toDoList.Controllers
         // POST: ToDoListController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Edit/{id?}")]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                List<ToDoList> lst = _toDoListRepository.GetListById(id).ToList();
+
+                AddTask_To_ToDoList tsk = new AddTask_To_ToDoList();
+                tsk.ToDoListID = Convert.ToInt32(collection["ToDoListID"].ToString());
+                tsk.ListTaskID = Convert.ToInt32(collection["ListTaskID"].ToString());
+                tsk.IDExecutor = Convert.ToInt32(collection["IDExecutor"].ToString());
+                string b = collection["IsChecked"].ToString();
+                
+                tsk.IsChecked = (b==""?false:true);
+                tsk.TaskDescription= collection["TaskDescription"].ToString();
+                tsk.TaskID  = Convert.ToInt32(collection["TaskID"].ToString()); ;
+                tsk.TaskName = collection["TaskName"].ToString();
+                tsk.TaskStatus = (StatusTask)Convert.ToInt32(collection["TaskStatus"].ToString());
+                tsk.UpdatedDate =Convert.ToDateTime( collection["UpdatedDate"]);
+                tsk.CreatedDate = Convert.ToDateTime(collection["CreatedDate"]);
+
+                IEnumerable<AddTask_To_ToDoList> tsk1 = _toDoListRepository.Update(tsk);
+
+                var value = collection["2"];
+
+                return RedirectToAction(nameof(Index),new { id = lst[0].IDExecutor });
             }
             catch
             {

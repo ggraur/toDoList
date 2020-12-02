@@ -31,12 +31,12 @@ namespace toDoList.Models
             return toDoList;
         }
 
-        public ToDoList Update(ToDoList toDoList)
+        public IEnumerable<AddTask_To_ToDoList> Update(AddTask_To_ToDoList AddTask_To_ToDoList)
         {
-            var _todoList=context.ToDoLists.Attach(toDoList);
+            var _todoList = context.AddTask_To_ToDoList.Attach(AddTask_To_ToDoList);
             _todoList.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
-            return toDoList;
+            return (IEnumerable<AddTask_To_ToDoList>)_todoList;
         }
         public IEnumerable<ToDoList> GetList()
         {
