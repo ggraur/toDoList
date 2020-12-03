@@ -9,10 +9,13 @@ using toDoClassLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace toDoList.Controllers
 {
+    
     [Route("[controller]")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
@@ -50,7 +53,9 @@ namespace toDoList.Controllers
             userDetailsViewModel.PageTitle = "User Details";
             return View("~/Views/User/GetUserDetails.cshtml", userDetailsViewModel);
         }
+        
         [HttpGet]
+
         public ViewResult Create()
         {
             return View("~/Views/User/Create.cshtml");
