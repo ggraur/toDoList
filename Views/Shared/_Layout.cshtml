@@ -25,13 +25,68 @@
     <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../css/site.css" rel="stylesheet" />
+    @*<link href="../css/site.css" rel="stylesheet" />*@
 
     <title>@ViewBag.Title</title>
     <style>
-        bg-dark {
+        /* .bg-dark {
             background-color: antiquewhite !important;
+        }*/
+        .navbar {
+            height: 80px !important;
         }
+
+            .navbar navbar-expand-sm bg-dark navbar-dark {
+                background-color: #e9e9e9 !important;
+            }
+
+        .nav-item {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+            .nav-item:hover {
+                background-color: #99ff99 !important;
+                text-decoration-color: #e9e9e9 !important;
+            }
+
+        /*ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #e9e9e9 !important;
+        }*/
+        /*   .navbar-dark {
+            background-color: #e9e9e9 !important;
+            height: 80px;
+        }        */
+        /*.nav-item {
+            background-color: #e9e9e9 !important;
+        }
+         .nav-pills {
+            background-color: #e9e9e9 !important;
+        }*/
+        li {
+            float: left;
+        }
+
+            li a, .dropbtn {
+                display: inline-block;
+                /*color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                background-color: #e9e9e9 !important;*/
+            }
+
+               li a:hover, .dropdown:hover .dropbtn {
+                    background-color: #99ff99;
+                } 
+
+            li.dropdown {
+                display: inline-block;
+            }
     </style>
 </head>
 <body>
@@ -44,55 +99,19 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavBar">
-                <div class="navbar-nav">
-                    @*<div class="nav-item">
-                            <a class="nav-link" asp-action="" asp-controller="">To Do List</a>
-                        </div>*@
-                    @*<div class="nav-item">
-                            <a class="nav-link" asp-action="index" asp-controller="User">Users</a>
-                        </div>*@
-
-                    @*<div class="dropdown" style="background-color:#FF343A40">
-                            <a class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Users
-                            </a>
-                            <div id="dropIdList" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" asp-action="Create" asp-controller="User">Create New User</a>
-                                <a class="dropdown-item" asp-action="index" asp-controller="User">View Users</a>
-                            </div>
-                        </div>
-                        <div class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" id="idTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Tasks
-                            </a>
-                            <div id="dropIdList" class="dropdown-menu" aria-labelledby="idTask">
-                                <a class="dropdown-item" asp-action="Create" asp-controller="Task">Create New Task</a>
-                                <a class="dropdown-item" asp-action="index" asp-controller="Task">View Tasks</a>
-                            </div>
-                        </div>*@
-                    @*<div class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" id="idTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                ToDo List
-                            </a>
-                           <div id="dropIdToDoList" class="dropdown-menu" aria-labelledby="idTask">
-                                <a class="dropdown-item" asp-action="Create" asp-controller="ToDoList">Create To Do List</a>
-                                <a class="dropdown-item" asp-action="index" asp-controller="ToDoList">Existing To Do List</a>
-                            </div>
-                        </div>*@
-
-                </div>
                 <div class="navbar-nav ml-auto float-left">
                     <ul class="navbar-nav ml-auto ">
                         @if (signInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item nav-pills"><a asp-action="Create" asp-controller="User">Create New User</a></li>
-                            <li class="nav-item nav-pills"><a asp-action="index" asp-controller="User">View Users</a></li>
-                            <li class="nav-item nav-pills"><a asp-action="Create" asp-controller="Task">Create New Task</a></li>
-                            <li class="nav-item nav-pills"><a asp-action="index" asp-controller="Task">View Tasks</a></li>
-                            <li >|</li>
-                            <li class="nav-item nav-pills float-right" style="float:right !important">
+                            <li class="nav-item nav-pills nav-link"><a asp-action="Create" asp-controller="User">Create New User</a></li>
+                            <li class="nav-item nav-pills nav-link"><a asp-action="index" asp-controller="User">View Users</a></li>
+                            <li class="nav-item nav-pills nav-link"><a asp-action="Create" asp-controller="Task">Create New Task</a></li>
+                            <li class="nav-item nav-pills nav-link"><a asp-action="index" asp-controller="Task">View Tasks</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li class="nav-item nav-pills">
                                 <form method="post" asp-action="logout" asp-controller="account">
-                                    <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
+                                    <button type="submit" class="nav-link btn btn-link py-0" style="width:auto;vertical-align:middle">
+                                        @*<button type="submit" class="nav-link btn btn-link py-0  align-text-bottom" style="width:auto;vertical-align:middle">*@
                                         Logout @User.Identity.Name
                                     </button>
                                 </form>
@@ -108,7 +127,6 @@
                             </li>
                         }
                     </ul>
-
                 </div>
             </div>
         </nav>
