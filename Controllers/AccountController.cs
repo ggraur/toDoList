@@ -9,6 +9,7 @@ using toDoList.ViewModels;
 
 namespace toDoList.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -30,7 +31,7 @@ namespace toDoList.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -43,8 +44,15 @@ namespace toDoList.Controllers
 
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        await signInManager.SignInAsync(user, isPersistent: false);
+                        return RedirectToAction("index", "home");
+                    }
                 }
                 foreach (var error in result.Errors)
                 {
@@ -54,12 +62,6 @@ namespace toDoList.Controllers
             return View(model);
         }
 
-        //[HttpGet]
-        //public IActionResult Login()
-        //{
-        //    return View();
-        //}
-
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -68,7 +70,6 @@ namespace toDoList.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl)
         {
             LoginViewModel model = new LoginViewModel
@@ -82,7 +83,7 @@ namespace toDoList.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -105,7 +106,7 @@ namespace toDoList.Controllers
                 {
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
-                        return Redirect(returnUrl);
+                        return LocalRedirect(returnUrl);
                     }
                     else
                     {
@@ -127,46 +128,10 @@ namespace toDoList.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Login(LoginViewModel model)
-        //{
-
-        //    model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await userManager.FindByEmailAsync(model.Email);
-        //        if (user != null && !user.EmailConfirmed &&
-        //            (await userManager.CheckPasswordAsync(user, model.Password)))
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Account not activate, Please check you email and activate your account!");
-        //            return View(model);
-        //        }
-
-        //        var result = await signInManager.PasswordSignInAsync(model.Email, model.Password,
-        //                                model.RememberMe, true);
-
-        //        if (result.Succeeded)
-        //        {
-        //            return RedirectToAction("index", "home");
-        //        }
-
-        //        if (result.IsLockedOut)
-        //        {
-        //            return View("AccountLocked");
-        //        }
-
-        //        ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-
-        //    }
-        //    return View(model);
-        //}
     }
 }
