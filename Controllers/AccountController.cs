@@ -50,8 +50,15 @@ namespace toDoList.Controllers
                     }
                     else
                     {
-                        await signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("index", "home");
+                        if (signInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                        {
+                            return RedirectToAction("ListUsers", "Administration");
+                        }
+                        else
+                        {
+                            await signInManager.SignInAsync(user, isPersistent: false);
+                            return RedirectToAction("index", "home");
+                        }
                     }
                 }
                 foreach (var error in result.Errors)
@@ -127,7 +134,9 @@ namespace toDoList.Controllers
             return View(model);
         }
 
+
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();

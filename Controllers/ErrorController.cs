@@ -24,7 +24,8 @@ namespace toDoList.Controllers
                     break;
             }
 
-            return View("NotFound");
+            //return View("NotFound");
+            return View("~/Views/Error/NotFound.cshtml");
 
         }
 
