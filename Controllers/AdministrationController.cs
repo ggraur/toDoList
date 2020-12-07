@@ -205,10 +205,23 @@ namespace toDoList.Controllers
             var user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
-                ViewBag.ErrorMessage = $"User with Id={id} cannot be found";
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
                 return View("NotFound");
             }
-            return View();
+
+            var userClaims = await userManager.GetClaimsAsync(user);
+            var userRoles= await userManager.GetRolesAsync(user);
+
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Email= user.Email,
+                UserName=user.UserName,
+                Claims= userClaims.Select(c=>c.Value).ToList(),
+                Roles= userRoles
+            };
+
+            return View(model);
         }
     }
 }

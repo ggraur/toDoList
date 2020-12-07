@@ -206,6 +206,7 @@ namespace toDoList.Controllers
             }
             catch   (Exception ex )
             {
+                Console.WriteLine(ex.Message);
                 return View();
             }
         }
