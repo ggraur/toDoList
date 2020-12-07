@@ -18,9 +18,11 @@ namespace toDoList
         }
 
         public DbSet<MyUser> MyUsers { get; set; }
+
+        public DbSet<AppUserAddress> UserAddress { get; set; }
   
        public DbSet<ToDoTask> Tasks { get; set; }
-         public DbSet<ToDoList> ToDoLists { get; set; }
+       public DbSet<ToDoList> ToDoLists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +39,8 @@ namespace toDoList
         }
 
         public DbSet<toDoList.ViewModels.AddTask_To_ToDoList> AddTask_To_ToDoList { get; set; }
+
+        public DbSet<toDoList.ViewModels.EditRoleViewModel> EditRoleViewModel { get; set; }
 
        
     }

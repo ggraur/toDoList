@@ -8,8 +8,9 @@ namespace toDoList.ViewModels
 {
     public class UserRoleViewModel
     {
-       public UserRole UserRole { get; set; }
-        public string PageTitle { get; set; }
-
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public bool IsSelected { get; set; }
+       
     }
 }

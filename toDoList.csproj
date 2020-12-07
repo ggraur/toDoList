@@ -36,11 +36,12 @@
       <Compile Remove="ViewModels\ForgotPasswordViewModel.cs" />
       <Compile Remove="ViewModels\ResetPasswordViewModel.cs" />
       <Compile Remove="ViewModels\ToDoListCreateViewModel.cs" />
-      <Compile Remove="ViewModels\UserRoleViewModel.cs" />
       <Compile Remove="ViewModels\_ToDoListCreateViewModel.cs" />
     </ItemGroup>
 
     <ItemGroup>
+      <Content Remove="Views\Administration\EditRole1.cshtml" />
+      <Content Remove="Views\Administration\_EditRole1.cshtml" />
       <Content Remove="Views\ToDoList\CreateTaskToDoinList.cshtml" />
       <Content Remove="Views\ToDoList\Details.cshtml" />
       <Content Remove="Views\ToDoList\View.cshtml" />
