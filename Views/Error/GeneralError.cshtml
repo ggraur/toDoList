@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewData["Title"] = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var signal = @ViewBag.Signal;
+    var title = @ViewBag.ErrorTitle;
+    var message = @ViewBag.ErrorMessage;
+}
+
+
+@switch (signal)
+{
+    case "ok":
+
+        <div class="card well">
+            <div class="card-header alert-success font-weight-bolder">
+                <h2><strong> @title </strong></h2>
+            </div>
+            <div class="card-body font-weight-bold">
+                <h3>@message</h3>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Index" asp-controller="Home">Back to Home Page </a>
+            </div>
+        </div>
+        break;
+    default:
+        <div class="card alert">
+            <div class="card-header alert-danger font-weight-bolder">
+                <h2><strong> @title </strong></h2>
+            </div>
+            <div class="card-body font-weight-bold">
+                <h3>@message</h3>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Index" asp-controller="Home">Back to Home Page </a>
+            </div>
+        </div>
+        break;
+}
+
+
+@*<h1>General Error</h1>
+
+    <h3> An Error occured while processing your request.
+        The support team is notified and we are working on the fix</h3>
+    <h5> Please contact us on indo23md@yahoo.com </h5>
+    <hr />
+    <h3>Exception Details:</h3>
+    <div class="alert alert-danger ">
+        <h5>Exception Path</h5>
+        <hr/>
+        <p>@ViewBag.ExceptionPath</p>
+    </div>
+    <div class="alert alert-danger ">
+        <h5>Exception Message</h5>
+        <hr />
+        <p>@ViewBag.ExceptionMessage</p>
+    </div>
+    <div class="alert alert-danger ">
+        <h5>Exception Stack Path</h5>
+        <hr />
+        <p>@ViewBag.StackTrace</p>
+    </div>*@
+
+

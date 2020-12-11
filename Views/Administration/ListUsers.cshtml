@@ -4,6 +4,21 @@
     ViewBag.Title = "All Users";
 }
 
+<script type="text/javascript">
+    function confirmDelete(uniqueId, isDeleteClicked) {
+        var deleteSpan = 'deleteSpan_' + uniqueId;
+        var confirmDeleteSpan = 'confirmDeleteSpan_' + uniqueId;
+        if (isDeleteClicked) {
+            $('#' + deleteSpan).hide();
+            $('#' + confirmDeleteSpan).show();
+        }
+        else {
+            $('#' + deleteSpan).show();
+            $('#' + confirmDeleteSpan).hide();
+        }
+    }
+</script>
+
 <h1>All Users</h1>
 
 @if (Model.Any())
@@ -56,6 +71,6 @@ else
         </div>
     </div>
 }
-@section Scripts{ 
+@*@section Scripts{ 
     <script src="~/js/CustomScript.js"></script>
-}
+}*@

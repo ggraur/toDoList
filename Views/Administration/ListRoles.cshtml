@@ -1,4 +1,8 @@
 ﻿
+@using Microsoft.AspNetCore.Authorization
+
+@inject IAuthorizationService authorizationService
+
 @model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
 
 @{
@@ -6,7 +10,20 @@
     ViewBag.Title = "All Roles";
 }
 
- 
+<script type="text/javascript">
+    function confirmDelete(uniqueId, isDeleteClicked) {
+        var deleteSpan = 'deleteSpan_' + uniqueId;
+        var confirmDeleteSpan = 'confirmDeleteSpan_' + uniqueId;
+        if (isDeleteClicked) {
+            $('#' + deleteSpan).hide();
+            $('#' + confirmDeleteSpan).show();
+        }
+        else {
+            $('#' + deleteSpan).show();
+            $('#' + confirmDeleteSpan).hide();
+        }
+    }
+</script>
 
 <h1>Existing Roles</h1>
 
@@ -27,10 +44,30 @@
                 <h5 class="card-title">@role.Name</h5>
             </div>
             <div class="card-footer">
-                <a class="btn btn-primary" asp-action="EditRole" asp-controller="Administration" asp-route-id="@role.Id">Edit</a>
-                <a class="btn btn-danger" asp-action="DeleteRole" asp-controller="Administration" asp-route-id="@role.Id">Delete</a>
+                <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
+                    @if((await authorizationService.AuthorizeAsync(User,"EditRolePolicy")).Succeeded)
+                    {
+                        <a class="btn btn-primary" asp-action="EditRole" asp-controller="Administration" asp-route-id="@role.Id">Edit</a>
+                    }
+                    <span id="confirmDeleteSpan_@role.Id" style="display:none">
+                        <span>Are you sure you want to delete that role?!</span>
+                        <button type="submit" class="btn btn-danger">Yes</button>
+                        <a href="#" class="btn btn-primary"
+                           onclick="confirmDelete('@role.Id',false)">No</a>
+                    </span>
+                    <span id="deleteSpan_@role.Id">
+                        @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
+                        {
+                            <a href="#" class="btn btn-danger"
+                               onclick="confirmDelete('@role.Id',true)">Delete</a>
+                            //https://www.youtube.com/watch?v=1Mi9Y9GAuCw
+                        }
+
+                    </span>
+                </form>
             </div>
         </div>
+
     }
 }
 else

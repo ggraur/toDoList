@@ -9,12 +9,16 @@
     <ItemGroup>
       <Compile Remove="Views\ToDoList\Old\**" />
       <Compile Remove="Views\UserRole\**" />
+      <Compile Remove="Views\User\**" />
       <Content Remove="Views\ToDoList\Old\**" />
       <Content Remove="Views\UserRole\**" />
+      <Content Remove="Views\User\**" />
       <EmbeddedResource Remove="Views\ToDoList\Old\**" />
       <EmbeddedResource Remove="Views\UserRole\**" />
+      <EmbeddedResource Remove="Views\User\**" />
       <None Remove="Views\ToDoList\Old\**" />
       <None Remove="Views\UserRole\**" />
+      <None Remove="Views\User\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,8 +37,6 @@
       <Compile Remove="Models\_SQLToDoListRepository.cs" />
       <Compile Remove="ViewModels\AddPasswordViewModel.cs" />
       <Compile Remove="ViewModels\ChangePasswordViewModel.cs" />
-      <Compile Remove="ViewModels\ForgotPasswordViewModel.cs" />
-      <Compile Remove="ViewModels\ResetPasswordViewModel.cs" />
       <Compile Remove="ViewModels\ToDoListCreateViewModel.cs" />
       <Compile Remove="ViewModels\_ToDoListCreateViewModel.cs" />
     </ItemGroup>
@@ -55,6 +57,7 @@
 
     <ItemGroup>
       <Folder Include="Migrations\" />
+      <Folder Include="ErrorLogs\" />
       <Folder Include="wwwroot\Pages\" />
     </ItemGroup>
 
@@ -1233,6 +1236,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+      <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.3" />
     </ItemGroup>
 
     <ItemGroup>

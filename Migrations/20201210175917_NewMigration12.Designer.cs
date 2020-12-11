@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using toDoList;
 
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201210175917_NewMigration12")]
+    partial class NewMigration12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -449,18 +451,6 @@ namespace toDoList.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ResetLinkConfirmationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ResetLinkCreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ResetLinkValidity")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("ForgotPasswordViewModel");
@@ -483,6 +473,15 @@ namespace toDoList.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ResetLinkConfirmationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ResetLinkCreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ResetLinkValidity")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");

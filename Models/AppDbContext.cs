@@ -7,6 +7,7 @@ using toDoClassLibrary;
 using toDoList.Models;
 using toDoList.ViewModels;
 
+
 namespace toDoList
 {
     public class AppDbContext :  IdentityDbContext<ApplicationUser>
@@ -27,10 +28,11 @@ namespace toDoList
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<AppDbContext>()
-            //   .HasKey();
-
+            //   .HasNoKey();
+     
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
+            
             foreach (var foreignKey in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(e => e.GetForeignKeys()))
             {
@@ -38,10 +40,11 @@ namespace toDoList
             }
         }
 
-        public DbSet<toDoList.ViewModels.AddTask_To_ToDoList> AddTask_To_ToDoList { get; set; }
+        public DbSet<AddTask_To_ToDoList> AddTask_To_ToDoList { get; set; }
+        public DbSet<EditRoleViewModel> EditRoleViewModel { get; set; }
+        public DbSet<ResetPasswordViewModel> ResetPasswordViewModel { get; set; }
+        public DbSet<ForgotPasswordViewModel> ForgotPasswordViewModel { get; set; }
 
-        public DbSet<toDoList.ViewModels.EditRoleViewModel> EditRoleViewModel { get; set; }
 
-       
     }
 }
