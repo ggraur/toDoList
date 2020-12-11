@@ -8,9 +8,17 @@ namespace toDoList.ViewModels
 {
     public class ForgotPasswordViewModel
     {
+        [Key]
+        public int Id { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+        public string Token { get; set; }
+
+        public DateTime ResetLinkCreatedTime { get; set; }
+        public DateTime ResetLinkValidity { get; set; }
+
+        public DateTime ResetLinkConfirmationDate { get; set; }
 
     }
 }

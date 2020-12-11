@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using toDoList.Models;
+using toDoList.Security;
 
 namespace toDoList
 {
@@ -50,13 +52,61 @@ namespace toDoList
                     .Build();
 
             services.AddMvc(options =>
-            {   options.Filters.Add(new AuthorizeFilter(policy));
+            {
+                options.Filters.Add(new AuthorizeFilter(policy));
                 options.EnableEndpointRouting = false;
             }).AddXmlSerializerFormatters();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
+            });
+
+            services.AddAuthorization(options =>
+            {
+                //options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role", "true")
+                //                                                      .RequireRole("Administrator")
+                //                                                      .RequireRole("Super Admin")
+                //);
+
+                //options.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role", "true")
+                //                                                    .RequireRole("Administrator")
+                //                                                    .RequireRole("Super Admin"));
+
+                //options.AddPolicy("EditRolePolicy", policy => policy.RequireAssertion(context =>
+                //              context.User.IsInRole("Administrator") &&
+                //              context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") ||
+                //              context.User.IsInRole("Super Admin")
+                //    ));
+               
+                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireAssertion(context =>
+                             context.User.IsInRole("Administrator") &&
+                             context.User.HasClaim(claim => claim.Type == "Delete Role" && claim.Value == "true") ||
+                             context.User.IsInRole("Super Admin")
+                  ));
+
+                options.AddPolicy("EditRolePolicy", policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+
+                options.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Administrator"));
+                options.AddPolicy("SuperAdminRolePolicy", policy => policy.RequireRole("Super Admin"));
+                  
+                options.AddPolicy("ManagerRights",
+                    policy => policy.RequireAssertion(context =>
+                              context.User.IsInRole("Administrator") ||
+                              context.User.IsInRole("Super Admin")));
+                  
+            });
 
             services.AddScoped<IUserRepository, SQLUserRepository>();
             services.AddScoped<ITaskRepository, SQLTaskRepository>();
             services.AddScoped<IToDoListRepository, SQLToDoRepository>();
+            services.AddScoped<IForgotPasswordRepository, SQL_IForgotPassword>();
+
+            //services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
+            services.AddSingleton<IAuthorizationHandler, AdministratorHandler>();
+            
+
 
             //services.AddSingleton<IUserRepository,MockUserRepository>();// memory repository used for test
 
