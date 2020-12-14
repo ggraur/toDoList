@@ -10,8 +10,8 @@ using toDoList;
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201210175917_NewMigration12")]
-    partial class NewMigration12
+    [Migration("20201213130946_newMigration3")]
+    partial class newMigration3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,36 @@ namespace toDoList.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1fa0c9b8-45f9-4835-9a3e-a6eb2b64d005",
+                            ConcurrencyStamp = "2134c8a2-6538-453d-8726-4f6b9e21d3f5",
+                            Name = "Super Admin",
+                            NormalizedName = "SUPER ADMIN"
+                        },
+                        new
+                        {
+                            Id = "8db3a46b-918b-4b0f-90e9-81fa103f262e",
+                            ConcurrencyStamp = "fe4e795f-7624-4a96-b684-50c069396a24",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "bb413bf2-537e-497e-bf5c-68dc0002e47c",
+                            ConcurrencyStamp = "8a4b1f65-36e3-4a42-b3b2-d7f6d688ae14",
+                            Name = "Power User",
+                            NormalizedName = "POWER USER"
+                        },
+                        new
+                        {
+                            Id = "fc2ab893-2d06-4f50-8608-a94bd4d3ab3a",
+                            ConcurrencyStamp = "eb5ecd96-0446-4342-af10-8f47aef49fa4",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -131,6 +161,13 @@ namespace toDoList.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "82b1a0e1-61f5-40ab-9773-bb74814413f8",
+                            RoleId = "1fa0c9b8-45f9-4835-9a3e-a6eb2b64d005"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -150,141 +187,6 @@ namespace toDoList.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("toDoClassLibrary.MyUser", b =>
-                {
-                    b.Property<int>("UserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("PhotoPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("UserPass")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserRole")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserID");
-
-                    b.ToTable("MyUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            UserID = 1,
-                            UserEmail = "mary@gmail.com",
-                            UserName = "Mary",
-                            UserPass = "maryPass",
-                            UserRole = 1
-                        },
-                        new
-                        {
-                            UserID = 2,
-                            UserEmail = "Karl@gmail.com",
-                            UserName = "Karl",
-                            UserPass = "karlPass",
-                            UserRole = 2
-                        },
-                        new
-                        {
-                            UserID = 3,
-                            UserEmail = "Eric@gmail.com",
-                            UserName = "Eric",
-                            UserPass = "ericPass",
-                            UserRole = 2
-                        },
-                        new
-                        {
-                            UserID = 4,
-                            UserEmail = "Jorge@gmail.com",
-                            UserName = "Jorge",
-                            UserPass = "jorgePass",
-                            UserRole = 0
-                        },
-                        new
-                        {
-                            UserID = 5,
-                            UserEmail = "Ann@gmail.com",
-                            UserName = "Ann",
-                            UserPass = "annPass",
-                            UserRole = 3
-                        },
-                        new
-                        {
-                            UserID = 6,
-                            UserEmail = "Annette@gmail.com",
-                            UserName = "Annette",
-                            UserPass = "annPass",
-                            UserRole = 3
-                        });
-                });
-
-            modelBuilder.Entity("toDoClassLibrary.ToDoList", b =>
-                {
-                    b.Property<int>("ToDoListID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("CreatedToDoListDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FinalizationDatetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IDCreator")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IDExecutor")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ToDoListName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserIDCreator")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserIDExecutor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ToDoListID");
-
-                    b.ToTable("ToDoLists");
-                });
-
-            modelBuilder.Entity("toDoClassLibrary.ToDoTask", b =>
-                {
-                    b.Property<int>("TaskID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("TaskActive")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TaskDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TaskName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TaskID");
-
-                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("toDoList.Models.AppUserAddress", b =>
@@ -385,45 +287,113 @@ namespace toDoList.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "82b1a0e1-61f5-40ab-9773-bb74814413f8",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6a985bc3-e1c5-4b3e-80a4-7ac93ce7030a",
+                            Email = "superadmin@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "SUPERADMIN@GMAIL.COM",
+                            NormalizedUserName = "SUPERADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEgjKSeD2Ds8RIJ40d4OYKamq5wQopldzWzPJicN6IHgC/ZrMFjZyvyUX+Tuqdu1LQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "V4PJL2RQEZ6FIRGR3LQPLMKQVYEQIMIL",
+                            TwoFactorEnabled = false,
+                            UserName = "superadmin@gmail.com"
+                        });
                 });
 
-            modelBuilder.Entity("toDoList.ViewModels.AddTask_To_ToDoList", b =>
+            modelBuilder.Entity("toDoList.Models.mapView_UtilzadoresEmpresa", b =>
                 {
-                    b.Property<int>("ListTaskID")
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AppUserAddressUserAddressId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToView("db_vw_UtilizadoresEmpresa");
+                });
+
+            modelBuilder.Entity("toDoList.ViewModels.ConConfigViewModel", b =>
+                {
+                    b.Property<int>("ConexaoID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IDExecutor")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsChecked")
+                    b.Property<bool>("ActiveConnection")
                         .HasColumnType("bit");
 
-                    b.Property<string>("TaskDescription")
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InstanciaSQL")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TaskID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TaskName")
+                    b.Property<string>("NomeServidor")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TaskStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ToDoListID")
-                        .HasColumnType("int");
+                    b.Property<string>("Utilizador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.HasKey("ConexaoID");
 
-                    b.HasKey("ListTaskID");
-
-                    b.ToTable("AddTask_To_ToDoList");
+                    b.ToTable("ConConfigViewModel");
                 });
 
             modelBuilder.Entity("toDoList.ViewModels.EditRoleViewModel", b =>
@@ -440,6 +410,68 @@ namespace toDoList.Migrations
                     b.ToTable("EditRoleViewModel");
                 });
 
+            modelBuilder.Entity("toDoList.ViewModels.EmpresaUtilizadoresViewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmpresaUtilizadores");
+                });
+
+            modelBuilder.Entity("toDoList.ViewModels.EmpresasViewModel", b =>
+                {
+                    b.Property<int>("EmpresaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataExpiracao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Licenca")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NIF")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NrEmpresas")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NrPostos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EmpresaID");
+
+                    b.ToTable("EmpresasViewModel");
+                });
+
             modelBuilder.Entity("toDoList.ViewModels.ForgotPasswordViewModel", b =>
                 {
                     b.Property<int>("Id")
@@ -449,6 +481,18 @@ namespace toDoList.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ResetLinkConfirmationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ResetLinkCreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ResetLinkValidity")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -473,15 +517,6 @@ namespace toDoList.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ResetLinkConfirmationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ResetLinkCreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ResetLinkValidity")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");

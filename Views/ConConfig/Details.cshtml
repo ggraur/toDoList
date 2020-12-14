@@ -1,0 +1,49 @@
+﻿@model toDoList.ViewModels.ConConfigViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalhes da conexão: <strong>ViewBag.NomeServidor</strong></h1>
+<hr />
+<div>
+
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NomeServidor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NomeServidor)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.InstanciaSQL)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InstanciaSQL)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Utilizador)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Utilizador)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ActiveConnection)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ActiveConnection)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ConexaoID">Edit</a> |
+    <a asp-action="Index" asp-route-EmpresaId="@Model.EmpresaId">Back to List</a>
+</div>

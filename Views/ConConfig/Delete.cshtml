@@ -1,0 +1,57 @@
+﻿@model toDoList.ViewModels.ConConfigViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="alert alert-danger"><strong>Tem A certeza que quer eliminar a conexao: @ViewBag.NomeServidor !?</strong></h1>
+
+<hr/>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2" hidden>
+            @Html.DisplayNameFor(model => model.ConexaoID)
+        </dt>
+        <dt class="col-sm-2" hidden>
+            @Html.DisplayNameFor(model => model.EmpresaId)
+        </dt>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NomeServidor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NomeServidor)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.InstanciaSQL)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InstanciaSQL)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Utilizador)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Utilizador)
+        </dd>
+        <dt class="col-sm-2" hidden>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd class="col-sm-10" hidden>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ActiveConnection)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ActiveConnection)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ConexaoID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" asp-route-EmpresaId="@Model.EmpresaId" >Back to List</a>
+    </form>
+</div>

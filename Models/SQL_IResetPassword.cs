@@ -6,7 +6,7 @@ using toDoList.ViewModels;
 
 namespace toDoList.Models
 {
-    public class SQL_IForgotPassword : IForgotPasswordRepository
+    public class SQL_IForgotPassword : IForgotPassword
     {
         private readonly AppDbContext context;
 
