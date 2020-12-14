@@ -16,19 +16,17 @@ namespace toDoList.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<AccountController> logger;
-        private readonly IForgotPasswordRepository  passwordRepo;
+        private readonly IForgotPassword  passwordRepo;
 
         public AccountController(UserManager<ApplicationUser> userManager,
                                 SignInManager<ApplicationUser> signInManager,
                                 ILogger<AccountController> logger, 
-                                IForgotPasswordRepository passwordRepo)
+                                IForgotPassword passwordRepo)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.passwordRepo = passwordRepo;
-
-
         }
 
         [AllowAnonymous]
@@ -37,6 +35,7 @@ namespace toDoList.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
         {
@@ -107,7 +106,6 @@ namespace toDoList.Controllers
         }
 
         [HttpPost]
-    
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -150,8 +148,6 @@ namespace toDoList.Controllers
             }
             return View(model);
         }
-
-
 
         //http://localhost:54324/Account/ConfirmEmail?userId=12a527c5-e995-4a86-b1c9-520c54450412&token=CfDJ8AN7DtCXzUpKnfnw8kxZyixCb2gm0AvJSUCESSqZkBqxQ5tzOU63Gj1hbpLYHPFMwLkRa9P%2Bbsbmjr7yvvkZtqFiPRpGlvg1wA3wYOard4qf0iAMaMjJW7ws%2FWmhlXvncHgSiVXw4iCOXgaFv16mIr%2BkH365dt%2FTm6h0AxUDKI7PvNiUjABciD1xyDK2u60MZSxyTW6krM29tekyMv8AsxTfGLPNsmCn3EuxaQx%2FMUiQxXTlXuzQNtbx93HzA4IrPQ%3D%3D
         [HttpGet]
@@ -262,8 +258,6 @@ namespace toDoList.Controllers
             return View("~/Views/Error/GeneralError.cshtml");
         }
 
-     
-
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
@@ -308,6 +302,6 @@ namespace toDoList.Controllers
             }
             return View(model);
         }
-        //ResetPassword
+
     }
 }

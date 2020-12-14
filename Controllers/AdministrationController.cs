@@ -14,7 +14,7 @@ using System.Security;
 
 namespace toDoList.Controllers
 {
-    [Authorize(Policy = "ManagerRights")]
+   [Authorize(Policy = "ManagerRights")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -60,7 +60,6 @@ namespace toDoList.Controllers
         }
 
         [HttpGet]
-
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
@@ -89,7 +88,6 @@ namespace toDoList.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> EditRole(EditRoleViewModel editRoleViewModel)
         {
             var role = await roleManager.FindByIdAsync(editRoleViewModel.Id);
@@ -462,15 +460,12 @@ namespace toDoList.Controllers
                 return View(_model);
             }
 
-            //int iCount = _model.Claims.Where(x => x.IsSelected).Count();
 
             List<UserClaim> _claims =_model.Claims.Where(x => x.IsSelected).ToList<UserClaim>();
 
             if (_claims.Count > 0)
             {
                 result = await userManager.AddClaimsAsync(user,_claims.Select(c => new Claim(c.ClaimType, c.IsSelected ? "true" : "false")));
-                //result = await userManager.AddClaimsAsync(user,
-                //    _model.Claims.Select(c => new Claim(c.ClaimType, c.IsSelected ? "true" : "false")));
 
                 if (!result.Succeeded)
                 {

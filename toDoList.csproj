@@ -7,28 +7,41 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Views\ToDoList\Old\**" />
+      <Compile Remove="Views\Task\**" />
+      <Compile Remove="Views\ToDoList\**" />
       <Compile Remove="Views\UserRole\**" />
       <Compile Remove="Views\User\**" />
-      <Content Remove="Views\ToDoList\Old\**" />
+      <Content Remove="Views\Task\**" />
+      <Content Remove="Views\ToDoList\**" />
       <Content Remove="Views\UserRole\**" />
       <Content Remove="Views\User\**" />
-      <EmbeddedResource Remove="Views\ToDoList\Old\**" />
+      <EmbeddedResource Remove="Views\Task\**" />
+      <EmbeddedResource Remove="Views\ToDoList\**" />
       <EmbeddedResource Remove="Views\UserRole\**" />
       <EmbeddedResource Remove="Views\User\**" />
-      <None Remove="Views\ToDoList\Old\**" />
+      <None Remove="Views\Task\**" />
+      <None Remove="Views\ToDoList\**" />
       <None Remove="Views\UserRole\**" />
       <None Remove="Views\User\**" />
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="Controllers\TaskController.cs" />
+      <Compile Remove="Controllers\ToDoListController.cs" />
+      <Compile Remove="Controllers\UserController.cs" />
       <Compile Remove="Controllers\UserRoleController.cs" />
       <Compile Remove="Controllers\_ToDoListController.cs" />
       <Compile Remove="Models\ApplicationDbContext.cs" />
+      <Compile Remove="Models\ITaskRepository.cs" />
+      <Compile Remove="Models\IToDoListRepository.cs" />
+      <Compile Remove="Models\IUserRepository.cs" />
       <Compile Remove="Models\IUserRoleRepository.cs" />
       <Compile Remove="Models\MockUserRepository.cs" />
       <Compile Remove="Models\MockUserRoleRepository.cs" />
+      <Compile Remove="Models\SQLTaskRepository.cs" />
       <Compile Remove="Models\SQLToDoListRepository.cs" />
+      <Compile Remove="Models\SQLToDoRepository.cs" />
+      <Compile Remove="Models\SQLUserRepository.cs" />
       <Compile Remove="Models\Task.cs" />
       <Compile Remove="Models\User.cs" />
       <Compile Remove="Models\UserRole.cs" />
@@ -44,10 +57,10 @@
     <ItemGroup>
       <Content Remove="Views\Administration\EditRole1.cshtml" />
       <Content Remove="Views\Administration\_EditRole1.cshtml" />
-      <Content Remove="Views\ToDoList\CreateTaskToDoinList.cshtml" />
-      <Content Remove="Views\ToDoList\Details.cshtml" />
-      <Content Remove="Views\ToDoList\View.cshtml" />
-      <Content Remove="Views\ToDoList\_Create.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Migrations\20201212145311_Newmigration1.sql" />
     </ItemGroup>
 
     <ItemGroup>
@@ -56,7 +69,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations\" />
+      <EmbeddedResource Include="Migrations\20201212145311_Newmigration1.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
       <Folder Include="ErrorLogs\" />
       <Folder Include="wwwroot\Pages\" />
     </ItemGroup>
@@ -1216,6 +1234,7 @@
       <None Include="node_modules\bootstrap-icons\icons\zoom-out.svg" />
       <None Include="node_modules\bootstrap-icons\LICENSE.md" />
       <None Include="node_modules\bootstrap-icons\README.md" />
+      <None Include="wwwroot\AppCss\AppStyleSheet.css" />
     </ItemGroup>
 
     <ItemGroup>

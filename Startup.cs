@@ -97,10 +97,13 @@ namespace toDoList
                   
             });
 
-            services.AddScoped<IUserRepository, SQLUserRepository>();
-            services.AddScoped<ITaskRepository, SQLTaskRepository>();
-            services.AddScoped<IToDoListRepository, SQLToDoRepository>();
-            services.AddScoped<IForgotPasswordRepository, SQL_IForgotPassword>();
+           // services.AddScoped<IUserRepository, SQLUserRepository>();
+            //services.AddScoped<ITaskRepository, SQLTaskRepository>();
+            //services.AddScoped<IToDoListRepository, SQLToDoRepository>();
+            services.AddScoped<IForgotPassword, SQL_IForgotPassword>();
+            services.AddScoped<IConConfig, SQL_ConConfig>();
+            services.AddScoped<IEmpresa, SQL_IEmpresa>();
+            services.AddScoped<IEmpresaUtilizadores, SQL_IEmpresaUtilizadores>();
 
             //services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
             services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();

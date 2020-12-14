@@ -6,7 +6,7 @@ using toDoList.ViewModels;
 
 namespace toDoList.Models
 {
-    public interface IForgotPasswordRepository
+    public interface IForgotPassword
     {
         public ForgotPasswordViewModel InsertResetLink(ForgotPasswordViewModel _model);
         public bool ConfirmResetLink(string email, string token);

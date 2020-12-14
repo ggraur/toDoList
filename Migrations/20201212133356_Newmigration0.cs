@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using toDoList.Models;
 
 namespace toDoList.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Newmigration0 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,6 +44,88 @@ namespace toDoList.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ConConfigViewModel",
+                columns: table => new
+                {
+                    ConexaoID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NomeServidor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstanciaSQL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Utilizador = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ActiveConnection = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ConConfigViewModel", x => x.ConexaoID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EditRoleViewModel",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EditRoleViewModel", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmpresasViewModel",
+                columns: table => new
+                {
+                    EmpresaID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NIF = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Licenca = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NrPostos = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NrEmpresas = table.Column<int>(type: "int", nullable: false),
+                    DataExpiracao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmpresasViewModel", x => x.EmpresaID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmpresaUtilizadores",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmpresaId = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsSelected = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmpresaUtilizadores", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ForgotPasswordViewModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetLinkCreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ResetLinkValidity = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ResetLinkConfirmationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ForgotPasswordViewModel", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MyUsers",
                 columns: table => new
                 {
@@ -57,6 +140,22 @@ namespace toDoList.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MyUsers", x => x.UserID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResetPasswordViewModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConfirmPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResetPasswordViewModel", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,18 +348,37 @@ namespace toDoList.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+          
+            migrationBuilder.Sql(" if exists ( select 1 from sys.views where name='db_vw_UtilizadoresEmpresa' and type='v' )  " + 
+                                 "  DROP VIEW [dbo].[db_vw_UtilizadoresEmpresa]; " +
+                                 " GO " +
+                                 " CREATE VIEW[dbo].[db_vw_UtilizadoresEmpresa] AS " +
+                                 " SELECT        dbo.AspNetUsers.Id, dbo.AspNetUsers.AppUserAddressUserAddressId, dbo.AspNetUsers.UserName, dbo.AspNetUsers.NormalizedUserName, dbo.AspNetUsers.Email, dbo.AspNetUsers.NormalizedEmail, " +
+                                 " dbo.AspNetUsers.EmailConfirmed, dbo.AspNetUsers.PasswordHash, dbo.AspNetUsers.SecurityStamp, dbo.AspNetUsers.ConcurrencyStamp, dbo.AspNetUsers.PhoneNumber, dbo.AspNetUsers.PhoneNumberConfirmed, " +
+                                 " dbo.AspNetUsers.TwoFactorEnabled, dbo.AspNetUsers.LockoutEnd, dbo.AspNetUsers.LockoutEnabled, dbo.AspNetUsers.AccessFailedCount " +
+                                 " FROM dbo.AspNetUsers RIGHT OUTER JOIN dbo.EmpresaUtilizadores ON dbo.AspNetUsers.Id = dbo.EmpresaUtilizadores.UserID "+
+                                 " GO ");
+
             migrationBuilder.InsertData(
-                table: "MyUsers",
-                columns: new[] { "UserID", "PhotoPath", "UserEmail", "UserName", "UserPass", "UserRole" },
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, "mary@gmail.com", "Mary", "maryPass", 1 },
-                    { 2, null, "Karl@gmail.com", "Karl", "karlPass", 2 },
-                    { 3, null, "Eric@gmail.com", "Eric", "ericPass", 2 },
-                    { 4, null, "Jorge@gmail.com", "Jorge", "jorgePass", 0 },
-                    { 5, null, "Ann@gmail.com", "Ann", "annPass", 3 },
-                    { 6, null, "Annette@gmail.com", "Annette", "annPass", 3 }
+                    { "1fa0c9b8-45f9-4835-9a3e-a6eb2b64d005", "2134c8a2-6538-453d-8726-4f6b9e21d3f5", "Super Admin", "SUPER ADMIN" },
+                    { "8db3a46b-918b-4b0f-90e9-81fa103f262e", "fe4e795f-7624-4a96-b684-50c069396a24", "Administrator", "ADMINISTRATOR" },
+                    { "bb413bf2-537e-497e-bf5c-68dc0002e47c", "8a4b1f65-36e3-4a42-b3b2-d7f6d688ae14", "Power User", "POWER USER" },
+                    { "fc2ab893-2d06-4f50-8608-a94bd4d3ab3a", "eb5ecd96-0446-4342-af10-8f47aef49fa4", "User", "USER" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "AppUserAddressUserAddressId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "82b1a0e1-61f5-40ab-9773-bb74814413f8", 0, null, "6a985bc3-e1c5-4b3e-80a4-7ac93ce7030a", "superadmin@gmail.com", true, false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEEgjKSeD2Ds8RIJ40d4OYKamq5wQopldzWzPJicN6IHgC/ZrMFjZyvyUX+Tuqdu1LQ==", null, false, "V4PJL2RQEZ6FIRGR3LQPLMKQVYEQIMIL", false, "superadmin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "1fa0c9b8-45f9-4835-9a3e-a6eb2b64d005", "82b1a0e1-61f5-40ab-9773-bb74814413f8" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -328,7 +446,25 @@ namespace toDoList.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ConConfigViewModel");
+
+            migrationBuilder.DropTable(
+                name: "EditRoleViewModel");
+
+            migrationBuilder.DropTable(
+                name: "EmpresasViewModel");
+
+            migrationBuilder.DropTable(
+                name: "EmpresaUtilizadores");
+
+            migrationBuilder.DropTable(
+                name: "ForgotPasswordViewModel");
+
+            migrationBuilder.DropTable(
                 name: "MyUsers");
+
+            migrationBuilder.DropTable(
+                name: "ResetPasswordViewModel");
 
             migrationBuilder.DropTable(
                 name: "Tasks");

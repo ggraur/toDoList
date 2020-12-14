@@ -1,0 +1,71 @@
+﻿@model toDoList.ViewModels.EmpresasViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h1>Detalhes da empresa: <strong>@ViewBag.NomeEmpresa</strong></h1>
+        <hr />
+        <a asp-action="Index">Voltar aos registos das empresas</a>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Nome)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nome)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.NIF)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.NIF)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Licenca)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Licenca)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.NrPostos)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.NrPostos)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.NrEmpresas)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.NrEmpresas)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.DataExpiracao)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.DataExpiracao)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.DataCriacao)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.DataCriacao)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Ativo)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Ativo)
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" asp-controller="ConConfig" asp-route-EmpresaID="@Model.EmpresaID">Configurar conexão de banco de dados</a> |
+        <a asp-action="Edit" asp-route-id="@Model.EmpresaID">Editar</a> |
+        <a asp-action="Index">Voltar aos registos das empresas</a>
+    </div>
+</div>

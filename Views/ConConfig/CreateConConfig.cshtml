@@ -1,0 +1,64 @@
+﻿@model toDoList.ViewModels.ConConfigViewModel
+
+@{
+    ViewData["Title"] = "Criar nova conexão";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var _hostName = ViewBag.HostName;
+    var nomeEmpresa = ViewBag.NomeEmpresa;
+    var EmpresaId = ViewBag.EmpresaId;
+    //EmpresaId
+}
+
+<div class="card">
+    <div class="card-header">
+        <h1>Criar nova conexão para empresa: <strong>@nomeEmpresa</strong></h1>
+        <h5><strong>@_hostName</strong></h5>
+        <hr />
+        <a asp-action="Index">Voltar a lista</a>
+        
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NomeServidor" class="control-label"></label>
+                <input asp-for="NomeServidor" class="form-control" />
+                <span asp-validation-for="NomeServidor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InstanciaSQL" class="control-label"></label>
+                <input asp-for="InstanciaSQL" class="form-control" />
+                <span asp-validation-for="InstanciaSQL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Utilizador" class="control-label"></label>
+                <input asp-for="Utilizador" class="form-control" />
+                <span asp-validation-for="Utilizador" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-check m-1">
+                <input asp-for="ActiveConnection" id="ActiveConnection" type="checkbox" />
+                <label class="form-check-label" asp-for="ActiveConnection"></label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Gravar" class="btn btn-primary" style="width:auto" asp-route-EmpresaId="@EmpresaId" asp-action="CreateConConfig" asp-controller="ConConfig" />
+            </div>
+        </form>
+    </div>
+    <div class="card-footer">
+
+        <a asp-action="Index">Voltar a lista</a>
+    </div>
+
+</div>
+
+
+
+
+
+
+

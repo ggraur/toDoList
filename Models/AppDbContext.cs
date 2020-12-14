@@ -18,18 +18,20 @@ namespace toDoList
 
         }
 
-        public DbSet<MyUser> MyUsers { get; set; }
+       // public DbSet<MyUser> MyUsers { get; set; }
 
         public DbSet<AppUserAddress> UserAddress { get; set; }
   
-       public DbSet<ToDoTask> Tasks { get; set; }
-       public DbSet<ToDoList> ToDoLists { get; set; }
+       //public DbSet<ToDoTask> Tasks { get; set; }
+       //public DbSet<ToDoList> ToDoLists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<AppDbContext>()
             //   .HasNoKey();
-     
+
+           
+
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
             
@@ -38,12 +40,26 @@ namespace toDoList
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            modelBuilder.Entity<mapView_UtilzadoresEmpresa>(
+                x => 
+                {
+                    x.HasNoKey();
+                    x.ToView("db_vw_UtilizadoresEmpresa");
+                    //x.Property(v => v.EmpresaId).HasColumnName("EmpresaId");
+                    
+                });
+            //object p = modelBuilder.Query<mapView_UtilzadoresEmpresa>().ToView("db_vw_UtilizadoresEmpresa");
+
         }
 
-        public DbSet<AddTask_To_ToDoList> AddTask_To_ToDoList { get; set; }
+        //public DbSet<AddTask_To_ToDoList> AddTask_To_ToDoList { get; set; }
         public DbSet<EditRoleViewModel> EditRoleViewModel { get; set; }
         public DbSet<ResetPasswordViewModel> ResetPasswordViewModel { get; set; }
         public DbSet<ForgotPasswordViewModel> ForgotPasswordViewModel { get; set; }
+        public DbSet<ConConfigViewModel> ConConfigViewModel { get; set; }
+        public DbSet<EmpresasViewModel> EmpresasViewModel { get; set; }
+        public DbSet<EmpresaUtilizadoresViewModel> EmpresaUtilizadores { get; set; }
+        public DbSet<mapView_UtilzadoresEmpresa> View_UtilzadoresEmpresa { get; set; }
 
 
     }
