@@ -29,6 +29,11 @@ namespace toDoList.Controllers
         // GET: EmpresaController
         public ActionResult Index()
         {
+            List<EmpresasViewModel> cabContab = context.GetActiveCabContabilidade().ToList();
+            if (cabContab.Count() == 0)
+            {
+                return RedirectToAction("CreateCabContabilidade");                
+            }
             IEnumerable<EmpresasViewModel> empresas = context.GetExistingRegistries();
             return View(empresas);
         }
@@ -257,6 +262,37 @@ namespace toDoList.Controllers
             }
 
             return RedirectToAction("Index", "Empresa", new { Id = EmpresaId });
+        }
+
+        [HttpGet]
+        public IActionResult CreateCabContabilidade()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateCabContabilidade(EmpresasViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Ativo = true;
+                model.DataCriacao = DateTime.Now;
+                model.isCabContabilidade = true;
+                bool bResult = context.InsertEmpresa(model);
+                if (bResult)
+                {
+                    return RedirectToAction("Index", "Empresa");
+                }
+                else
+                {
+                    ViewBag.Signal = "notok";
+                    ViewBag.ErrorTitle = "Erro de inserção";
+                    ViewBag.ErrorMessage = "Não foi possível criar o cabinete de contabilidade " +
+                                           "se o erro persistir entre em contato com o suporte!";
+                    return View("~/Views/Error/GeneralError.cshtml");
+                }
+            }
+            return View(model);
         }
     }
 }

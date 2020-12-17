@@ -31,6 +31,7 @@
       <Compile Remove="Controllers\UserController.cs" />
       <Compile Remove="Controllers\UserRoleController.cs" />
       <Compile Remove="Controllers\_ToDoListController.cs" />
+      <Compile Remove="Models\AGesDbContext.cs" />
       <Compile Remove="Models\ApplicationDbContext.cs" />
       <Compile Remove="Models\ITaskRepository.cs" />
       <Compile Remove="Models\IToDoListRepository.cs" />
@@ -76,6 +77,7 @@
 
     <ItemGroup>
       <Folder Include="ErrorLogs\" />
+      <Folder Include="MigrationsAGes\" />
       <Folder Include="wwwroot\Pages\" />
     </ItemGroup>
 

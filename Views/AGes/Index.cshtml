@@ -1,0 +1,65 @@
+﻿
+@model List<toDoList.Models.EmprViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h2>Selectione empresas para importar</h2>
+            <hr />
+            <a asp-action="index" asp-controller="Empresa" style="width:auto">Voltar a lista das empresas</a>
+        </div>
+        <div class="card-body">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                
+                    <div class="form-check m-1">
+                        <input asp-for="@Model[i].IsSelected" class="form-check-input" />
+                        <label class="form-check-label" asp-for="@Model[i].IsSelected">
+                            @Model[i].Nome
+                        </label>
+                    </div>
+              
+                <div  >
+                    <input disabled type="text" asp-for=@Model[i].Ncontrib)/>
+                    
+                </div>
+                <div hidden>
+                    <input type="text" asp-for=@Model[i].Ncontrib) />
+                    <input type="text" asp-for=@Model[i].Nome />
+                    <input type="text" asp-for=@Model[i].Morada />
+                    <input type="text" asp-for=@Model[i].Localidade />
+                    <input type="text" asp-for=@Model[i].CodPostal />
+                    <input type="text" asp-for=@Model[i].Distrito />
+                    <input type="text" asp-for=@Model[i].Concelho />
+                    <input type="text" asp-for=@Model[i].Freguesia />
+                    <input type="text" asp-for=@Model[i].Sede />
+                    <input type="text" asp-for=@Model[i].Telefone />
+                    <input type="text" asp-for=@Model[i].Fax />
+                    <input type="text" asp-for=@Model[i].Email />
+                    <input type="text" asp-for=@Model[i].CapSocial />
+                    <input type="text" asp-for=@Model[i].ConsRegC />
+                    <input type="text" asp-for=@Model[i].Matriculado />
+                    <input type="text" asp-for=@Model[i].Cae />
+                    <input type="text" asp-for=@Model[i].Actividade />
+                    <input type="text" asp-for=@Model[i].RfinancasC />
+                    <input type="text" asp-for=@Model[i].RfinancasD />
+                </div>
+            }
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+        <div class="card-footer">
+            <div>
+                <input asp-action="Import" asp-controller="AGes" type="submit" class="btn btn-primary" style="width:auto" value="Importar" />
+                <a asp-action="index" asp-controller="Empresa" style="width:auto">Voltar a lista das empresas</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</form>

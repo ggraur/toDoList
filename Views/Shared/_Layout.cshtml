@@ -168,8 +168,8 @@
             </div>
         </nav>
 
-        <div class="row" style="padding-top:10px" >
-            <div class="col-sm-12 col-md-3" style="padding-left:-20px;" >
+        <div class="row">
+            <div class="col-sm-12 col-md-2" style="padding-left:-20px;padding-top:10px;" >
                 @if (signInManager.IsSignedIn(User))
                 {
                     @*<div class="vertical-menu float-left rounded">*@
@@ -183,10 +183,9 @@
                         <a href="#" class="rounded">C-Lab</a>
                         <a href="#" class="rounded">Excel</a>
                     </div>
-
                 }
             </div>
-            <div class="col-sm-12 col-md-8">
+            <div class="col-sm-12 col-md-10">
                 <div class="container" style="padding-top:10px">
                     @RenderBody()
                 </div>

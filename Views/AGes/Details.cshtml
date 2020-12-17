@@ -1,0 +1,133 @@
+﻿@model toDoList.Models.Empr
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Empr</h4>
+    <hr />
+    <dl class="row">
+          <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Morada)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Morada)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Localidade)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Localidade)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CodPostal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CodPostal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Distrito)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Distrito)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Concelho)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Concelho)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Freguesia)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Freguesia)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sede)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sede)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Telefone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Telefone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fax)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Fax)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ncontrib)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ncontrib)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CapSocial)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CapSocial)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ConsRegC)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ConsRegC)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Matriculado)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Matriculado)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cae)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cae)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Actividade)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Actividade)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RfinancasC)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RfinancasC)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RfinancasD)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RfinancasD)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Cemp">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

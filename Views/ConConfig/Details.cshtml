@@ -5,12 +5,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Detalhes da conexão: <strong>ViewBag.NomeServidor</strong></h1>
+<h1>Detalhes da conexão: <strong>@Model.NomeServidor</strong>: ID Empresa : @Model.EmpresaId</h1>
 <hr />
 <div>
 
 
     <dl class="row">
+        <dt class="col-sm-2" hidden>
+            @Html.DisplayNameFor(model => model.EmpresaId)
+        </dt>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NomeServidor)
         </dt>
