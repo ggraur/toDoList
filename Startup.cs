@@ -107,6 +107,7 @@ namespace toDoList
             services.AddScoped<IEmpresa, SQL_IEmpresa>();
             services.AddScoped<IEmpresaUtilizadores, SQL_IEmpresaUtilizadores>();
             services.AddScoped<IEmpresaAGes,SQL_IEmpresaAGes>();
+            services.AddScoped<ICLab, SQL_ICLab>();
 
 
             //services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();

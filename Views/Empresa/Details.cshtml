@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var empresaId = Model.EmpresaID;
 }
 
 <div class="card">
@@ -68,7 +69,7 @@
         </dl>
     </div>
     <div class="card-footer">
-        <a asp-action="Index">Voltar aos registos das empresas</a> |
+        <a asp-action="Index" asp-route-id="@Model.EmpresaID">Voltar aos registos das empresas</a> |
         <a asp-action="Index" asp-controller="ConConfig" asp-route-EmpresaID="@Model.EmpresaID">Configurar conexão de banco de dados</a> |
         <a asp-action="Edit" asp-route-id="@Model.EmpresaID">Editar</a>        
     </div>

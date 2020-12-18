@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 using System;
@@ -10,7 +11,7 @@ using toDoList.ViewModels;
 
 namespace toDoList
 {
-    public class AppDbContext :  IdentityDbContext<ApplicationUser>
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             :base(options) 
@@ -60,6 +61,7 @@ namespace toDoList
         public DbSet<EmpresasViewModel> EmpresasViewModel { get; set; }
         public DbSet<EmpresaUtilizadoresViewModel> EmpresaUtilizadores { get; set; }
         public DbSet<mapView_UtilzadoresEmpresa> View_UtilzadoresEmpresa { get; set; }
+        public DbSet<CLab> cLabs { get; set;}
 
 
     }
