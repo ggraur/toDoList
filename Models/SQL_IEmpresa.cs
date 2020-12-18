@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using toDoList.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Data.Common;
+using System;
 
 namespace toDoList.Models
 {
@@ -11,11 +13,56 @@ namespace toDoList.Models
     {
         private readonly AppDbContext context;
         private readonly ILogger<SQL_IEmpresa> logger;
+        private readonly AGesContext aGesContext;
 
-        public SQL_IEmpresa(AppDbContext _context, ILogger<SQL_IEmpresa> _logger)
+        public SQL_IEmpresa(AppDbContext _context, ILogger<SQL_IEmpresa> _logger,AGesContext _aGesContext)
         {
             this.context = _context;
             this.logger = _logger;
+            this.aGesContext = _aGesContext;
+        }
+
+        public  int  ReturnCompanyID(string nomeEmpresa, string NIF)
+        {
+            int iResult = -1;
+            try
+            {
+                int tmp =  context.EmpresasViewModel
+                                  .Where(x => x.Nome == nomeEmpresa && x.NIF==NIF)
+                                  .Distinct()
+                                  .Select(x=>x.EmpresaID)
+                                  .ToList<int>()[0];
+                if (tmp != 0)
+                {
+                    iResult = tmp;
+                }
+                return iResult;
+            }
+            catch (Exception ex)
+            {
+                logger.LogCritical(ex.Message);
+                return iResult;
+            }
+
+        }
+
+        public async Task<bool> RemoveUtilizadorFromEmpresaAsync(EmpresaUtilizadoresViewModel tmpUser)
+        {
+            try
+            {
+                EmpresaUtilizadoresViewModel tmp = (EmpresaUtilizadoresViewModel)context.EmpresaUtilizadores.Where(x => x.UserID == tmpUser.UserID);
+                using (context)
+                {
+                    context.EmpresaUtilizadores.RemoveRange(tmp);
+                    int iCount = await context.SaveChangesAsync();
+                    return (iCount > 0) ? true : false;
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                logger.LogCritical(ex.Message);
+                return false;
+            }
 
         }
 
@@ -38,6 +85,24 @@ namespace toDoList.Models
             }
         }
 
+        public async Task<bool> AddUtilizadorEmpresaAsync(int EmpresaID, EmpresaUtilizadoresViewModel user)
+        {
+            try
+            {
+                using (context)
+                {
+                    user.EmpresaId = EmpresaID;  
+                    context.EmpresaUtilizadores.Add(user);
+                    int iCount = await context.SaveChangesAsync();
+                    return (iCount > 0) ? true : false;
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                logger.LogCritical(ex.Message);
+                return false;
+            }
+        }
         public async Task<bool> AddUtilizadoresEmpresaAsync(int EmpresaID, List<EmpresaUtilizadoresViewModel> users)
         {
             try
@@ -75,6 +140,11 @@ namespace toDoList.Models
 
         }
 
+        public     IEnumerable<EmpresasViewModel>  GetActiveCabContabilidade()
+        {
+            return  context.EmpresasViewModel.Where(x => x.isCabContabilidade == true).ToList();
+        }
+
         public bool DeleteEmpresa(EmpresasViewModel _model)
         {
             var bResult = false;
@@ -98,6 +168,11 @@ namespace toDoList.Models
             return  context.EmpresasViewModel.Where(x => x.EmpresaID == id);
         }
 
+        public IEnumerable<EmpresaUtilizadoresViewModel> GetUtilizadorEmpresa(string UserName, int EmpresaId)
+        {
+             return context.EmpresaUtilizadores.Where(x => x.UserName == UserName && x.EmpresaId == EmpresaId);
+        }
+
         public List<ApplicationUser> GetUtilizadoresEmpresa(int EmpresaID)
         {
 
@@ -110,61 +185,26 @@ namespace toDoList.Models
                 ApplicationUser user = context.Users.FirstOrDefault(x => x.Id == v);
                 tmp.Add(user);
             }
-
-
-            //List<ApplicationUser> applicationUsers = context.Users.Any(x=>x.Id.Contains(tmp1.ToArray()));
-
-            ////var usr = context.Users.Where(kvp => tmp1.Contains(kvp.Key))
-            //// .Select(x => x);
-
-
-
-
-
-            //var users = context.View_UtilzadoresEmpresa.Where(x => x.EmpresaId == EmpresaID).ToList();
-
-            //foreach (mapView_UtilzadoresEmpresa item in users.ToList())
-            //{
-            //    ApplicationUser user = new ApplicationUser
-            //    {
-            //        Id = item.Id,
-            //        AccessFailedCount = item.AccessFailedCount,
-            //        // AppUserAddress = item.AppUserAddressUserAddressId
-            //        ConcurrencyStamp = item.ConcurrencyStamp,
-            //        Email = item.Email,
-            //        EmailConfirmed = item.EmailConfirmed,
-            //        LockoutEnabled = item.LockoutEnabled,
-            //        LockoutEnd = item.LockoutEnd,
-            //        NormalizedEmail = item.NormalizedEmail,
-            //        NormalizedUserName = item.NormalizedUserName,
-            //        PasswordHash = item.PasswordHash,
-            //        PhoneNumber = item.PhoneNumber,
-            //        PhoneNumberConfirmed = item.PhoneNumberConfirmed,
-            //        SecurityStamp = item.SecurityStamp,
-            //        TwoFactorEnabled = item.TwoFactorEnabled,
-            //        UserName = item.UserName
-
-            //    };
-            //    tmp.Add(user);
-            //}
+        
 
             return tmp;
 
-            // string sqlStr = " SELECT [Id],[AppUserAddressUserAddressId], [UserName], [NormalizedUserName], [Email], [NormalizedEmail] " +
-            //                 ",[EmailConfirmed],[PasswordHash],[SecurityStamp],[ConcurrencyStamp],[PhoneNumber],[PhoneNumberConfirmed] " +
-            //                 ",[TwoFactorEnabled],[LockoutEnd],[LockoutEnabled],[AccessFailedCount],[EmpresaId] " +
-            //                 " FROM[toDoListDB].[dbo].[db_vw_UtilizadoresEmpresa] " +
-            //                 " WHERE EmpresaId = '" + EmpresaID.ToString() + "'";
-
-            //throw new NotImplementedException();
+      
         }
 
         public bool InsertEmpresa(EmpresasViewModel _model)
         {
             var bResult = false;
-            context.EmpresasViewModel.Add(_model);
-            context.SaveChanges();
-            bResult = true;
+            try 
+            { 
+                context.EmpresasViewModel.Add(_model);
+                int i = context.SaveChanges();
+                bResult = true;
+            }
+            catch (Exception ex) 
+            {
+                logger.Log(LogLevel.Warning,"Method: Insert Impresa| Class: SQL_IEmpresa | Erro: " + ex.Message);
+            }
             return bResult;
         }
 
@@ -177,5 +217,8 @@ namespace toDoList.Models
             bResult = true;
             return bResult;
         }
+
+
     }
 }
+//https://www.entityframeworktutorial.net/efcore/working-with-stored-procedure-in-ef-core.aspx

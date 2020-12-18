@@ -29,8 +29,8 @@ namespace toDoList
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
 
-            //services.AddDbContextPool<ApplicationDbContext>(options =>
-            //                options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
+            services.AddDbContextPool<AGesContext>(
+             options => options.UseSqlServer(_config.GetConnectionString("aGesConnection")));
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -45,6 +45,8 @@ namespace toDoList
 
             }).AddEntityFrameworkStores<AppDbContext>()
               .AddDefaultTokenProviders();
+
+       
 
 
             var policy = new AuthorizationPolicyBuilder()
@@ -104,6 +106,9 @@ namespace toDoList
             services.AddScoped<IConConfig, SQL_ConConfig>();
             services.AddScoped<IEmpresa, SQL_IEmpresa>();
             services.AddScoped<IEmpresaUtilizadores, SQL_IEmpresaUtilizadores>();
+            services.AddScoped<IEmpresaAGes,SQL_IEmpresaAGes>();
+            services.AddScoped<ICLab, SQL_ICLab>();
+
 
             //services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
             services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();

@@ -32,5 +32,7 @@ namespace toDoList.ViewModels
         public DateTime DataCriacao { get; set; } = DateTime.Now;
         [Display(Name = "Registro da empresa Activo/Inactivo")]
         public bool Ativo { get; set; } = true;
+        public bool isCabContabilidade { get; set; } = false;
+        public int IdCabContabilidade { get; set; } = 0;
     }
 }

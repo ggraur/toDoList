@@ -66,7 +66,7 @@
     </style>*@
 
 <style>
-        /*
+    /*
     Max width before this PARTICULAR table gets nasty
     This query will take effect for any screen smaller than 760px
     and also iPads specifically.
@@ -75,81 +75,78 @@
     @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
         /* Force table to not be like tables anymore */
         table, thead, tbody, th, td, tr {
-                display: block;
-            }
-                /* Hide table headers (but not display: none;, for accessibility) */
-                thead tr {
-                    position: absolute;
-                     *top: -9999px;
-                    left: -9999px; 
-                }
-
-            tr {
-                border: 1px solid #ccc;
-             
+            display: block;
+        }
+            /* Hide table headers (but not display: none;, for accessibility) */
+            thead tr {
+                position: absolute;
+                *top: -9999px;
+                left: -9999px;
             }
 
-         
+        tr {
+            /*border: 1px solid #ccc;*/
+            margin: 5px;
+        }
 
-            td {
-                /* Behave  like a "row" */
-                
-                border: none;
-                border-bottom: 1px solid #eee;
-                position: relative;
-                padding-left: 50%;
+        td {
+            /* Behave  like a "row" */
+            margin: 3px 5px 3px 3px;
+            border: none;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 50%;
+        }
+
+            td:before {
+                /* Now like a table header */
+                position: absolute;
+                /* Top/left values mimic padding */
+                top: -8px;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
             }
-
-                td:before {
-                     
-                    /* Now like a table header */
-                    position: absolute;
-                    /* Top/left values mimic padding */
-                    top: -8px;
-                    left: 6px;
-                    width: 45%;
-                    padding-right: 10px;
-                    white-space: nowrap;
-                }
-                /*
+            /*
         Label the data
         */
-                td:nth-of-type(1):before {
-                    content: "EmpresaID";
-                }
+            td:nth-of-type(1):before {
+                content: "EmpresaID";
+            }
 
-                td:nth-of-type(2):before {
-                    content: "Nome";
-                }
+            td:nth-of-type(2):before {
+                content: "Nome";
+            }
 
-                td:nth-of-type(3):before {
-                    content: "NIF";
-                }
+            td:nth-of-type(3):before {
+                content: "NIF";
+            }
 
-                td:nth-of-type(4):before {
-                    content: "Licenca";
-                }
+            td:nth-of-type(4):before {
+                content: "Licenca";
+            }
 
-                td:nth-of-type(5):before {
-                    content: "NrPostos";
-                }
+            td:nth-of-type(5):before {
+                content: "NrPostos";
+            }
 
-                td:nth-of-type(6):before {
-                    content: "NrEmpresas";
-                }
+            td:nth-of-type(6):before {
+                content: "NrEmpresas";
+            }
 
-                td:nth-of-type(7):before {
-                    content: "DataExpiracao";
-                }
+            td:nth-of-type(7):before {
+                content: "DataExpiracao";
+            }
 
-                td:nth-of-type(8):before {
-                    content: "DataCriacao";
-                }
+            td:nth-of-type(8):before {
+                content: "DataCriacao";
+            }
 
-                td:nth-of-type(9):before {
-                    content: "Ativo";
-                }
-        }
+            td:nth-of-type(9):before {
+                content: "Ativo";
+            }
+    }
 </style>
 <div class="card">
     <div class="card-header">
@@ -163,65 +160,7 @@
 
         @if (Model != null)
         {
-            @*<div id="resp-table">
-                    <div id="resp-table-caption">
-                        Responsive Table without Table tag
-                    </div>
-                    <div id="resp-table-header">
-                        <div class="table-header-cell">
-                            Header 1
-                        </div>
-                        <div class="table-header-cell">
-                            Header 2
-                        </div>
-                        <div class="table-header-cell">
-                            Header 3
-                        </div>
-                        <div class="table-header-cell">
-                            Header 4
-                        </div>
-                        <div class="table-header-cell">
-                            Header 5
-                        </div>
-                    </div>
-                    <div id="resp-table-body">
-                        <div class="table-body-cell">
-                            Cell 1–1
-                        </div>
-                        <div class="table-body-cell">
-                            Cell 1–2
-                        </div>
-                        <div class="table-body-cell">
-                            Cell 1–3
-                        </div>
-                        <div class="table-body-cell">
-                            Cell 1–4
-                        </div>
-                        <div class="table-body-cell">
-                            Cell 1–5
-                        </div>
-                    </div>
-                    <div id="resp-table-footer">
-                        <div class="table-footer-cell">
-                            Footer 1
-                        </div>
-                        <div class="table-footer-cell">
-                            Footer 2
-                        </div>
-                        <div class="table-footer-cell">
-                            Footer 3
-                        </div>
-                        <div class="table-footer-cell">
-                            Footer 4
-                        </div>
-                        <div class="table-footer-cell">
-                            Footer 5
-                        </div>
-                    </div>
-
-                </div>*@
-
-            <table class="table">
+            <table class="table" style="width:100%;">
                 <thead>
                     <tr>
                         <th hidden>
@@ -285,12 +224,22 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Ativo)
                             </td>
-                            <td>
-                                <a asp-action="ManageEmpresaUtilizadores" asp-controller="Empresa" asp-route-id="@item.EmpresaID"> Add Utilizadores</a> |
-                                <a asp-action="Edit" asp-route-id="@item.EmpresaID">Editar</a> |
-                                <a asp-action="Details" asp-route-id="@item.EmpresaID">Detalhes</a> |
-                                <a asp-action="Delete" asp-route-id="@item.EmpresaID">Apagar</a>
-                            </td>
+
+                            @if (item.isCabContabilidade == true)
+                            {
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.EmpresaID">Detalhes</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <a asp-action="ManageEmpresaUtilizadores" asp-controller="Empresa" asp-route-id="@item.EmpresaID"> Add Utilizadores</a> |
+                                    <a asp-action="Edit" asp-route-id="@item.EmpresaID">Editar</a> |
+                                    <a asp-action="Details" asp-route-id="@item.EmpresaID">Detalhes</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.EmpresaID">Apagar</a>
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>

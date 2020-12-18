@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using toDoList;
 
 namespace toDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201215144812_NewMigration4")]
+    partial class NewMigration4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,36 +305,6 @@ namespace toDoList.Migrations
                             TwoFactorEnabled = false,
                             UserName = "superadmin@gmail.com"
                         });
-                });
-
-            modelBuilder.Entity("toDoList.Models.CLab", b =>
-                {
-                    b.Property<int>("IdCLab")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<short>("Ano")
-                        .HasColumnType("smallint");
-
-                    b.Property<DateTime>("DataLancamento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EmpresaSageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("InputFilePAth")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OutputFilePAth")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdCLab");
-
-                    b.ToTable("cLabs");
                 });
 
             modelBuilder.Entity("toDoList.Models.mapView_UtilzadoresEmpresa", b =>

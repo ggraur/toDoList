@@ -11,13 +11,18 @@ namespace toDoList.Models
         public bool InsertEmpresa(EmpresasViewModel _model);
         public bool UpdateEmpresa(EmpresasViewModel _model);
         public bool DeleteEmpresa(EmpresasViewModel _model);
-
+        public IEnumerable<EmpresasViewModel> GetActiveCabContabilidade();
         public IEnumerable<EmpresasViewModel> GetModelByID(int id);
         public IEnumerable<EmpresasViewModel> GetExistingRegistries();
+        public IEnumerable<EmpresaUtilizadoresViewModel> GetUtilizadorEmpresa(string UserName, int EmpresaId);
         public List<ApplicationUser> GetUtilizadoresEmpresa(int EmpresaID);
         public Task<bool> RemoveFromUtilizadoresEmpresaAsync(int EmpresaID);
         public Task<bool> AddUtilizadoresEmpresaAsync(int EmpresaID, List<EmpresaUtilizadoresViewModel> users);
+        public Task<bool> AddUtilizadorEmpresaAsync(int EmpresaID, EmpresaUtilizadoresViewModel user);
         public Task<bool> IsCompanyUserAsync(int EmpresaID, string userName);
+        public Task<bool> RemoveUtilizadorFromEmpresaAsync(EmpresaUtilizadoresViewModel tmpUser);
+
+        public  int  ReturnCompanyID(string nomeEmpresa, string NIF);
 
     }
 }
