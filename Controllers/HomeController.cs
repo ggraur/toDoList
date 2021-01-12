@@ -18,7 +18,7 @@ namespace toDoList.Controllers
         [Route("Home/Index")]
         public  ActionResult  Index()
         {
-             return View("~/Views/Home/Index.cshtml");
+             return this.View("~/Views/Home/Index.cshtml");
 
             // return RedirectToAction("index", "User");
             //return View("~/Views/User/getUsers.cshtml");

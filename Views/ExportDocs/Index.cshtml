@@ -1,0 +1,264 @@
+﻿@model toDoList.ViewModels.PathViewModel
+
+@Html.AntiForgeryToken()
+
+@{
+    ViewData["Title"] = "ExportDocs";
+
+}
+<script src="~/js/customscript.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+<style>
+    .divCnt {
+        /*border: 3px solid orange;*/
+        height: 50px;
+        /*overflow: hidden;*/
+        /* margin-bottom: 10px;*/
+        vertical-align: middle;
+        padding: 10px !important;
+        text-align: center;
+        margin: 5px;
+    }
+
+    .inputPath {
+        height: 44px;
+        width: 100%;
+        padding: 0;
+        line-height: 30px;
+        font-size: 20px;
+        padding: 0;
+        margin: 3px;
+        border: 3px solid rgba(0,220,0,255);
+    }
+
+        .inputPath:disabled {
+            color: darkgrey;
+        }
+
+        .inputPath:focus {
+            outline: none;
+        }
+
+    .btnExport {
+        width: 100% !important;
+        position: center;
+        line-height: 50px;
+        border-radius: 5px;
+        height: 50px !important;
+        background: rgba(0,51,73,255);
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+        border: solid 1px rgb(3,10,77);
+        display: inline-block;
+    }
+
+        .btnExport:hover {
+            background-color: rgba(0,220,0,255);
+            color: rgb(3,10,77);
+            font-weight: bold;
+            border: solid 1px rgb(7,77,3);
+        }
+
+    .iClassShowGreen {
+        font-size: 24px !important;
+        color: rgba(0,220,0,255) !important;
+    }
+
+    .iClassShowRed {
+        font-size: 24px !important;
+        color: red !important;
+    }
+
+    .iClassHide {
+        display: none !important;
+    }
+</style>
+<div class="form-group" hidden>
+    <input id="myEmpresaID" name="@Model.EmpresaID" value="@Model.EmpresaID" class="form-control" />
+</div>
+<div class="form-group" hidden>
+    <input id="myEmpresaAno" name="@Model.Ano" class="form-control" value="@Model.Ano" />
+</div>
+<div class="card">
+    <div class="card-header">
+        <p class="h1">Página de exportação</p>
+        <hr />
+        <h4><label asp-for="Path" class="control-label"></label></h4>
+        <input hidden name="__RequestVerificationToken" />
+        <input id="myPath" name="@Model.Path" class="inputPath" disabled value="@Model.Path" />
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="divCnt" style="vertical-align:middle;">
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                }
+
+                <a id="myExportPlContas" class="btnExport">
+                    EXPORTAR PLANO DE CONTAS PARA C-LAB
+                    <i id="i_myExportPlContas" class='far fa-check-circle iClassHide float-right'></i>
+                </a>
+            </div>
+            <div class="divCnt">
+                @*@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                }*@
+                <a id="myExportTpDoc" class="btnExport">
+                    EXPORTAR TIPOS DE DOCUMENTOS PARA C-LAB
+                    <i id="i_myExportTpDoc" class='far fa-check-circle iClassHide float-right'></i>
+                </a>
+            </div>
+            <div class="divCnt">
+                <a id="myExportCntCusto" class="btnExport">
+                    EXPORTAR CENTROS DE CUSTO PARA C-LAB
+                    <i id="i_myExportCntCusto" class='far fa-check-circle iClassHide float-right'></i>
+                </a>
+            </div>
+            <div class="divCnt">
+                <a id="myExportFlxCaixa" class="btnExport">
+                    EXPORTAR FLUXOS DE CAIXA PARA C-LAB
+                    <i id="i_myExportFlxCaixa" class='far fa-check-circle iClassHide float-right'></i>
+                </a>
+            </div>
+            <div class="divCnt">
+                <a id="myExportSaft" class="btnExport">
+                    EXPORTAR SAFT CONTABILIDADE
+                    <i id="i_myExportSaft" class='far fa-check-circle iClassHide float-right'></i>
+                </a>
+            </div>
+        </form>
+    </div>
+    <!--<div id="myFooter" class="card-footer">-->
+    @*<button type="submit" class="btn btn-primary" style="width:auto" onclick="ExportClick(@Model.EmpresaID,@Model.Ano,@Model.Path)">Exportar</button>*@
+
+    <!--<p></p>
+    </div>-->
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#myExportPlContas').click(function () {
+            var a = ExportPlanoContas();
+        });
+        $('#myExportTpDoc').click(function () {
+            var a = ExportTpDoc();
+        });
+        $('#myExportCntCusto').click(function () {
+            var a = ExportCentroCusto();
+        });
+
+    });
+
+    function ExportPlanoContas() {
+        var _url = "/ExportDocs/ExportPlContasAsync";
+        var _EmpresaID = $("#myEmpresaID:text").val();
+        var _Ano = $("#myEmpresaAno:text").val();
+        var _path = $("#myPath:text").val();
+        var _data = { EmpresaID: _EmpresaID, Ano: _Ano, _path: _path };
+         
+        $.ajax({
+            url: _url,
+            type: "POST",
+            cache: false,
+            data: _data,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            success:
+                function (data) {
+                    if (data.success === true) {
+                        $("#i_myExportPlContas").removeClass("iClassHide");
+                        $("#i_myExportPlContas").addClass("iClassShowGreen").fadeOut(5000);
+                        //$("#i_myExportPlContas").removeClass("iClassShowGreen");
+                        //$("#i_myExportPlContas").addClass("iClassHide");
+                    };
+                    if (data.success === false) {
+                        $("#i_myExportPlContas").removeClass("iClassHide");
+                        $("#i_myExportPlContas").addClass("iClassShowRed").fadeOut(5000);;
+                    };
+                },
+            error:
+                function (xhr) {
+                    ProcessError(xhr);//alert(xhr.responseText);
+                }
+        });
+
+    };
+
+    function ExportTpDoc() {
+        var _url = "/ExportDocs/ExportTpDocsAsync";
+        var _EmpresaID = $("#myEmpresaID:text").val();
+        var _Ano = $("#myEmpresaAno:text").val();
+        var _Path = $("#myPath:text").val();
+        var _data = { EmpresaID: _EmpresaID, Ano: _Ano, _path: _Path };
+        $.ajax({
+            url: _url,
+            type: "POST",
+            cache: false,
+            data: _data,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            success:
+                function (data) {
+                    if (data.success === true) {
+                        $("#i_myExportTpDoc").removeClass("iClassHide");
+                        $("#i_myExportTpDoc").addClass("iClassShowGreen").fadeOut(5000); 
+                    };
+                    if (data.success === false) {
+                        $("#i_myExportTpDoc").removeClass("iClassHide");
+                        $("#i_myExportTpDoc").addClass("iClassShowRed").fadeOut(5000); 
+                    };
+                },
+            error:
+                function (xhr) {
+                    ProcessError(xhr);//alert(xhr.responseText);
+                }
+        });
+
+    };
+
+    function ExportCentroCusto() {
+        var _url = "/ExportDocs/ExportSaveCentroCustoAsyncAsync";
+        var _EmpresaID = $("#myEmpresaID:text").val();
+        var _Ano = $("#myEmpresaAno:text").val();
+        var _Path = $("#myPath:text").val();
+        var _data = { EmpresaID: _EmpresaID, Ano: _Ano, _path: _Path };
+        $.ajax({
+            url: _url,
+            type: "POST",
+            cache: false,
+            data: _data,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            success:
+                function (data) {
+                    if (data.success === true) {
+                        $("#i_myExportCntCusto").removeClass("iClassHide");
+                        $("#i_myExportCntCusto").addClass("iClassShowGreen").fadeOut(5000);
+                    };
+                    if (data.success === false) {
+                        $("#i_myExportCntCusto").removeClass("iClassHide");
+                        $("#i_myExportCntCusto").addClass("iClassShowRed").fadeOut(5000);
+                    };
+                },
+            error:
+                function (xhr) {
+                    ProcessError(xhr);//alert(xhr.responseText);
+                }
+        });
+
+    };
+
+
+</script>
+

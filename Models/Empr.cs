@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,9 +7,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace toDoList.Models
 {
+    [Keyless]
     public partial class Empr
     {
-        [Key]
         public string Cemp { get; set; }
         public string Nome { get; set; }
         public string Morada { get; set; }

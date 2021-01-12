@@ -13,24 +13,29 @@ namespace toDoList.Models
     {
         private readonly AppDbContext context;
         private readonly ILogger<SQL_IEmpresa> logger;
+        private readonly IDadosEmpresaViewModel dadosEmpresaView;
         private readonly AGesContext aGesContext;
 
-        public SQL_IEmpresa(AppDbContext _context, ILogger<SQL_IEmpresa> _logger,AGesContext _aGesContext)
+        public SQL_IEmpresa(AppDbContext _context,
+                    ILogger<SQL_IEmpresa> _logger,
+                IDadosEmpresaViewModel _dadosEmpresaView,
+                AGesContext _aGesContext)
         {
             this.context = _context;
             this.logger = _logger;
+            this.dadosEmpresaView = _dadosEmpresaView;
             this.aGesContext = _aGesContext;
         }
 
-        public  int  ReturnCompanyID(string nomeEmpresa, string NIF)
+        public int ReturnCompanyID(string nomeEmpresa, string NIF)
         {
             int iResult = -1;
             try
             {
-                int tmp =  context.EmpresasViewModel
-                                  .Where(x => x.Nome == nomeEmpresa && x.NIF==NIF)
+                int tmp = context.EmpresasViewModel
+                                  .Where(x => x.Nome == nomeEmpresa && x.NIF == NIF)
                                   .Distinct()
-                                  .Select(x=>x.EmpresaID)
+                                  .Select(x => x.EmpresaID)
                                   .ToList<int>()[0];
                 if (tmp != 0)
                 {
@@ -45,7 +50,6 @@ namespace toDoList.Models
             }
 
         }
-
         public async Task<bool> RemoveUtilizadorFromEmpresaAsync(EmpresaUtilizadoresViewModel tmpUser)
         {
             try
@@ -91,7 +95,7 @@ namespace toDoList.Models
             {
                 using (context)
                 {
-                    user.EmpresaId = EmpresaID;  
+                    user.EmpresaId = EmpresaID;
                     context.EmpresaUtilizadores.Add(user);
                     int iCount = await context.SaveChangesAsync();
                     return (iCount > 0) ? true : false;
@@ -110,8 +114,8 @@ namespace toDoList.Models
                 using (context)
                 {
                     users[0].EmpresaId = EmpresaID;   //nao esquecer resolver esta situacao
-                    context.EmpresaUtilizadores.AddRange((IEnumerable<EmpresaUtilizadoresViewModel>)users.Where(x=>x.IsSelected == true));
-                    int iCount= await context.SaveChangesAsync();
+                    context.EmpresaUtilizadores.AddRange((IEnumerable<EmpresaUtilizadoresViewModel>)users.Where(x => x.IsSelected == true));
+                    int iCount = await context.SaveChangesAsync();
                     return (iCount > 0) ? true : false;
                 }
             }
@@ -140,9 +144,14 @@ namespace toDoList.Models
 
         }
 
-        public     IEnumerable<EmpresasViewModel>  GetActiveCabContabilidade()
+        public IEnumerable<EmpresasViewModel> GetActiveCabContabilidade()
         {
-            return  context.EmpresasViewModel.Where(x => x.isCabContabilidade == true).ToList();
+            return context.EmpresasViewModel.Where(x => x.isCabContabilidade == true).ToList();
+        }
+
+        public IEnumerable<EmpresasViewModel> GetEmpresasDaGabinete(int idEmprGabContab)
+        {
+            return context.EmpresasViewModel.Where(x => x.isCabContabilidade == false && x.IdCabContabilidade == idEmprGabContab).ToList();
         }
 
         public bool DeleteEmpresa(EmpresasViewModel _model)
@@ -158,19 +167,19 @@ namespace toDoList.Models
             return bResult;
         }
 
-          public IEnumerable<EmpresasViewModel> GetExistingRegistries()
+        public IEnumerable<EmpresasViewModel> GetExistingRegistries()
         {
             return context.EmpresasViewModel.ToList();
         }
 
         public IEnumerable<EmpresasViewModel> GetModelByID(int id)
         {
-            return  context.EmpresasViewModel.Where(x => x.EmpresaID == id);
+            return context.EmpresasViewModel.Where(x => x.EmpresaID == id);
         }
 
         public IEnumerable<EmpresaUtilizadoresViewModel> GetUtilizadorEmpresa(string UserName, int EmpresaId)
         {
-             return context.EmpresaUtilizadores.Where(x => x.UserName == UserName && x.EmpresaId == EmpresaId);
+            return context.EmpresaUtilizadores.Where(x => x.UserName == UserName && x.EmpresaId == EmpresaId);
         }
 
         public List<ApplicationUser> GetUtilizadoresEmpresa(int EmpresaID)
@@ -185,36 +194,103 @@ namespace toDoList.Models
                 ApplicationUser user = context.Users.FirstOrDefault(x => x.Id == v);
                 tmp.Add(user);
             }
-        
-
+ 
             return tmp;
-
-      
+ 
         }
 
-        public bool InsertEmpresa(EmpresasViewModel _model)
+        public string InsertEmpresaJson(EmpresasViewModel _model)
+        {
+            if (_model.Nome == null) { return "success:false|'Nome da empresa é um campo obrigatório, não pode ser nulo'|NomeEmpresa"; };
+            if (_model.NIF == null) { return "success:false|'NIF da empresa é um campo obrigatório, não pode ser nulo'|NifEmpresa"; };
+            if (_model.Licenca == null) { return "success:false|'Licença software é um campo obrigatório, não pode ser nulo'|Licenca"; };
+            if (_model.NrPostos == 0) { return "success:false|'Insira numero de licenças para empresa é um campo obrigatório, não pode ser nulo'|NrPostos"; };
+            if (_model.NrEmpresas == 0) { return "success:false|'Numero de empresas é um campo obrigatório, não pode ser nulo'|NrEmpresas"; };
+            if (_model.DataExpiracao == DateTime.Parse("01/01/0001 00:00:00")) { return "success:false|'A data da expiracao da licença é um campo obrigatório, não pode ser nulo'|DataExpiracao"; };
+            try
+            {
+                context.EmpresasViewModel.Add(_model);
+                int i = context.SaveChanges();
+                return "success:true|error:'Registro inserido com sucesso'|"+ _model.EmpresaID + " ";
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Warning, "Method: Insert Impresa| Class: SQL_IEmpresa | Erro: " + ex.Message);
+            }
+            return "success:false|error:'O registro nao foi inserido'|0";
+        }
+        public string UpdateEmpresaJson(EmpresasViewModel _model)
+        {
+            if (_model.Nome == null) { return "success:false|'Nome da empresa é um campo obrigatório, não pode ser nulo'|NomeEmpresa"; };
+            if (_model.NIF == null) { return "success:false|'NIF da empresa é um campo obrigatório, não pode ser nulo'|NifEmpresa"; };
+            if (_model.Licenca == null) { return "success:false|'Licença software é um campo obrigatório, não pode ser nulo'|Licenca"; };
+            if (_model.NrPostos == 0) { return "success:false|'Insira numero de licenças para empresa é um campo obrigatório, não pode ser nulo'|NrPostos"; };
+            if (_model.NrEmpresas == 0) { return "success:false|'Numero de empresas é um campo obrigatório, não pode ser nulo'|NrEmpresas"; };
+            if (_model.DataExpiracao == DateTime.Parse("01/01/0001 00:00:00")) { return "success:false|'A data da expiracao da licença é um campo obrigatório, não pode ser nulo'|DataExpiracao"; };
+            try
+            {
+                var _tmp = context.EmpresasViewModel.Attach(_model);
+                _tmp.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                int i = context.SaveChanges();
+                return "success:true|error:'Registro actualizado com sucesso'|" + _model.EmpresaID + " ";
+            }
+            catch (Exception ex)
+            {
+                logger.Log(LogLevel.Warning, "Method: Insert Impresa| Class: SQL_IEmpresa | Erro: " + ex.Message);
+            }
+            return "success:false|error:'O registro nao foi actualizado!'|" + _model.EmpresaID + " ";
+        }
+        public async Task<bool> InsertEmpresa(EmpresasViewModel _model)
         {
             var bResult = false;
-            try 
-            { 
+            try
+            {
                 context.EmpresasViewModel.Add(_model);
                 int i = context.SaveChanges();
                 bResult = true;
+                if (bResult)
+                {//insert dados da empresa auxiliares.
+                    IEnumerable<AGesEmpresasUtilizadores> tmpAGes = aGesContext.AGesEmpresasUtilizadores.Where(x => x.NIF == _model.NIF);
+
+                    var tt = tmpAGes
+                        .Select(x => new { x.AnoFi, x.AnoIn, x.CodeApplicacao, x.CodeEmpresa })
+                        .Distinct().ToList();
+
+                    foreach (var item in tt)
+                    {
+                        DadosEmpresaImportada tmp = new DadosEmpresaImportada()
+                        {
+                            EmpresaID = _model.EmpresaID,
+                            AnoFi = item.AnoFi,
+                            AnoIn = item.AnoIn,
+                            CodeAplicacao = item.CodeApplicacao,
+                            CodeEmpresa = item.CodeEmpresa
+                        };
+                        bool dadosExist = dadosEmpresaView.ModelExist(tmp);
+                        if (dadosExist != true)
+                        {
+                            var result = await dadosEmpresaView.Insert(tmp);// .DadosEmpresaImportada.Where(x => x.== _model.NIF); 
+                            if (result)
+                            {
+                                logger.Log(LogLevel.Information, "Dados Empresa inseridos com successo " + tmp.CodeEmpresa);
+                            }
+                        }
+                    }
+                }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                logger.Log(LogLevel.Warning,"Method: Insert Impresa| Class: SQL_IEmpresa | Erro: " + ex.Message);
+                logger.Log(LogLevel.Warning, "Method: Insert Impresa| Class: SQL_IEmpresa | Erro: " + ex.Message);
             }
             return bResult;
         }
 
         public bool UpdateEmpresa(EmpresasViewModel _model)
         {
-            var bResult = false;
             var _tmp = context.EmpresasViewModel.Attach(_model);
             _tmp.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
-            bResult = true;
+            bool bResult = true;
             return bResult;
         }
 
@@ -222,3 +298,6 @@ namespace toDoList.Models
     }
 }
 //https://www.entityframeworktutorial.net/efcore/working-with-stored-procedure-in-ef-core.aspx
+
+//list /combo
+//https://www.pluralsight.com/guides/asp-net-mvc-populating-dropdown-lists-in-razor-views-using-the-mvvm-design-pattern-entity-framework-and-ajax

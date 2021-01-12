@@ -10,6 +10,19 @@
     width:auto;
 }
 
+
+
+#voltarAsEmpresas, #voltarAsEmpresas1 {
+    color: blue !important;
+}
+
+#voltarAsEmpresas, #voltarAsEmpresas1:hover {
+    color: blue !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}
+
+
  
 ul {
     list-style-type: none;

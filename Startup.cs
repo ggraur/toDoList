@@ -10,7 +10,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using toDoList.Models;
+using toDoList.Models.Interfaces;
+using toDoList.Models.SQL;
 using toDoList.Security;
+
 
 namespace toDoList
 {
@@ -26,6 +29,9 @@ namespace toDoList
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContextPool<AppDbContext>(
+               options => options.UseSqlServer(_config.GetConnectionString("ApplicationDbContext")));
+
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("toDoListDBConnection")));
 
@@ -46,12 +52,19 @@ namespace toDoList
             }).AddEntityFrameworkStores<AppDbContext>()
               .AddDefaultTokenProviders();
 
-       
+           services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
 
 
             var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
+            
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(so =>
+            {
+                so.IdleTimeout = TimeSpan.FromMinutes(60);
+            });
 
             services.AddMvc(options =>
             {
@@ -108,17 +121,14 @@ namespace toDoList
             services.AddScoped<IEmpresaUtilizadores, SQL_IEmpresaUtilizadores>();
             services.AddScoped<IEmpresaAGes,SQL_IEmpresaAGes>();
             services.AddScoped<ICLab, SQL_ICLab>();
+            services.AddScoped<IDadosEmpresaViewModel, SQL_IDadosEmpresaViewModel>();
+            services.AddScoped<IGabineteContabilidade, Sql_IGabineteContabilidade>();
 
-
-            //services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
             services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
             services.AddSingleton<IAuthorizationHandler, AdministratorHandler>();
             
+           // services.AddSingleton<ICustomDbContextFactory<CustomDbContext>, CustomDbContextFactory<CustomDbContext>>();
 
-
-            //services.AddSingleton<IUserRepository,MockUserRepository>();// memory repository used for test
-
-            // services.AddSingleton<IUserRoleRepository, MockUserRoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -138,6 +148,8 @@ namespace toDoList
             //app.UseMvcWithDefaultRoute();
 
             app.UseAuthentication();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

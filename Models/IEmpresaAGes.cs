@@ -9,5 +9,6 @@ namespace toDoList.Models
     public interface IEmpresaAGes
     {
         public IEnumerable<AGesEmpresasUtilizadores> GetUtilizadores(string NIF, string NomeEmpresa);
+        public AGesLocEn  GetAGesLocEn();
     }
 }

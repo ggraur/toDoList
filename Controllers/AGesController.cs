@@ -58,8 +58,6 @@ namespace toDoList.Controllers
                     RfinancasD = empr.RfinancasD,
                     Sede = empr.Sede,
                     Telefone = empr.Telefone
-
-
                 };
 
                 tmp.Add(_tmp);
@@ -102,23 +100,25 @@ namespace toDoList.Controllers
                 {
                     return RedirectToAction("CreateCabContabilidade");
                 }
-                List<EmpresasViewModel> lstTmp = new List<EmpresasViewModel>();
+                 List<EmpresasViewModel> lstTmp = new List<EmpresasViewModel>();
                 foreach (EmprViewModel itm in model)
                 {
                     if (itm.Ncontrib != null && itm.Ncontrib != "")
                     {
-                        EmpresasViewModel tmp = new EmpresasViewModel();
-                        tmp.isCabContabilidade = false;
-                        tmp.IdCabContabilidade = cabContab[0].EmpresaID;
-                        tmp.Ativo = true;
-                        tmp.NIF = itm.Ncontrib;
-                        tmp.Nome = itm.Nome;
-                        tmp.Licenca = "";
-                        tmp.DataCriacao = DateTime.Now;
-                        tmp.DataExpiracao = DateTime.Now.AddYears(1);
-                        tmp.NrEmpresas = 0;
-                        tmp.NrPostos = "0";
-                        bResult = empContext.InsertEmpresa(tmp);
+                        EmpresasViewModel tmp = new EmpresasViewModel
+                        {
+                            isCabContabilidade = false,
+                            IdCabContabilidade = cabContab[0].EmpresaID,
+                            Ativo = true,
+                            NIF = itm.Ncontrib,
+                            Nome = itm.Nome,
+                            Licenca = "",
+                            DataCriacao = DateTime.Now,
+                            DataExpiracao = DateTime.Now.AddYears(1),
+                            NrEmpresas = 0,
+                            NrPostos = 0
+                        };
+                        bResult = await empContext.InsertEmpresa(tmp);
                         
                         if (bResult == true)
                         {// add users  
@@ -179,10 +179,9 @@ namespace toDoList.Controllers
 
         private async Task<bool> AddUserToSpecificCompanyAsync(ApplicationUser user, int empresaId)
         {
-            bool bResult = false;
+            List<EmpresaUtilizadoresViewModel> tmpUser = empContext.GetUtilizadorEmpresa(user.UserName, empresaId).ToList();
 
-           List<EmpresaUtilizadoresViewModel> tmpUser = empContext.GetUtilizadorEmpresa(user.UserName,empresaId).ToList(); 
-
+            bool bResult;
             if (tmpUser.Count == 1)
             {
                 bResult = true;

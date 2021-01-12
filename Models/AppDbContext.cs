@@ -19,7 +19,7 @@ namespace toDoList
 
         }
 
-       // public DbSet<MyUser> MyUsers { get; set; }
+        // public DbSet<MyUser> MyUsers { get; set; }
 
         public DbSet<AppUserAddress> UserAddress { get; set; }
   
@@ -49,7 +49,29 @@ namespace toDoList
                     //x.Property(v => v.EmpresaId).HasColumnName("EmpresaId");
                     
                 });
-            //object p = modelBuilder.Query<mapView_UtilzadoresEmpresa>().ToView("db_vw_UtilizadoresEmpresa");
+            modelBuilder.Entity<mapView_GabContabilidade>(
+              x =>
+              {
+                  x.HasNoKey();
+                  x.ToView("db_vw_GabContabilidade");
+              });
+            modelBuilder.Entity<mapView_EmpresasGabContabilidade>(
+               x =>
+               {
+                   x.HasNoKey();
+                   x.ToView("db_vw_EmpresasGabContabilidade");
+               });
+            modelBuilder.Entity<mapView_EmpresasGabContabilidadeAno>(
+               x =>
+               {
+                   x.HasNoKey();
+                   x.ToView("db_vw_EmpresasGabContabilidadeAno");
+               });
+            modelBuilder.Entity<GabineteEditViewModel>(
+                x=> {
+                    x.HasNoKey();
+                });
+        
 
         }
 
@@ -61,8 +83,14 @@ namespace toDoList
         public DbSet<EmpresasViewModel> EmpresasViewModel { get; set; }
         public DbSet<EmpresaUtilizadoresViewModel> EmpresaUtilizadores { get; set; }
         public DbSet<mapView_UtilzadoresEmpresa> View_UtilzadoresEmpresa { get; set; }
+        public DbSet<mapView_GabContabilidade> View_GabContabilidade { get; set; }
+        public DbSet<mapView_EmpresasGabContabilidade> View_EmpresasGabContabilidade { get; set; }
+        public DbSet<mapView_EmpresasGabContabilidadeAno> View_EmpresasGabContabilidadeAno { get; set; }
         public DbSet<CLab> cLabs { get; set;}
-
+        //public DbSet<DadosEmpresaViewModel> DadosEmpresaImportada { get; set; }
+        public DbSet<EmpresasViewModel> GabineteContabilidade { get; set; }
+        public DbSet<DadosEmpresaImportada> DadosEmpresaImportada { get; set; }
+        public DbSet<toDoList.ViewModels.CLabViewModel> CLabViewModel { get; set; }
 
     }
 }

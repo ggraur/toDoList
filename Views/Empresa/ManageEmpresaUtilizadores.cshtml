@@ -5,6 +5,8 @@
     var empresaNome = ViewBag.EmpresaNome;
 }
 
+<script src="~/js/customscript.js"></script>
+
 <form method="post">
     <div class="card">
         <div class="card-header">
@@ -26,8 +28,8 @@
             <div asp-validation-summary="All" class="text-danger"></div>
         </div>
         <div class="card-footer">
-            <input type="submit" asp-action="ManageEmpresaUtilizadores" asp-controller="Empresa"  asp-route-EmpresaId="@empresaId" value="Update" class="btn btn-primary" style="width:auto" />
-            <a asp-action="index" asp-controller="Empresa" class="btn btn-primary" style="width:auto">Cancel</a>
+            <input type="submit" asp-action="ManageEmpresaUtilizadores" asp-controller="Empresa" asp-route-EmpresaId="@empresaId" value="Update" class="btn btn-primary" style="width:auto" />
+            <a onclick="VoltarParaListaEmpresas()" class="btn btn-primary" style="width:auto">Cancel</a>
         </div>
     </div>
 </form>

@@ -23,5 +23,10 @@ namespace toDoList.Models
         {
             return context.AGesEmpresasUtilizadores.Where(x=>x.NIF==NIF && x.NomeEmpresa==NomeEmpresa);
         }
+
+        public  AGesLocEn GetAGesLocEn() 
+        {
+            return    context.AGesLocEns.First();
+        }
     }
 }

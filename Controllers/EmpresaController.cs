@@ -27,40 +27,50 @@ namespace toDoList.Controllers
         }
 
         // GET: EmpresaController
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult IndexJson()
         {
             List<EmpresasViewModel> cabContab = context.GetActiveCabContabilidade().ToList();
             if (cabContab.Count() == 0)
             {
-                return RedirectToAction("CreateCabContabilidade");                
+                var a = Json(new { success = false });
+                return a;
             }
-            IEnumerable<EmpresasViewModel> empresas = context.GetExistingRegistries();
-            return View(empresas);
+            var b = Json(new { success = true });
+            return b;
         }
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            IEnumerable<EmpresasViewModel> empresas = context.GetExistingRegistries();
+            return this.PartialView("~/Views/Empresa/Index.cshtml", empresas);
+        }
+
 
         // GET: EmpresaController/Details/5
         public ActionResult Details(int id)
         {
             EmpresasViewModel tmp = context.GetModelByID(id).ToList()[0];
             ViewBag.NomeEmpresa = tmp.Nome;
-            return View(tmp);
+            return this.PartialView(tmp);
         }
         [HttpGet]
         // GET: EmpresaController/Create
         public ActionResult Create()
         {
-            return View();
+            return this.PartialView();
         }
 
         // POST: EmpresaController/Create
         [HttpPost]
-     
-        public ActionResult Create(EmpresasViewModel _model)
+
+        public async Task<ActionResult> Create(EmpresasViewModel _model)
         {
 
             if (ModelState.IsValid)
             {
-                bool bResult = context.InsertEmpresa(_model);
+                var bResult = await context.InsertEmpresa(_model);
                 if (bResult)
                 {
                     return RedirectToAction("Index", "Empresa");
@@ -74,7 +84,7 @@ namespace toDoList.Controllers
                     return View("~/Views/Error/GeneralError.cshtml");
                 }
             }
-            return View(_model);
+            return this.PartialView(_model);
 
         }
 
@@ -102,7 +112,7 @@ namespace toDoList.Controllers
             };
 
             ViewBag.NomeEmpresa = model.Nome;
-            return View(model);
+            return this.PartialView("~/Views/Empresa/Edit.cshtml", model);
 
         }
 
@@ -120,7 +130,7 @@ namespace toDoList.Controllers
                     Nome = collection["Nome"][0].ToString(),
                     Licenca = collection["Licenca"][0].ToString(),
                     NrEmpresas = Int32.Parse(collection["NrEmpresas"][0].ToString()),
-                    NrPostos = collection["NrPostos"][0].ToString(),
+                    NrPostos = Int32.Parse(collection["NrPostos"][0].ToString()),
                     DataCriacao = DateTime.Parse(collection["DataCriacao"][0]),
                     DataExpiracao = DateTime.Parse(collection["DataExpiracao"][0]),
                     Ativo = bool.Parse(collection["Ativo"][0].ToString())
@@ -129,14 +139,15 @@ namespace toDoList.Controllers
                 bool bResult = context.UpdateEmpresa(tmp);
                 if (bResult)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return this.PartialView(nameof(Index));
+                    // return RedirectToAction(nameof(Index));
                 }
 
                 ViewBag.Signal = "notok";
                 ViewBag.ErrorTitle = "Erro de atualização!";
                 ViewBag.ErrorMessage = "Não foi possível atualizar os dados Empresa, " +
                                        " se o erro persistir, entre em contato com o suporte!";
-                return View("~/Views/Error/GeneralError.cshtml");
+                return this.PartialView("~/Views/Error/GeneralError.cshtml");
 
             }
             catch
@@ -149,7 +160,7 @@ namespace toDoList.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-           IEnumerable< EmpresasViewModel >tmp = context.GetModelByID(id);
+            IEnumerable<EmpresasViewModel> tmp = context.GetModelByID(id);
             if (tmp == null)
             {
                 ViewBag.ErrorMessage = $"A empresa com o ID = {id} não foi possível de encontrar .";
@@ -157,7 +168,7 @@ namespace toDoList.Controllers
             }
 
             ViewBag.NomeEmpresa = tmp.ToList()[0].Nome;
-            return View(tmp.ToList()[0]);
+            return this.PartialView(tmp.ToList()[0]);
         }
 
         // POST: EmpresaController/Delete/5
@@ -165,7 +176,7 @@ namespace toDoList.Controllers
         public ActionResult Delete(int id, IFormCollection collection)
         {
 
-           IEnumerable< EmpresasViewModel > tmp = context.GetModelByID(id);
+            IEnumerable<EmpresasViewModel> tmp = context.GetModelByID(id);
             if (tmp == null)
             {
                 ViewBag.ErrorMessage = $"A empresa com ID = {id} não foi possível de encontrar .";
@@ -180,7 +191,7 @@ namespace toDoList.Controllers
             ViewBag.ErrorTitle = "Erro ao apagar!";
             ViewBag.ErrorMessage = $"Não foi possível apagar a empresa {tmp.ToList()[0].Nome}, " +
                                    " se o erro persistir, entre em contato com o suporte!";
-            return View("~/Views/Error/GeneralError.cshtml");
+            return this.PartialView("~/Views/Error/GeneralError.cshtml");
 
         }
 
@@ -217,13 +228,13 @@ namespace toDoList.Controllers
             }
             ViewBag.EmpresaId = empresa.ToList()[0].EmpresaID;
             ViewBag.EmpresaNome = empresa.ToList()[0].Nome;
-            return View(model);
+            return this.PartialView(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> ManageEmpresaUtilizadoresAsync(List<EmpresaUtilizadoresViewModel> model, int EmpresaId)
         {
-           IEnumerable< EmpresasViewModel > empresa = context.GetModelByID(EmpresaId);
+            IEnumerable<EmpresasViewModel> empresa = context.GetModelByID(EmpresaId);
 
             if (empresa == null)
             {
@@ -267,18 +278,88 @@ namespace toDoList.Controllers
         [HttpGet]
         public IActionResult CreateCabContabilidade()
         {
-            return View();
+            return PartialView();
         }
 
         [HttpPost]
-        public IActionResult CreateCabContabilidade(EmpresasViewModel model)
+        public IActionResult CreateCabContabilidadeJson(string nomeEmpresa, string nifEmpresa, string licencaEmp, string nrPostLicEmp, string nrEmpresasEmp, string dtExpLicEmp)
+        {
+            EmpresasViewModel model = new EmpresasViewModel
+            {
+                Nome = nomeEmpresa,
+                NIF = nifEmpresa,
+                Licenca = licencaEmp
+            };
+            if (nrPostLicEmp != null)
+            {
+                model.NrPostos = Int32.Parse(nrPostLicEmp);
+            };
+            if (nrEmpresasEmp != null)
+            {
+                model.NrEmpresas = Int32.Parse(nrEmpresasEmp);
+            };
+            if (dtExpLicEmp != null)
+            {
+                model.DataExpiracao = DateTime.Parse(dtExpLicEmp);
+            };
+            model.Ativo = true;
+            model.DataCriacao = DateTime.Now;
+            model.isCabContabilidade = true;
+            string bResult = context.InsertEmpresaJson(model);
+            List<string> d = bResult.Split("|").ToList();
+            List<string> v = d[0].ToString().Split(":").ToList();
+            var s = Json(new { success = bool.Parse(v[1].ToString()), msg = d[1].ToString().Replace("'", ""), field = d[2].ToString() });
+            return s;
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCabContabilidadeJson(
+            int emresaId, int idCabContabilidade,bool isCabContabilidade,
+            string nomeEmpresa, string nifEmpresa, string licencaEmp, 
+            string nrPostLicEmp, string nrEmpresasEmp, string dtExpLicEmp)
+        {
+            EmpresasViewModel model = new EmpresasViewModel
+            {
+                EmpresaID = emresaId,
+                IdCabContabilidade = idCabContabilidade,
+                isCabContabilidade = isCabContabilidade,
+
+                Nome = nomeEmpresa,
+                NIF = nifEmpresa,
+                Licenca = licencaEmp
+            };
+            if (nrPostLicEmp != null)
+            {
+                model.NrPostos = Int32.Parse(nrPostLicEmp);
+            };
+            if (nrEmpresasEmp != null)
+            {
+                model.NrEmpresas = Int32.Parse(nrEmpresasEmp);
+            };
+            if (dtExpLicEmp != null)
+            {
+                model.DataExpiracao = DateTime.Parse(dtExpLicEmp);
+            };
+            model.Ativo = true;
+            model.DataCriacao = DateTime.Now;
+            model.isCabContabilidade = true;
+            string bResult = context.UpdateEmpresaJson(model);
+            List<string> d = bResult.Split("|").ToList();
+            List<string> v = d[0].ToString().Split(":").ToList();
+            var s = Json(new { success = bool.Parse(v[1].ToString()), msg = d[1].ToString().Replace("'", ""), field = d[2].ToString() });
+            return s;
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCabContabilidade(EmpresasViewModel model)
         {
             if (ModelState.IsValid)
             {
                 model.Ativo = true;
                 model.DataCriacao = DateTime.Now;
                 model.isCabContabilidade = true;
-                bool bResult = context.InsertEmpresa(model);
+                bool bResult = await context.InsertEmpresa(model);
                 if (bResult)
                 {
                     return RedirectToAction("Index", "Empresa");

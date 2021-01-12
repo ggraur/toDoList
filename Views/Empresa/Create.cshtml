@@ -2,15 +2,24 @@
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
+<script src="~/js/customscript.js"></script>
+<style>
+    .aLink {
+        color: rgb(82,123,255) !important;
+    }
 
+        .aLink:hover {
+            color: rgb(82,123,255) !important;
+            text-decoration: underline !important;
+            cursor: pointer !important;
+        }
+</style>
 <div class="card">
     <div class="card-header">
         <h1>Criar Empresa</h1>
         <hr />
-        <a asp-action="Index">Voltar a lista das empresas</a>
+        <a class="aLink"  onclick="VoltarParaListaEmpresas()">Voltar a lista das empresas</a>
     </div>
     <div class="card-body">
         <form asp-action="post">
@@ -42,12 +51,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="DataExpiracao" class="control-label"></label>
-                <input asp-for="DataExpiracao" class="form-control" />
+                <input asp-for="DataExpiracao" type="date" class="form-control" />
                 <span asp-validation-for="DataExpiracao" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DataCriacao" class="control-label"></label>
-                <input asp-for="DataCriacao" class="form-control" />
+                <input asp-for="DataCriacao" type="date" class="form-control" />
                 <span asp-validation-for="DataCriacao" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -57,15 +66,16 @@
             </div>
             <div>
                 <div class="form-group">
-                    <input type="submit" value="Guardar" asp-action="Create" asp-controller="Empresa"   class="btn btn-primary" />
+                    <input type="submit" value="Guardar" asp-action="Create" asp-controller="Empresa" class="btn btn-primary" />
                 </div>
             </div>
         </form>
     </div>
     <div class="card-footer">
-         <a asp-action="Index">Voltar a lista das empresas</a>
+        <a  class="aLink" onclick="VoltarParaListaEmpresas()">Voltar a lista das empresas</a>
     </div>
 </div>
+
 
 
 

@@ -33,7 +33,7 @@ namespace toDoList.Controllers
         [HttpGet]
         public IActionResult CreateRole()
         {
-            return View();
+            return this.PartialView();
         }
 
         [HttpPost]
@@ -202,7 +202,7 @@ namespace toDoList.Controllers
         public IActionResult ListUsers()
         {
             var users = userManager.Users;
-            return View(users);
+            return this.PartialView(users);
         }
 
         [HttpGet]

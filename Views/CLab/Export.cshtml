@@ -1,0 +1,233 @@
+﻿@model toDoList.ViewModels.CLabViewModel
+    <style>
+        .btnClose {
+            /*position: absolute;*/
+            /*right: 25px;
+        top: 0;*/
+            float: right;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+            .btnClose:hover,
+            .btnClose:focus {
+                color: red;
+                cursor: pointer;
+            }
+    </style>
+    <div class="card">
+        <div class="card-header">
+            <h1>CONVERTER C-LAB PARA SAGE</h1>
+            <hr />
+        </div>
+        <div class="card-body">
+            @*<div class="col-md-4">*@
+            <form enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group" hidden>
+                    <label asp-for="EmpresaSageId" class="control-label"></label>
+                    <input id="expEmpresaSageId" asp-for="EmpresaSageId" class="disabled" hidden />
+                    <span asp-validation-for="EmpresaSageId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ano" class="control-label"></label>
+                    <input id="expAno" asp-for="Ano" class="form-control" value="@Model.Ano" readonly />
+                    <span asp-validation-for="Ano" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DataLancamento" class="control-label"></label>
+                    <input id="expDataLancamento" asp-for="DataLancamento" type="date" class="form-control" value="@Model.DataLancamento.ToString("yyyy-MM-dd")" style="width:180px !important;" />
+                    <span asp-validation-for="DataLancamento" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input id="ajxInputFilePath" asp-for="InputFilePath" type="file" accept=".asc" class="custom-file-input form-control">
+                        <label id="ajxinputFileLabel" class="custom-file-label" asp-for="InputFilePath">Caminho do ficheiro '.asc'</label>
+                        <input id="encPath" style="width:auto" hidden />
+                        <div id="idWell" class="well" style="display:none;">
+                            <div class="alert-success">
+                                <h5 id="idUpload"></h5>
+                            </div>
+                        </div>
+                        @*<progress id="progress-wrp" value="0" max="100"></progress>*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OutputFilePAth" class="control-label"></label>
+                    <input id="expOutputFilePAth" asp-for="OutputFilePAth" class="form-control" readonly />
+                    <span asp-validation-for="OutputFilePAth" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="UserID" class="control-label"></label>
+                    <input id="expUserID" asp-for="UserID" class="form-control" />
+                    <span asp-validation-for="UserID" class="text-danger"></span>
+                </div>
+                <div id="idDivError" class="well" style="display:none;">
+                    <div class="alert-danger">
+                        <h5 id="idErroExport"></h5>
+                    </div>
+                </div>
+                <div id="idDivSuccess" class="well" style="display:none;">
+                    <div class="alert-success">
+                        <h5 id="idSuccessExport"></h5>
+                    </div>
+                </div>
+
+
+                @*<div class="form-group card-footer">
+
+                </div>*@
+            </form>
+        </div>
+        <div class="card-footer">
+            <input id="btnExport" value="Export" class="btn btn-primary" />
+            @*<a asp-action="Index">Back to List</a>*@
+        </div>
+        <br />
+        <div id="idDivListError" class="card" style="display:none;">
+            <div class="card-header">
+                <span onclick="document.getElementById('idDivListError').style.display='none'" class="btnClose float-right">&times;</span>
+                <p class="h2">Lista com erros!</p>
+            </div>
+            <br />
+            <div class="card-body">
+                <div class="well">
+                    <div class="alert-danger">
+                        <p id="idListErrorsExport" class="h3"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.custom-file-input').on('change',
+            function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+
+        $('#ajxInputFilePath').on('change', function (e) {
+            //how upload files
+            // https://stackoverflow.com/questions/2320069/jquery-ajax-file-upload
+            var file = $(this)[0].files[0];
+
+            // alert("file" + file);
+            var upload = new Upload(file);
+
+            // maby check size or type here with upload.getSize() and upload.getType()
+
+            // execute upload
+            upload.doUpload("CLab/UploadFile", "POST");
+        });
+
+        var Upload = function (file) {
+            this.file = file;
+        };
+
+        Upload.prototype.getType = function () {
+            return this.file.type;
+        };
+        Upload.prototype.getSize = function () {
+            return this.file.size;
+        };
+        Upload.prototype.getName = function () {
+            return this.file.name;
+        };
+        Upload.prototype.doUpload = function (_url, method) {
+            var that = this;
+            var formData = new FormData();
+
+            // add assoc key values, this will be posts values
+            formData.append("file", this.file, this.getName());
+            formData.append("upload_file", true);
+
+            $.ajax({
+                type: method, //"POST",
+                url: _url, //"CLab/UploadFile",
+                data: formData,
+                xhr: function () {
+                    var myXhr = $.ajaxSettings.xhr();
+                    if (myXhr.upload) {
+                        myXhr.upload.addEventListener('progress', that.progressHandling, false);
+                    }
+                    return myXhr;
+                },
+                success: function (data) {
+                    $('#idUpload').html(data.message);
+                    $('#encPath').attr('value', data.filePath)
+                    $('#idWell').show().css("display", "inline").fadeOut(3000);
+                    //filePath
+                },
+                error: function (error) {
+                    // handle error
+                },
+                async: true,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                timeout: 60000
+            });
+        };
+        Upload.prototype.progressHandling = function (event) {
+            var percent = 0;
+            var position = event.loaded || event.position;
+            var total = event.total;
+            var progress_bar_id = "#progress-wrp";
+            if (event.lengthComputable) {
+                percent = Math.ceil(position / total * 100);
+            }
+            // update progressbars classes so it fits your code
+            $(progress_bar_id + " .progress-bar").css("width", +percent + "%");
+            $(progress_bar_id + " .status").text(percent + "%");
+        };
+
+        $('#btnExport').on('click', function () {
+            var _EmpresaSageId = $('#expEmpresaSageId').val();
+            var _Ano = $('#expAno').val();
+            var _DataLancamento = $('#expDataLancamento').val();
+            var _InputFilePathStr = $('#encPath').val();
+            var _OutputFilePAth = $('#expOutputFilePAth').val();
+            var _UserID = $('#expUserID').val();
+            //  alert(_InputFilePathStr);
+            var _data = {
+                EmpresaSageId: _EmpresaSageId,
+                Ano: _Ano,
+                DataLancamento: _DataLancamento,
+                InputFilePath: _InputFilePathStr,
+                InputFilePathStr: _InputFilePathStr,
+                OutputFilePAth: _OutputFilePAth,
+                UserID: _UserID
+            };
+
+            $.ajax({
+                url: "/CLab/Export",
+                type: "post",
+                cache: false,
+                data: _data
+                , success: function (data) {
+                    if (data.success === true) {
+                        $('#idSuccessExport').html(data.message);
+                        $('#idDivSuccess').show().css("display", "inline").fadeOut(10000);
+                        var obj = data.errors;
+
+                        $.each(JSON.parse(obj), function (key, value) {
+                            $('#idListErrorsExport').append("Erro:N " + key + ": Conta: " + value.AccountID + " Erro: " + value.ErrorMsg + "<br/>");
+                        });
+
+                        $('#idDivListError').show().css("display", "inline");
+
+                    }
+                    if (data.success === false) {
+                        $('#idErroExport').html(data.message);
+                        $('#idDivError').show().css("display", "inline").fadeOut(10000);
+                    }
+                }
+                , error: function (error) {
+                    alert("there was error uploading files!");
+                }
+            }, 'json');
+        });
+
+    </script>

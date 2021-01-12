@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using toDoList.ViewModels;
 
 namespace toDoList.Controllers
 {
@@ -37,8 +38,21 @@ namespace toDoList.Controllers
             ViewBag.ExceptionPath = exceptionDetails.Path;
             ViewBag.ExceptionMessage = exceptionDetails.Error.Message;
             ViewBag.Stacktrace = exceptionDetails.Error.Message;
-
             return View("Error");
+        }
+         [AllowAnonymous]
+        [Route("Error/GeneralError")]
+        [HttpGet]
+        public IActionResult GeneralError(string Signal, string ErrorTitle,string ErrorMessage, string UrlToRedirect, string optionalData, string StringButton)
+        {
+            GeneralErrorViewModel model = new GeneralErrorViewModel();
+            model.Signal = Signal;
+            model.ErrorTitle = ErrorTitle;
+            model.ErrorMessage = ErrorMessage;
+            model.UrlToRedirect = UrlToRedirect;
+            model.optionalData = optionalData;
+            model.StringButton = StringButton;
+            return this.PartialView("~/Views/Error/GeneralErrorModel.cshtml",model);
         }
     }
 }
