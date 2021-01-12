@@ -2,56 +2,114 @@
 
 @{
     ViewData["Title"] = "Delete";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    var idEmpresa = Model.EmpresaId;
+
+    var idConexao = Model.ConexaoID;
 }
+<style>
+    .aLink {
+        color: rgb(82,123,255) !important;
+    }
 
-<h1 class="alert alert-danger"><strong>Tem A certeza que quer eliminar a conexao: @ViewBag.NomeServidor !?</strong></h1>
-
-<hr/>
-
-<div>
-    <dl class="row">
-        <dt class="col-sm-2" hidden>
-            @Html.DisplayNameFor(model => model.ConexaoID)
-        </dt>
-        <dt class="col-sm-2" hidden>
-            @Html.DisplayNameFor(model => model.EmpresaId)
-        </dt>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NomeServidor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NomeServidor)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.InstanciaSQL)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.InstanciaSQL)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Utilizador)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Utilizador)
-        </dd>
-        <dt class="col-sm-2" hidden>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class="col-sm-10" hidden>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ActiveConnection)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ActiveConnection)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ConexaoID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index" asp-route-EmpresaId="@Model.EmpresaId" >Back to List</a>
-    </form>
-</div>
+        .aLink:hover {
+            color: rgb(82,123,255) !important;
+            text-decoration: underline !important;
+            cursor: pointer !important;
+        }
+</style>
+<h5 id="myConexao" hidden>@idConexao</h5>
+ 
+<form asp-action="Delete">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="alert alert-danger"><strong>Tem a certeza que quer eliminar a conexao: @ViewBag.NomeServidor !?</strong></h1>
+            <h2 id="myIdEmpresa" hidden>@idEmpresa</h2>
+            <h2 id="ConId" hidden>@idConexao</h2>
+            <hr />
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-2" hidden>
+                    @Html.DisplayNameFor(model => model.ConexaoID)
+                </dt>
+                <dt class="col-sm-2" hidden>
+                    @Html.DisplayNameFor(model => model.EmpresaId)
+                </dt>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.NomeServidor)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.NomeServidor)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.InstanciaSQL)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.InstanciaSQL)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Utilizador)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Utilizador)
+                </dd>
+                <dt class="col-sm-2" hidden>
+                    @Html.DisplayNameFor(model => model.Password)
+                </dt>
+                <dd class="col-sm-10" hidden>
+                    @Html.DisplayFor(model => model.Password)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ActiveConnection)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ActiveConnection)
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            <input type="hidden" asp-for="ConexaoID" />
+            @*<input  type="submit" value="Delete" class="btn btn-danger" /> |*@
+            <a id="myDelete"  class="btn btn-danger">Apagar</a>|
+            <a id="aBackToConnectionList" class="aLink">Voltar a lista</a>
+        </div>
+    </div>
+</form>
+ 
+<script>
+    $('#aBackToConnectionList').click(function () {
+        var _id = $('#myIdEmpresa').text();
+        var b = RenderWithNoRefreshWithData("/ConConfig/Index/", { EmpresaId: _id }, "GET")
+    });
+    $('#myDelete').click(function () {
+        var _id = $('#myConexao').text();
+        var _emprId = $('#myIdEmpresa').text();
+        $.ajax({
+            url: "/ConConfig/DeleteJson/" + _id,
+            type: "post",
+            cache: false,
+            success:
+                function (data) {
+                    if (data.success === true) {
+                        RenderWithNoRefreshWithData("/ConConfig/Index/", { EmpresaId: _emprId }, "GET");
+                    };
+                    if (data.success === false) {
+                        var _data = {
+                            Signal: "notok",
+                            ErrorTitle: "Erro ao apagar!",
+                            ErrorMessage: "Não foi possível apagar a conexao, se o erro persistir, entre em contato com o suporte!",
+                            UrlToRedirect: "/ConConfig/Index/",
+                            OptionalData: "new { EmpresaId : " + _id + " }",
+                            StringButton: "Voltar para as conexões"
+                        };
+                        var c = RenderWithNoRefreshWithData("/Error/GeneralError/", _data, "GET");
+                    };
+                },
+            error:
+                function (xhr) {
+                    alert(xhr.responseText);
+                }
+        });
+    });
+</script>

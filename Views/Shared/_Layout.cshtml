@@ -1,5 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity;
+@using toDoList.ViewModels;
+@using toDoList.Models.Interfaces;
+
 @inject SignInManager<ApplicationUser> signInManager;
+@*@inject IEmpresa empresas;*@
+@inject IGabineteContabilidade gabContab;
+@*@model GabineteEditViewModel;*@
 
 <!DOCTYPE html>
 @*//https://www.youtube.com/watch?v=0jqZ63ybeRY*@
@@ -9,8 +15,9 @@
     <environment include="Development">
 
         @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">*@
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">*@
+
 
         <script src="~/lib/jquery/jquery.js"></script>
         <script src="~/lib/jquery-validate/jquery.validate.js"></script>
@@ -18,30 +25,76 @@
 
         <script src="~/lib/bootstrap/js/bootstrap.js"></script>
         <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-        
+
+        <link rel="stylesheet" href="~/css/site.css" />
+
+        <script src="~/js/customscript.js"></script>
+
     </environment>
     <environment exclude="Development">
         @*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>*@
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>*@
 
         <script src="~/lib/jquery/jquery.min.js"></script>
         <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
         <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+
         <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-        
-        
+
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+
     </environment>
-    
-   
-    
-    @*@{
-            var usrName = User.Identity.Name.ToString().Split("@")[0];
-        }*@
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
     <title>@ViewBag.Title</title>
+
     <style>
+        .LabelFor {
+            color: white !important;
+            font-weight: bold;
+            width: auto;
+            margin-top: 5px !important;
+            position: relative;
+            left: 0px !important;
+        }
+
+        #divOneGabContab #divTwoGabContab #divThreeGabContab {
+            /* min-width:300px !important;*/
+            width: 100%;
+        }
+
+        .DropDownListFor {
+            height: 30px !important;
+            font-size: x-small !important;
+            /* min-width: 200px;*/
+            margin: -5px 0px 0px 10px;
+            width: auto;
+        }
+
+        #formGabinetes {
+            font-size: x-small;
+            margin: 0 0 0 25px;
+            /*float: right;*/
+            /* position: initial;*/
+            text-align: left;
+            width: 100%;
+            /*display:inline-block !important;*/
+        }
+
+        #divGabContab {
+            /*width: auto !important;*/
+            /*  float: right !important;*/
+            /*border: 1px solid red !important;*/
+            /*     position: relative !important;*/
+            /*float: right !important;*/
+            /*   left:450px;*/
+        }
+
         .btn {
             width: 150px !important;
         }
@@ -49,7 +102,7 @@
         /*vertical menu */
 
         .vertical-menu {
-            padding-top: 5px;
+            /*padding-top: -5px;*/
             width: 250px;
             background-color: rgba(0,51,73,255);
             /*margin-left: 16px;*/
@@ -61,8 +114,9 @@
                 background-color: rgba(0,51,73,255);
                 color: rgba(0,220,0,255);
                 display: block;
-                padding: 10px;
+                padding: 10px 10px 10px 30px;
                 text-decoration: none;
+                font-weight: normal;
             }
 
                 .vertical-menu a:hover {
@@ -77,78 +131,231 @@
                     font-weight: bold;
                 }
 
-        @@media screen and (max-width: 992px) {
-            .column {
-                width: 50%;
+            .vertical-menu div a {
+                background-color: rgba(0,51,73,255);
+                color: white !important;
+                font-weight: bold;
             }
+
+            .vertical-menu button {
+                background-color: rgba(0,130,0,255);
+                color: white !important;
+                font-weight: bold;
+                text-align: left;
+            }
+        /*.vertical-menu div a:hover {
+                background-color: rgba(0,130,0,255);
+                color: white !important;
+                font-weight: bold;
+                cursor:pointer;
+            }*/
+        #divToolAcc {
+            margin-top: 3px;
+            margin-left: -10px;
+        }
+
+        #logoTextCntDig {
+            font-size: small;
+            margin-top: -7px;
+        }
+
+        #containerLogo {
+            width: 130px;
+            height: 65px;
+            position: relative;
+            left: -30px;
+        }
+
+        .verticalMenuDivider {
+            border-top: 1px solid #38546d;
+            border-bottom: 1px solid #16222c;
+            height: 2px;
+            position: absolute;
+            width: auto;
+            /*     right: 249px;
+            top: 10px;*/
+        }
+
+        #logoutBtn {
+            width: auto;
+            vertical-align: middle;
+            background-color: transparent !important;
+            /*margin-right:10px;*/
+            /*word-wrap:hyphenate;*/
         }
 
         @@media screen and (max-width: 600px) {
             .row {
                 flex-direction: column;
+                overflow: hidden;
             }
-            /*.col {
+
+            #divLogOut {
+                margin: 15px 45px 0 0 !important;
+            }
+
+            #formGabinetes {
+                flex-direction: column !important;
+                /*margin: 0 0 0 -45px;*/
+            }
+
+            #divOneGabContab {
+                order: 1 !important;
+                margin: 0 0 0 -25px;
+                /*border: solid 1px red;*/
                 width: 100%;
             }
-           .vertical-menu {
-                width:600px ;
+
+            #divTwoGabContab {
+                order: 2 !important;
+                margin: 0 0 0 -25px;
             }
 
-                .vertical-menu a {
-                    -webkit-flex-flow: column wrap;
-                    flex-flow: column wrap;
-                    padding: 0;
-                    width: 463px;
-                    margin: 3px 3px 3px 3px;
-                    float: none;
-                    display: block;
-                    width:480px; width: 100%;
-                    text-align: left;
-                    
-                }*/
+            #divThreeGabContab {
+                order: 3 !important;
+                margin: 0 0 0 -25px;
+            }
+
+            #containerLogo {
+                width: 130px;
+                height: 65px;
+                position: relative;
+            }
         }
 
-        /*vertical menu */
+        @@media screen and (max-width: 992px) {
+            .column {
+                width: 50%;
+            }
+
+            #formGabinetes {
+                flex-direction: row;
+                display: inline-block;
+                position: relative;
+            }
+
+            #divOneGabContab {
+                order: 1 !important;
+            }
+
+            #divTwoGabContab {
+                order: 2 !important;
+            }
+
+            #divThreeGabContab {
+                order: 3 !important;
+            }
+        }
     </style>
+
+
 </head>
 <body>
     <div class="container col-md-10 offset-1" style=" padding-top: 15px;">
-
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark rounded" style="background-color: rgb(0,51,73) !important;">
-            <a class="navbar-brand float-left" asp-action="index" asp-controller="home">
-                <img src="~/favicon.ico" />
-            </a>
+        <nav id="myNavMenu" class="navbar navbar-expand-sm bg-dark navbar-dark rounded sticky-top" style="background-color: rgb(0,51,73) !important;">
+            <div class="container" style="width:200px !important;" >
+                <a class="navbar-brand float-left" asp-action="index" asp-controller="home">
+                    <div class="d-inline-flex" id="containerLogo">
+                        <div class="container">
+                            <img src="~/images/tools4Acc.png"   />
+                        </div>
+                        <div id="divToolAcc" class="container">
+                            <div class="row">
+                                <p class="h3"  >tools4Acc</p>
+                            </div>
+                            <div class="row">
+                                <p id="logoTextCntDig"  >contabilidade digital</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @*<label id="windowWidth"></label>
+                <label id="windowHeight"></label>*@
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavBar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavBar">
-                <div class="navbar-nav float-left">
-                    <ul class="navbar-nav ml-auto ">
-                        @*@if (signInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Super Admin")))
-                            {*@
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="manageAccessDropDownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Manage
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="manageAccessDropDownMenu">
-                                <a class="dropdown-item" asp-action="Register" asp-controller="Account">New User</a>
-                                <a class="dropdown-item" asp-action="CreateRole" asp-controller="administration">New Role</a>
-                                <a class="dropdown-divider"><hr /></a>
-                                <a asp-action="ListUsers" asp-controller="Administration" class="dropdown-item">Users</a>
-                                <a asp-action="ListRoles" asp-controller="Administration" class="dropdown-item">Roles</a>
-                            </div>
-                        </li>
+                <div id="divGabContab" style="width:100%;">
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        GabineteEditViewModel gabViewModel = new GabineteEditViewModel();
 
-                        @*}*@
-                    </ul>
+                        IEnumerable<SelectListItem> tmp_gabContab = gabContab.GetGabContabilidade();
+
+                        SelectListItem item_gabContab = new SelectListItem()
+                        {
+                            Value = "0",
+                            Text = "-- Selectione Gabinete --"
+                        };
+                        List<SelectListItem> tmp = tmp_gabContab.ToList<SelectListItem>();
+                        tmp.Insert(0, item_gabContab);
+                        gabViewModel.EmpresasContabilidade = tmp;
+
+                        //-----------------------Empresas contabilitate
+
+                        //gabViewModel.Empresas = gabContab.GetEmprGabContabilidade(0);
+
+                        IEnumerable<SelectListItem> tmp_EmpresaContab = gabContab.GetEmprGabContabilidade(0);
+
+                        SelectListItem itemEmpresaContab = new SelectListItem()
+                        {
+                            Value = "0",
+                            Text = "-- Selectione Empresa --"
+                        };
+
+                        List<SelectListItem> tmpEmpresas = tmp_EmpresaContab.ToList<SelectListItem>();
+                        tmpEmpresas.Insert(0, itemEmpresaContab);
+
+                        // GabineteEditViewModel gabViewModel = new GabineteEditViewModel();
+                        gabViewModel.Empresas = tmpEmpresas;
+                        //----------------------------Ano fiscal das empresas
+
+                        //gabViewModel.AnoFiscal = gabContab.GetEmprGabContabilidadeAno(0);
+                        IEnumerable<SelectListItem> tmp_EmpresaContabAno = gabContab.GetEmprGabContabilidadeAno(0);
+
+                        SelectListItem itemEmprAno = new SelectListItem()
+                        {
+                            Value = "0",
+                            Text = "-- Selectione Ano Fiscal --"
+                        };
+
+                        List<SelectListItem> tmpEmpresaAno = tmp_EmpresaContabAno.ToList<SelectListItem>();
+                        tmpEmpresaAno.Insert(0, itemEmprAno);
+
+                        // GabineteEditViewModel gabViewModel = new GabineteEditViewModel();
+                        gabViewModel.AnoFiscal = tmpEmpresaAno;
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @*<form id="formGabinetes" class="col-xs-3 col-9 d-inline-flex float-right">*@
+                        <form id="formGabinetes" class="d-inline-flex">
+                            <div class="col-xl-3" id="divOneGabContab">
+                                @Html.LabelFor(x => gabViewModel.EmpresaContabID, htmlAttributes: new { @class = "control-label LabelFor" })
+                                @Html.DropDownListFor(x => gabViewModel.EmpresaContabID, new SelectList(gabViewModel.EmpresasContabilidade, "Value", "Text"),
+                                                    htmlAttributes: new { @class = "form-control col-md-9 DropDownListFor", id = "GabContab" })
+                                @Html.ValidationMessageFor(x => gabViewModel.EmpresaContabID, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-xl-3" id="divTwoGabContab">
+                                @Html.LabelFor(x => gabViewModel.EmpresaID, htmlAttributes: new { @class = "control-label   LabelFor" })
+                                @Html.DropDownListFor(x => gabViewModel.EmpresaID, new SelectList(gabViewModel.Empresas, "Value", "Text"),
+                                                    htmlAttributes: new { @class = "form-control col-md-9 DropDownListFor", id = "EmprGab" })
+                                @Html.ValidationMessageFor(x => gabViewModel.EmpresaID, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-xl-3" id="divThreeGabContab">
+                                @Html.LabelFor(x => gabViewModel.CodeEmpresa, htmlAttributes: new { @class = "control-label LabelFor" })
+                                @Html.DropDownListFor(x => gabViewModel.CodeEmpresa, new SelectList(gabViewModel.AnoFiscal, "Value", "Text"),
+                                                    htmlAttributes: new { @class = "form-control col-md-9 DropDownListFor", id = "AnoEmprGab" })
+                                @Html.ValidationMessageFor(x => gabViewModel.CodeEmpresa, "", new { @class = "text-danger" })
+                            </div>
+                        </form>
+                    }
                 </div>
-                <div class="navbar-nav ml-auto float-right">
+                <div id="divLogOut" class="navbar-nav ml-auto float-right">
                     <ul class="navbar-nav ml-auto ">
                         @if (signInManager.IsSignedIn(User))
                         {
                             <li class="nav-item nav-pills">
                                 <form method="post" asp-action="logout" asp-controller="account">
-                                    <button type="submit" class="nav-link btn btn-link py-0" style="width:auto;vertical-align:middle;margin-right:10px;word-wrap:hyphenate">
+                                    <button type="submit" id="logoutBtn" class="nav-link btn btn-link py-0 rounded">
                                         Logout @User.Identity.Name.ToString().Split("@")[0]  @*@User.Identity.Name*@
                                     </button>
                                 </form>
@@ -169,27 +376,61 @@
         </nav>
 
         <div class="row">
-            <div class="col-sm-12 col-md-2" style="padding-left:-20px;padding-top:10px;" >
+            <div class="col-sm-12 col-md-2" style="padding-left:-20px;padding-top:10px;">
                 @if (signInManager.IsSignedIn(User))
                 {
-                    @*<div class="vertical-menu float-left rounded">*@
-                    <div class="vertical-menu rounded">
-                        <a href="#" class="active rounded">Configuração</a>
-                        @*<a asp-action="index" asp-controller="ConConfig" class="rounded">Servidor SQL (BD local)</a>*@
-                        <a asp-action="index" asp-controller="Empresa" class="rounded">Empresas</a>
-                        @*<a href="#" class="rounded">Utilizadores</a>*@
-
-                        <a href="#" class="active rounded">Lab</a>
-                        <a href="#" class="rounded">C-Lab</a>
-                        <a href="#" class="rounded">Excel</a>
+                    <div id="mySideBar" class="vertical-menu" style="text-align:left; color:white;font-size:medium;font-weight:bold;">
+                        <button type="button" style="width:100%;" class="navbar-toggler" data-toggle="collapse" data-target="#divLab" aria-controls="divLab" aria-expanded="false">
+                            Conversor
+                        </button>
+                        <div id="divLab" class="collapse navbar-collapse flex-column">
+                            @*<a id="mnuCLab"class="rounded" asp-action="Create" asp-controller="CLab" asp-route-EmpresaID="101">C-Lab</a>*@
+                            <a id="mnuCLab" class="rounded">C-Lab</a>
+                            <a id="mnuExcelLab" class="rounded">Excel</a>
+                            @*<a class="" id="mnuGabinete">Gabinete</a>*@
+                        </div>
+                        <button type="button" style="width:100%;" class="navbar-toggler" data-toggle="collapse" data-target="#divImportacao" aria-controls="divImportacao" aria-expanded="false">
+                            Importação
+                        </button>
+                        <div id="divImportacao" class="collapse navbar-collapse flex-column">
+                            <a class="rounded">Extratos Bancários</a>
+                            <a class="rounded">Lançamento de Documentos</a>
+                            <a class="rounded">Despesas de Pessoal (GEP)</a>
+                            <a class="rounded">Entidades</a>
+                            <a class="rounded">Recibos Verdes</a>
+                        </div>
+                        <button type="button" style="width:100%;" class="navbar-toggler" data-toggle="collapse" data-target="#divExportacao" aria-controls="divExportacao" aria-expanded="false">
+                            Exportação
+                        </button>
+                        <div id="divExportacao" class="collapse navbar-collapse flex-column">
+                            <a id="mnuExportDocs" class="rounded">Exportar Documentos</a>
+                            @*<a class="rounded">Tipo de Documentos</a>
+                            <a class="rounded">Centros de Custo</a>
+                            <a class="rounded">Fluxos de Caixa</a>
+                            <a class="rounded">SAFT Contabilidade</a>*@
+                        </div>
+                        @if (signInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Super Admin")))
+                        {
+                            <button type="button" style="width:100%;" class="navbar-toggler" data-toggle="collapse" data-target="#divConfig" aria-controls="divConfig" aria-expanded="false">
+                                Configuração
+                            </button>
+                            <div id="divConfig" class="collapse navbar-collapse flex-column">
+                                <a id="mnuEmpresas" class="rounded">Empresas</a>
+                                <a id="mnuNewUser" class="rounded">New User</a>
+                                <a id="mnuNewRole" class="rounded">New Role</a>
+                                <a id="mnuListUsers" class="rounded">Users</a> @*asp-action="ListUsers" asp-controller="Administration"*@
+                                <a asp-action="ListRoles" asp-controller="Administration" class="rounded">Roles</a>
+                            </div>
+                        }
                     </div>
                 }
             </div>
             <div class="col-sm-12 col-md-10">
-                <div class="container" style="padding-top:10px">
+                <div class="container" style="padding-top:10px;margin-left:-30px; width:100% !important;" id="renderbody" >
                     @RenderBody()
                 </div>
             </div>
+
             @if (IsSectionDefined("Scripts"))
             {
                 @RenderSection("Scripts", true)
@@ -197,6 +438,95 @@
         </div>
 
     </div>
-    @*<div class="navbar navbar-expand-sm bg-dark navbar-dark" style="position:fixed;bottom:0;height:3em;"></div>*@
+
+    <script type="text/javascript">
+        function goHome() {
+            var b = RenderWithNoRefresh("/Home/Index")
+        }
+        $('#GabContab').on('change', (function () {
+            var selectedGab = $("#GabContab").val();
+           // alert(selectedGab);
+            var a = GabContabSelectChanged(selectedGab);
+        }));
+
+
+        $(document).ready(function () {
+    
+           
+            $('#EmprGab').change(function () {
+                var a = EmpresaContabSelectChanged();
+            });
+            $('#AnoEmprGab').change(function () {
+                var d = AnoSelectChanged();
+            });
+            
+            $('#mnuGabinete').click(function () {
+                var b = RenderWithNoRefresh("/GabContab/Index")
+            });
+
+            $('#mnuEmpresas').click(function () {
+
+                //var b = RenderWithNoRefresh("/Empresa/Index")
+
+                $.ajax({
+                    url: "/Empresa/IndexJson",
+                    type: "GET",
+                    cache: false,
+                    //data: _data,
+                    success:
+                        function (data) {
+                            if (data.success === true) {
+                                RenderWithNoRefresh("/Empresa/Index");
+                            };
+                            if (data.success === false) {
+                                RenderWithNoRefresh("/Empresa/CreateCabContabilidade"); 
+                            };
+                        },
+                    error:
+                        function (xhr) {
+                            ProcessError(xhr);//alert(xhr.responseText);
+                        }
+                });
+
+            });
+
+            $('#mnuNewUser').click(function () {
+                var b = RenderWithNoRefresh("/Account/Register")
+            });
+
+            $('#mnuNewRole').click(function () {
+                var b = RenderWithNoRefresh("/Administration/CreateRole")
+            });
+
+            $('#mnuListUsers').click(function () {
+                var b = RenderWithNoRefresh("/Administration/ListUsers")
+            });
+
+            $('#mnuCLab').click(function () {
+                var b = RenderWithNoRefresh("/CLab/Export")
+            });
+            $('#mnuExcelLab').click(function () {
+                var b = RenderWithNoRefresh("/ExcelLab/Index")
+            });
+
+        /*Exportacao*/
+            $('#mnuExportDocs').click(function () {
+                var empSage = $('#EmprGab :selected').text();
+                var empSageAno = $('#AnoEmprGab :selected').text();
+                var b = RenderWithNoRefreshWithData("/ExportDocs/Index", { _EmpSage: empSage, _Ano: empSageAno },"GET");
+            });
+
+            $(window).resize(function () {
+                var w = window.innerWidth;
+                var h = window.innerHeight;
+                $("#windowWidth").val = w;
+                $("#windowHeight").val = h;
+            });
+        });
+
+
+
+    </script>
+
 </body>
 </html>

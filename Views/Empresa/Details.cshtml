@@ -2,19 +2,31 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
     var empresaId = Model.EmpresaID;
 }
+<script src="~/js/customscript.js"></script>
+<style>
+ 
+    .aLink {
+        color: rgb(82,123,255) !important;
+    }
 
+        .aLink:hover {
+            color: rgb(82,123,255) !important;
+            text-decoration: underline !important;
+            cursor: pointer !important;
+        }
+</style>
 <div class="card">
     <div class="card-header">
         <h1>Detalhes da empresa: <strong>@ViewBag.NomeEmpresa</strong></h1>
         <hr />
-        <a asp-action="Index">Voltar aos registos das empresas</a> | 
-        @if(Model.isCabContabilidade == true)
+        <a class="aLink" onclick="VoltarParaListaEmpresas()">Voltar a lista das empresas</a> |
+
+        @if (Model.isCabContabilidade == true)
         {
             <a asp-action="Index" asp-controller="AGes">Importar Empresas de BD AGES</a>
-            }
+        }
     </div>
     <div class="card-body">
         <dl class="row">
@@ -69,8 +81,21 @@
         </dl>
     </div>
     <div class="card-footer">
-        <a asp-action="Index" asp-route-id="@Model.EmpresaID">Voltar aos registos das empresas</a> |
-        <a asp-action="Index" asp-controller="ConConfig" asp-route-EmpresaID="@Model.EmpresaID">Configurar conexão de banco de dados</a> |
-        <a asp-action="Edit" asp-route-id="@Model.EmpresaID">Editar</a>        
+        <a class="aLink" onclick="VoltarParaListaEmpresas()">Voltar a lista das empresas </a>|
+        @if (Model.isCabContabilidade == false)
+        {
+        <a class="aLink" onclick="CriarConexaoEmpresa(@Model.EmpresaID)">Configurar conexão de banco de dados</a><span> |</span>   
+        }
+
+        <a class="aLink" onclick="EditEmpresa(@Model.EmpresaID)">Editar</a>
     </div>
 </div>
+<script>
+    function EditEmpresa(id) {
+        var b = RenderWithNoRefresh("/Empresa/Edit/" + id);
+    }
+    function CriarConexaoEmpresa(id)
+    {
+        var b = RenderWithNoRefresh("/ConConfig/CreateConConfig/" + id);
+    }
+</script>

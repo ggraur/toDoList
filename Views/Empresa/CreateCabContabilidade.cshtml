@@ -2,134 +2,146 @@
 
 @{
     ViewData["Title"] = "CreateCabContabilidade";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="~/js/customscript.js"></script>
+<style>
+    .aLink {
+        color: rgb(82,123,255) !important;
+    }
 
+    .aLink:hover {
+        color: rgb(82,123,255) !important;
+        text-decoration: underline !important;
+        cursor: pointer !important;
+    }
+    span {
+        display:none;
+    }
+</style>
 
-@*<div class="card">
-   
+<div class="card">
+    <div class="card-header">
+        <h1>Criacao cabinete da contabilidade</h1>
+        <hr />
+        <a class="aLink" id="voltarAsEmpresas" onclick="VoltarParaListaEmpresas()">Voltar a lista das empresas</a>
     </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="CreateCabContabilidade">
-                <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="card-body">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input id="nomeEmpresa" asp-for="Nome" class="form-control" />
+                <span id="nomeEmpresaSpan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NIF" class="control-label"></label>
+                <input id="nifEmpresa" asp-for="NIF" class="form-control" />
+                <span id="NifEmpresaSpan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Licenca" class="control-label"></label>
+                <input id="licencaEmp" asp-for="Licenca" class="form-control" />
+                <span id="licencaEmpSpan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NrPostos" class="control-label"></label>
+                <input id="nrPostLicEmp" asp-for="NrPostos" class="form-control" />
+                <span id="nrPostLicEmpSpan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NrEmpresas" class="control-label"></label>
+                <input id ="nrEmpresasEmp" asp-for="NrEmpresas" class="form-control" />
+                <span id ="nrEmpresasEmpSpan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataExpiracao" class="control-label"></label>
+                <input id="dtExpLicEmp" type="date" asp-for="DataExpiracao" class="form-control" />
+                <span id="dtExpLicEmpSpan" class="text-danger"></span>
+            </div>
+            <div>
                 <div class="form-group">
-                    <label asp-for="Nome" class="control-label"></label>
-                    <input asp-for="Nome" class="form-control" />
-                    <span asp-validation-for="Nome" class="text-danger"></span>
+                     <a id="btnGravar" class="btn btn-primary" style="width:auto">Gravar</a>
                 </div>
-                <div class="form-group">
-                    <label asp-for="NIF" class="control-label"></label>
-                    <input asp-for="NIF" class="form-control" />
-                    <span asp-validation-for="NIF" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Licenca" class="control-label"></label>
-                    <input asp-for="Licenca" class="form-control" />
-                    <span asp-validation-for="Licenca" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NrPostos" class="control-label"></label>
-                    <input asp-for="NrPostos" class="form-control" />
-                    <span asp-validation-for="NrPostos" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NrEmpresas" class="control-label"></label>
-                    <input asp-for="NrEmpresas" class="form-control" />
-                    <span asp-validation-for="NrEmpresas" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DataExpiracao" class="control-label"></label>
-                    <input asp-for="DataExpiracao" class="form-control" />
-                    <span asp-validation-for="DataExpiracao" class="text-danger"></span>
-                </div>
-                
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
-
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>*@
-
-
-    <div class="card">
-        <div class="card-header">
-            <h1>Criacao cabinete da contabilidade</h1>
-            <hr />
-            <a asp-action="Index">Voltar a lista das empresas</a>
-        </div>
-        <div class="card-body">
-            <form asp-action="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Nome" class="control-label"></label>
-                    <input asp-for="Nome" class="form-control" />
-                    <span asp-validation-for="Nome" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NIF" class="control-label"></label>
-                    <input asp-for="NIF" class="form-control" />
-                    <span asp-validation-for="NIF" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Licenca" class="control-label"></label>
-                    <input asp-for="Licenca" class="form-control" />
-                    <span asp-validation-for="Licenca" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NrPostos" class="control-label"></label>
-                    <input asp-for="NrPostos" class="form-control" />
-                    <span asp-validation-for="NrPostos" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NrEmpresas" class="control-label"></label>
-                    <input asp-for="NrEmpresas" class="form-control" />
-                    <span asp-validation-for="NrEmpresas" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DataExpiracao" class="control-label"></label>
-                    <input  type="date" asp-for="DataExpiracao" class="form-control" />
-                    <span asp-validation-for="DataExpiracao" class="text-danger"></span>
-                </div>
-                @*<div class="form-group" hidden>
-                    <label asp-for="DataCriacao" class="control-label"></label>
-                    <input type="date" asp-for="DataCriacao" class="form-control" />
-                    <span asp-validation-for="DataCriacao" class="text-danger"></span>
-                </div>
-                <div class="form-group form-check" hidden>
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
-                    </label>
-                </div>
-                <div class="form-group form-check" hidden>
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="isCabContabilidade" /> @Html.DisplayNameFor(model => model.isCabContabilidade)
-                    </label>
-                </div>
-                <div class="form-group" hidden>
-                    <label asp-for="IdCabContabilidade" class="control-label"></label>
-                    <input asp-for="IdCabContabilidade" class="form-control" />
-                    <span asp-validation-for="IdCabContabilidade" class="text-danger"></span>
-                </div>
-                <div class="form-group form-check" hidden>
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
-                    </label>
-                </div>*@
-                <div>
-                    <div class="form-group">
-                        <input type="submit" value="Guardar" asp-action="CreateCabContabilidade" asp-controller="Empresa" class="btn btn-primary" />
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="card-footer">
-            <a asp-action="Index">Voltar a lista das empresas</a>
-        </div>
+    <div class="card-footer">
+        <a class="aLink" id="voltarAsEmpresas1" onclick="VoltarParaListaEmpresas()">Voltar a lista das empresas</a>
     </div>
+</div>
+<script>
+    $('#btnGravar').click(function () {
+        var _nomeEmpresa = $('#nomeEmpresa').val();
+        var _nifEmpresa = $('#nifEmpresa').val();
+        var _licencaEmp = $('#licencaEmp').val();
+        var _nrPostLicEmp = $('#nrPostLicEmp').val();
+        var _nrEmpresasEmp = $('#nrEmpresasEmp').val();
+        var _dtExpLicEmp = $('#dtExpLicEmp ').val();
+        var _data = {
+            nomeEmpresa: _nomeEmpresa,
+            nifEmpresa: _nifEmpresa,
+            licencaEmp: _licencaEmp,
+            nrPostLicEmp: _nrPostLicEmp,
+            nrEmpresasEmp: _nrEmpresasEmp,
+            dtExpLicEmp: _dtExpLicEmp
+        };
+        $.ajax({
+            url: "/Empresa/CreateCabContabilidadeJson/",
+            type: "POST",
+            cache: false,
+            data: _data,
+            success:
+                function (data) {
+                    if (data.success === true) {
+                        RenderWithNoRefresh("/Empresa/Index");
+                     };
+                    if (data.success === false) {
+                        if (data.field === "NomeEmpresa") {
+                            $('#nomeEmpresaSpan').text(data.msg);
+                            $('#nomeEmpresaSpan').show().css("display", "inline").fadeOut(3000);
+                        };
+                        if (data.field === "NifEmpresa") {
+                            $('#NifEmpresaSpan').text(data.msg);
+                            $('#NifEmpresaSpan').show().css("display", "inline").fadeOut(3000);
+                        };
+                        if (data.field === "Licenca") {
+                            $('#licencaEmpSpan').text(data.msg);
+                            $('#licencaEmpSpan').show().css("display", "inline").fadeOut(3000);
+                        };
+                        if (data.field === "NrPostos") {
+                            $('#nrPostLicEmpSpan').text(data.msg);
+                            $('#nrPostLicEmpSpan').show().css("display", "inline").fadeOut(3000);
+                            };
+                        if (data.field === "NrEmpresas") {
+                            $('#nrEmpresasEmpSpan').text(data.msg);
+                            $('#nrEmpresasEmpSpan').show().css("display", "inline").fadeOut(3000);
+                        };
+                        if (data.field === "DataExpiracao") {
+                            $('#dtExpLicEmpSpan').text(data.msg);
+                            $('#dtExpLicEmpSpan').show().css("display", "inline").fadeOut(3000);
+                        };
+                      };
+                },
+            error:
+                function (xhr) {
+                    ProcessError(xhr);
+                }
+        });
+    });
 
+    function ProcessError(xhr) {
+        var _emprId = $('#myEmpresaID').val();
+        var _data = {
+            Signal: "notok",
+            ErrorTitle: "Erro de insercao!",
+            ErrorMessage: "Não foi possível inserir dados da empresa, " +
+                " se o erro persistir, entre em contato com o suporte!" + xhr.responseText,
+            UrlToRedirect: "/Empresa/Index/",
+            OptionalData: "new { EmpresaId : " + _emprId + " }",
+            StringButton: "Voltar para as conexões"
+        };
+
+        var c = RenderWithNoRefreshWithData("/Error/GeneralError/", _data, "GET");
+    }
+</script>

@@ -321,7 +321,8 @@ namespace toDoList.Migrations
                     b.Property<int>("EmpresaSageId")
                         .HasColumnType("int");
 
-                    b.Property<string>("InputFilePAth")
+                    b.Property<string>("InputFilePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OutputFilePAth")
@@ -333,6 +334,84 @@ namespace toDoList.Migrations
                     b.HasKey("IdCLab");
 
                     b.ToTable("cLabs");
+                });
+
+            modelBuilder.Entity("toDoList.Models.mapView_EmpresasGabContabilidade", b =>
+                {
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataExpiracao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmpresaID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCabContabilidade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Licenca")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NIF")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NrEmpresas")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrPostos")
+                        .HasColumnType("int");
+
+                    b.ToView("db_vw_EmpresasGabContabilidade");
+                });
+
+            modelBuilder.Entity("toDoList.Models.mapView_EmpresasGabContabilidadeAno", b =>
+                {
+                    b.Property<int>("AnoFi")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
+                    b.ToView("db_vw_EmpresasGabContabilidadeAno");
+                });
+
+            modelBuilder.Entity("toDoList.Models.mapView_GabContabilidade", b =>
+                {
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataExpiracao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmpresaID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Licenca")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NIF")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NrEmpresas")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrPostos")
+                        .HasColumnType("int");
+
+                    b.ToView("db_vw_GabContabilidade");
                 });
 
             modelBuilder.Entity("toDoList.Models.mapView_UtilzadoresEmpresa", b =>
@@ -424,6 +503,33 @@ namespace toDoList.Migrations
                     b.ToTable("ConConfigViewModel");
                 });
 
+            modelBuilder.Entity("toDoList.ViewModels.DadosEmpresaViewModel", b =>
+                {
+                    b.Property<int>("DEmpresaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<short>("AnoFi")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("AnoIn")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("CodeAplicacao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodeEmpresa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmpresaID")
+                        .HasColumnType("int");
+
+                    b.HasKey("DEmpresaID");
+
+                    b.ToTable("DadosEmpresaViewModel");
+                });
+
             modelBuilder.Entity("toDoList.ViewModels.EditRoleViewModel", b =>
                 {
                     b.Property<string>("Id")
@@ -495,8 +601,8 @@ namespace toDoList.Migrations
                     b.Property<int>("NrEmpresas")
                         .HasColumnType("int");
 
-                    b.Property<string>("NrPostos")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("NrPostos")
+                        .HasColumnType("int");
 
                     b.Property<bool>("isCabContabilidade")
                         .HasColumnType("bit");
@@ -532,6 +638,21 @@ namespace toDoList.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ForgotPasswordViewModel");
+                });
+
+            modelBuilder.Entity("toDoList.ViewModels.GabineteEditViewModel", b =>
+                {
+                    b.Property<string>("CodeEmpresa")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmpresaContabID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpresaID")
+                        .HasColumnType("int");
+
+                    b.ToTable("GabineteEditViewModel");
                 });
 
             modelBuilder.Entity("toDoList.ViewModels.ResetPasswordViewModel", b =>

@@ -1,0 +1,90 @@
+﻿@model toDoList.ViewModels.GeneralErrorViewModel
+
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h5 id="urlToredirect" hidden>@Model.UrlToRedirect</h5>
+<h5 id="optionalData" hidden>@Model.optionalData</h5>
+<div class="card">
+    <div class="card-header">
+        @switch (Model.Signal)
+        {
+            case "ok":
+                <h1 class="card-header alert-success font-weight-bolder">General Error</h1>
+                break;
+
+            default:
+                <h1 class="card-header alert-danger font-weight-bolder">General Error</h1>
+                break;
+        }
+        <hr />
+        <h3>
+            Um erro ocorreu durante o processamento do seu pedido.
+            A equipe de suporte é notificada e estamos trabalhando para corrigir.
+        </h3>
+        <h5>Por favour contacte o suporte via email: geral@gestecnica.com</h5>
+        <hr />
+    </div>
+    <div class="card-body">
+        @switch (Model.Signal)
+        {
+            case "ok":
+                <div class="card well">
+                    <div class="card-header alert-success font-weight-bolder">
+                        <h2><strong>@Model.ErrorTitle </strong></h2>
+                    </div>
+                    <div class="card-body font-weight-bold">
+                        <h3>@Model.ErrorMessage</h3>
+                    </div>
+                </div>
+                break;
+            default:
+                <div class="card alert">
+                    <div class="card-header alert-danger font-weight-bolder">
+                        <h2><strong> @Model.ErrorTitle </strong></h2>
+                    </div>
+                    <div class="card-body font-weight-bold">
+                        <h3>@Model.ErrorMessage</h3>
+                    </div>
+                </div>
+                break;
+        }
+    </div>
+    <div class="card-footer">
+        <input id="redirectTo" type="submit" value="@Model.StringButton" />
+        @*<a asp-action="Index" asp-controller="Home">Back to Home Page </a>*@
+    </div>
+</div>
+
+<script>
+    $("#redirectTo").click(function () {
+        var _UrlToredirect = $('#urlToredirect').text();
+        var _optData = $('#optionalData').text();
+       
+        var b;
+        if (_optData === null) {
+            b = RenderWithNoRefresh(_UrlToredirect);
+        } else {
+            b = RenderWithNoRefresh(_UrlToredirect + _optData);
+           // alert(_optData + _UrlToredirect);
+           // b = RenderWithNoRefreshWithData(_UrlToredirect, new { Id: _optData }, "GET");
+
+            //$.ajax({
+            //    url: "/ConConfig/IndexJson/" + _optData,
+            //    type: "GET",
+            //    cache: false,
+            //    //data: JSON.stringify(new { Id: _optData }),
+            //    //dataType:"json",
+            //    success: function (data) {
+            //        $("#renderbody").html(data);
+            //    },
+            //    error: function (xhr) {
+            //        alert(xhr.responseText);
+            //    }
+            //})
+
+        }
+    });
+</script>

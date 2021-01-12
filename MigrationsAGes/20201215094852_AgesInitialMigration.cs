@@ -11,14 +11,32 @@ namespace toDoList.MigrationsAGes
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             var sql = @"
-            CREATE OR ALTER VIEW [dbo].[vwEmpresaUtilizadores] AS
-                    SELECT t1.CEmp [CodeEmpresa]  , t1.Nome [NomeEmpresa],  t1.NContrib [NIF],
-                    t2.CApl[CodeApplicacao], t2.AnoIn, t2.AnoFi, 
-                    t3.COper [Utilizador]
-                    FROM   Emprs t1
-                    left join EmpDat  t2 on t1.CEmp=t2.CEmp
-                    Left join OpEmp t3 on t1.CEmp = t3.CEmp
-                    group by t1.CEmp, t1.Nome,  t1.NContrib,t2.CApl, t2.AnoFi,t2.AnoIn,   t3.COper ";
+                        declare @strSql nvarchar(max)='';
+
+                        if exists(select 1 from sys.views where name = 'vwEmpresaUtilizadores' and type = 'v')    
+	                         DROP VIEW[dbo].[vwEmpresaUtilizadores]; 
+                        
+                         select @strSql = '   CREATE OR ALTER VIEW [dbo].[vwEmpresaUtilizadores] AS
+                                            SELECT t1.CEmp [CodeEmpresa]  , t1.Nome [NomeEmpresa],  t1.NContrib [NIF],
+                                            t2.CApl[CodeApplicacao], t2.AnoIn, t2.AnoFi, 
+                                            t3.COper [Utilizador]
+                                            FROM   Emprs t1
+                                            left join EmpDat  t2 on t1.CEmp=t2.CEmp
+                                            Left join OpEmp t3 on t1.CEmp = t3.CEmp
+                                            group by t1.CEmp, t1.Nome,  t1.NContrib,t2.CApl, t2.AnoFi,t2.AnoIn,   t3.COper ' ;
+
+                        EXEC sp_executesql @strSql		    
+
+                        if exists(select 1 from sys.views where name = 'vwLocEn' and type = 'v')    
+	                         DROP VIEW[dbo].[vwLocEn];    
+                        Begin												    
+ 	                        select @strSql = '  CREATE OR ALTER VIEW [dbo].[vwLocEn]
+						                        AS
+						                        SELECT        CLocE, GesSharedDir, SageSearchMachine
+						                        FROM            dbo.LocEn '    
+ 	                        EXEC sp_executesql @strSql		    
+                        end;
+                        ";
 
             //EX: https://www.michalbialecki.com/2020/09/09/working-with-views-in-entity-framework-core-5/
             migrationBuilder.Sql(sql);

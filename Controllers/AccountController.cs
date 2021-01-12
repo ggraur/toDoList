@@ -33,7 +33,7 @@ namespace toDoList.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            return this.PartialView("~/Views/Account/Register.cshtml");
         }
 
         [HttpPost]

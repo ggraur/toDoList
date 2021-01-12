@@ -2,51 +2,82 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    var idEmpresa = Model.EmpresaId;
 }
+<style>
+    .aLink {
+        color: rgb(82,123,255) !important;
+    }
 
-<h1>Detalhes da conexão: <strong>@Model.NomeServidor</strong>: ID Empresa : @Model.EmpresaId</h1>
-<hr />
-<div>
+        .aLink:hover {
+            color: rgb(82,123,255) !important;
+            text-decoration: underline !important;
+            cursor: pointer !important;
+        }
+</style>
 
-
-    <dl class="row">
-        <dt class="col-sm-2" hidden>
-            @Html.DisplayNameFor(model => model.EmpresaId)
-        </dt>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NomeServidor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NomeServidor)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.InstanciaSQL)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.InstanciaSQL)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Utilizador)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Utilizador)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ActiveConnection)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ActiveConnection)
-        </dd>
-    </dl>
+<div class="card">
+    <div class="card-header">
+        <h1>Detalhes da conexão: <strong>@Model.NomeServidor</strong>: ID Empresa : @Model.EmpresaId</h1>
+        <h2 id="myIdEmpresa" hidden>@idEmpresa</h2>
+        <hr />
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-2" hidden>
+                @Html.DisplayNameFor(model => model.EmpresaId)
+            </dt>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.NomeServidor)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.NomeServidor)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.InstanciaSQL)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.InstanciaSQL)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Utilizador)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Utilizador)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Password)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Password)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ActiveConnection)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ActiveConnection)
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a class="aLink" onclick="EditConexao(@Model.ConexaoID)">Edit</a> |
+        <a class="aLink" id="aBackToConnectionList">Voltar a lista</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ConexaoID">Edit</a> |
-    <a asp-action="Index" asp-route-EmpresaId="@Model.EmpresaId">Back to List</a>
-</div>
+ 
+<script>
+    function EditConexao(id) {
+        var b = RenderWithNoRefresh("/ConConfig/Edit/" + id);
+    }
+    function BackToIndex(id) {
+        var b = RenderWithNoRefresh("/ConConfig/Index/" + id );
+    }
+
+    $('#aBackToConnectionList').click(function () {
+        var _id = $('#myIdEmpresa').text();
+
+        var b = RenderWithNoRefreshWithData("/ConConfig/Index/", { EmpresaId: _id }, "GET")
+    });
+
+</script>

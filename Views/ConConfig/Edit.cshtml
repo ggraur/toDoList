@@ -2,50 +2,143 @@
 
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    var idEmpresa = @Model.EmpresaId;
 }
 
-<h1>Alterar a conexao<strong>@Model.NomeServidor</strong> | Empresa: @Model.EmpresaId</h1>
+<style>
+    .aLink {
+        color: rgb(82,123,255) !important;
+    }
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ConexaoID" />
-            <input type="hidden" asp-for="EmpresaId" />
-            <div class="form-group">
-                <label asp-for="NomeServidor" class="control-label"></label>
-                <input asp-for="NomeServidor" class="form-control" />
-                <span asp-validation-for="NomeServidor" class="text-danger"></span>
+   .aLink:hover {
+            color: rgb(82,123,255) !important;
+            text-decoration: underline !important;
+            cursor: pointer !important;
+        }
+ 
+</style>
+<form asp-action="Edit" method="post">
+    <div class="card">
+        <div class="card-header">
+            <h1>Nome Empresa: @ViewBag.NomeEmpresa | ID Empresa: @Model.EmpresaId</h1>
+            <h1>Alterar a conexao: <strong>@Model.NomeServidor</strong></h1>
+            <h2 id="myIdEmpresa" hidden>@idEmpresa</h2>
+            <hr />  
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    @*<form method="post">*@
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input id="myConexaoID" type="hidden" asp-for="ConexaoID" />
+                    <input id="myEmpresaID" type="hidden" asp-for="EmpresaId" />
+                    <div class="form-group">
+                        <label asp-for="NomeServidor" class="control-label"></label>
+                        <input id="myNomeServidor" asp-for="NomeServidor" class="form-control" />
+                        <span id="myNomeServidorSpan" class="text-danger" style="display:none;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="InstanciaSQL" class="control-label"></label>
+                        <input id="myInstanciaSQL" asp-for="InstanciaSQL" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Utilizador" class="control-label"></label>
+                        <input id="myUtilizador" asp-for="Utilizador" class="form-control" />
+                        <span id="myUtilizadorSpan" class="text-danger" style="display:none;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input id="myPassword" asp-for="Password" class="form-control" />
+                        <span id="myPasswordSpan" class="text-danger" style="display:none;"></span>
+                    </div>
+                    <div class="form-check m-1">
+                        <input id="myActiveConnection" asp-for="ActiveConnection" type="checkbox" />
+                        <label class="form-check-label" asp-for="ActiveConnection"></label>
+                    </div>
+                    <div class="form-group">
+                        <input id="btnGravar" value="Gravar" class="btn btn-primary" />
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="InstanciaSQL" class="control-label"></label>
-                <input asp-for="InstanciaSQL" class="form-control" />
-                <span asp-validation-for="InstanciaSQL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Utilizador" class="control-label"></label>
-                <input asp-for="Utilizador" class="form-control" />
-                <span asp-validation-for="Utilizador" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-check m-1">
-                <input asp-for="ActiveConnection" id="ActiveConnection" type="checkbox" />
-                <label class="form-check-label" asp-for="ActiveConnection"></label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Gravar" asp-action="Edit" asp-controller="ConConfig" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div class="card-footer">
+            <a id="aBackToConnectionList" class="aLink">Voltar a lista</a>
+        </div>
     </div>
-</div>
+</form>
+<script>
+    $('#aBackToConnectionList').click(function () {
+        var _id = $('#myIdEmpresa').text();
+        var b = RenderWithNoRefreshWithData("/ConConfig/Index/", { EmpresaId: _id }, "GET")
+    });
 
-<div>
-    <a asp-action="Index" asp-controller="ConConfig" asp-route-EmpresaId="@Model.EmpresaId">Back to List</a>
-</div>
+    $('#btnGravar').click(function () {
+        var _nServer = $('#myNomeServidor').val();
+        var _conId = $('#myConexaoID').val();
+        var _emprId = $('#myEmpresaID').val();
+        var _InstanciaSQL = $('#myInstanciaSQL').val();
+        var _Utilizador = $('#myUtilizador').val();
+        var _Password = $('#myPassword').val();
+        var _ActiveConnection = $('#myActiveConnection').val();
 
+        var _data = {
+            ConexaoID: _conId,
+            EmpresaId: _emprId,
+            NomeServidor: _nServer,
+            InstanciaSQL: _InstanciaSQL,
+            Utilizador: _Utilizador,
+            Password: _Password,
+            ActiveConnection: _ActiveConnection
+        };
+
+        // alert(_data);
+        $.ajax({
+            url: "/ConConfig/EditJson",
+            type: "post",
+            cache: false,
+            data: _data,
+            success:
+                function (data) {
+                    if (data.success === true) {
+                        RenderWithNoRefreshWithData("/ConConfig/Index/", { EmpresaId: _emprId }, "GET");
+                    };
+                    if (data.success === false) {
+                        if (data.field === "NomeServidor") {
+                            $('#myNomeServidorSpan').text(data.msg);
+                            $('#myNomeServidorSpan').show().css("display", "inline").fadeOut(3000);
+                        };
+                        if (data.field === "Utilizador") {
+                            $('#myUtilizadorSpan').text(data.msg);
+                            $('#myUtilizadorSpan').show().css("display", "inline").fadeOut(3000);
+                        };
+                        if (data.field === "Password") {
+                            $('#myPasswordSpan').text(data.msg);
+                            $('#myPasswordSpan').show().css("display", "inline").fadeOut(3000);
+                        };
+                    };
+                },
+            error:
+                function (xhr) {
+                    ProcessError(xhr);//alert(xhr.responseText);
+                }
+        });
+
+    });
+
+    function ProcessError(xhr) {
+        var _emprId = $('#myEmpresaID').val();
+        var _data = {
+            Signal: "notok",
+            ErrorTitle: "Erro de atualização!",
+            ErrorMessage: "Não foi possível atualizar os dados de conexão no servidor, " +
+                " se o erro persistir, entre em contato com o suporte!" + xhr.responseText,
+            UrlToRedirect: "/ConConfig/Index/",
+            OptionalData: "new { EmpresaId : " + _emprId + " }",
+            StringButton: "Voltar para as conexões"
+        };
+
+        var c = RenderWithNoRefreshWithData("/Error/GeneralError/", _data, "GET");
+    }
+
+</script>

@@ -2,151 +2,30 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+ 
 }
 
-@*<style>
-
-        /* table https://wisdmlabs.com/blog/responsive-tables-using-css-div-tag/ */
-        #resp-table {
-            width: auto;
-            display: table;
-        }
-
-        #resp-table-caption {
-            display: table-caption;
-            text-align: center;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        #resp-table-header {
-            display: table-header-group;
-            background-color: gray;
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-        .table-header-cell {
-            display: table-cell;
-            padding: 10px;
-            text-align: justify;
-            border-bottom: 1px solid black;
-        }
-
-        #resp-table-body {
-            display: table-row-group;
-        }
-
-        .resp-table-row {
-            display: table-row;
-        }
-
-        .table-body-cell {
-            display: table-cell;
-        }
-
-        #resp-table-footer {
-            display: table-footer-group;
-            background-color: gray;
-            font-weight: bold;
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.45);
-        }
-
-        .table-footer-cell {
-            display: table-cell;
-            padding: 10px;
-            text-align: justify;
-            border-bottom: 1px solid black;
-        }
-
-
-        /*table*/
-    </style>*@
 
 <style>
-    /*
-    Max width before this PARTICULAR table gets nasty
-    This query will take effect for any screen smaller than 760px
-    and also iPads specifically.
-    */
-    /*//https://css-tricks.com/responsive-data-tables/*/
-    @@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
-        /* Force table to not be like tables anymore */
-        table, thead, tbody, th, td, tr {
-            display: block;
-        }
-            /* Hide table headers (but not display: none;, for accessibility) */
-            thead tr {
-                position: absolute;
-                *top: -9999px;
-                left: -9999px;
-            }
-
-        tr {
-            /*border: 1px solid #ccc;*/
-            margin: 5px;
-        }
-
-        td {
-            /* Behave  like a "row" */
-            margin: 3px 5px 3px 3px;
-            border: none;
-            border-bottom: 1px solid #eee;
-            position: relative;
-            padding-left: 50%;
-        }
-
-            td:before {
-                /* Now like a table header */
-                position: absolute;
-                /* Top/left values mimic padding */
-                top: -8px;
-                left: 6px;
-                width: 45%;
-                padding-right: 10px;
-                white-space: nowrap;
-            }
-            /*
-        Label the data
-        */
-            td:nth-of-type(1):before {
-                content: "EmpresaID";
-            }
-
-            td:nth-of-type(2):before {
-                content: "Nome";
-            }
-
-            td:nth-of-type(3):before {
-                content: "NIF";
-            }
-
-            td:nth-of-type(4):before {
-                content: "Licenca";
-            }
-
-            td:nth-of-type(5):before {
-                content: "NrPostos";
-            }
-
-            td:nth-of-type(6):before {
-                content: "NrEmpresas";
-            }
-
-            td:nth-of-type(7):before {
-                content: "DataExpiracao";
-            }
-
-            td:nth-of-type(8):before {
-                content: "DataCriacao";
-            }
-
-            td:nth-of-type(9):before {
-                content: "Ativo";
-            }
+    td a {
+        color: blue !important;
     }
+    td a:hover {
+        color: blue !important;
+        text-decoration: underline !important;
+        cursor:pointer !important;
+    }
+   div p a {
+        color: blue !important;
+    }
+
+    div p a:hover {
+        color: blue !important;
+        text-decoration: underline !important;
+        cursor: pointer !important;
+    }
+ 
 </style>
 <div class="card">
     <div class="card-header">
@@ -155,7 +34,8 @@
     </div>
     <div class="card-body">
         <p>
-            <a asp-action="Create" asp-controller="Empresa">Criar uma nova empresa</a>
+            @*<a id="CriarNovaEmpresa" asp-action="Create" asp-controller="Empresa">Criar uma nova empresa</a>*@
+            <a id="CriarNovaEmpresa" onclick="CriarNovaEmpresa()">Criar uma nova empresa</a>
         </p>
 
         @if (Model != null)
@@ -227,18 +107,23 @@
 
                             @if (item.isCabContabilidade == true)
                             {
-                                <td>
-                                    <a asp-action="Details" asp-route-id="@item.EmpresaID">Detalhes</a>
-                                </td>
+                        <td>
+                            @*<a asp-action="Details" asp-route-id="@item.EmpresaID">Detalhes</a>*@
+                            <a id="@("itmDetail_" + @item.EmpresaID)" onclick="DetailsEmpresa(@item.EmpresaID)">Detalhes</a>
+                        </td>
                             }
                             else
                             {
-                                <td>
-                                    <a asp-action="ManageEmpresaUtilizadores" asp-controller="Empresa" asp-route-id="@item.EmpresaID"> Add Utilizadores</a> |
-                                    <a asp-action="Edit" asp-route-id="@item.EmpresaID">Editar</a> |
-                                    <a asp-action="Details" asp-route-id="@item.EmpresaID">Detalhes</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.EmpresaID">Apagar</a>
-                                </td>
+                        <td>
+                            @*<a asp-action="ManageEmpresaUtilizadores" asp-controller="Empresa" asp-route-id="@item.EmpresaID"> Add Utilizadores</a> |*@
+                            @*<a asp-action="Edit" asp-route-id="@item.EmpresaID">Editar</a>*@
+                            <a id="@("itmManageEmpresaUtilizadores_"+ @item.EmpresaID)" onclick="ManageUsersEmpresa(@item.EmpresaID)">Add Utilizadores</a> |
+                            <a id="@("itmEdit_" + @item.EmpresaID)" onclick="EditEmpresa(@item.EmpresaID)">Editar</a> |
+                            <a id="@("itmDetail_" + @item.EmpresaID)" onclick="DetailsEmpresa(@item.EmpresaID)">Detalhes</a> |
+                            <a id="@("itmDetail_" + @item.EmpresaID)" onclick="ApagarEmpresa(@item.EmpresaID)">Apagar</a>
+                            @*<a asp-action="Details" asp-route-id="@item.EmpresaID">Detalhes</a> |*@
+                            @*<a asp-action="Delete" asp-route-id="@item.EmpresaID">Apagar</a>*@
+                        </td>
                             }
                         </tr>
                     }
@@ -261,3 +146,24 @@
         }
     </div>
 </div>
+
+<script>
+    var b;
+    function CriarNovaEmpresa() {
+        b = RenderWithNoRefresh("/Empresa/Create")
+    }
+    function ManageUsersEmpresa(id) {
+        b = RenderWithNoRefresh("/Empresa/ManageEmpresaUtilizadores/" + id)
+    }
+    function EditEmpresa(id)
+    {
+         b = RenderWithNoRefresh("/Empresa/Edit/" + id)
+    }
+    function DetailsEmpresa(id) {
+       // alert("Detalho empresa" + id);
+        b = RenderWithNoRefresh("/Empresa/Details/" + id)
+    }
+    function ApagarEmpresa(id) {
+        b = RenderWithNoRefresh("/Empresa/Delete/" + id)
+    }
+</script>

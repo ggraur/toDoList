@@ -18,17 +18,16 @@ namespace toDoList.ViewModels
         [Display(Name = "NIF Empresa")]
         public string NIF { get; set; }
 
-        [Display(Name = "Licença")]
+        [Display(Name = "Licença software")]
         public string Licenca { get; set; }
         
         [Display(Name = "Número de Postos da licença")]
-        public string NrPostos { get; set; }
+        public int NrPostos { get; set; }
         [Display(Name = "Número de Empresas")]
         public int NrEmpresas { get; set; }
         [Display(Name = "Data de expiração da licença")]
         public DateTime DataExpiracao { get; set; }
         [Display(Name = "Data de criação do registro")]
-
         public DateTime DataCriacao { get; set; } = DateTime.Now;
         [Display(Name = "Registro da empresa Activo/Inactivo")]
         public bool Ativo { get; set; } = true;

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using toDoList.ViewModels;
+using toDoList.Models;
 
 #nullable disable
 
@@ -19,7 +20,7 @@ namespace toDoList.Models
         }
         
         public virtual DbSet<EmpDat> EmpDats { get; set; }
-        
+        public virtual DbSet<AGesLocEn> AGesLocEns { get; set; }
         public virtual DbSet<Empr> Emprs { get; set; }
         public virtual DbSet<OpApl> OpApls { get; set; }
         public virtual DbSet<OpEmp> OpEmps { get; set; }
@@ -27,10 +28,11 @@ namespace toDoList.Models
         public virtual DbSet<Oper> Opers { get; set; }
 
         public virtual DbSet<AGesEmpresasUtilizadores> AGesEmpresasUtilizadores { get; set; }
-
+        public virtual DbSet<DadosEmpresaImportada> DadosEmpresaViewModels { get; set;}
+        
         //public virtual DbSet<EmpDhist> EmpDhists { get; set; }
         //public virtual DbSet<CfgExter> CfgExters { get; set; }
-        //public virtual DbSet<LocEn> LocEns { get; set; }
+       // public virtual DbSet<LocEn> LocEns { get; set; }
         //public virtual DbSet<MetaP> MetaPs { get; set; }
         //public virtual DbSet<ParEmp> ParEmps { get; set; }
         //public virtual DbSet<SageLicence> SageLicences { get; set; }
@@ -57,6 +59,12 @@ namespace toDoList.Models
                     empUtil.HasNoKey();
                     empUtil.ToView("vwEmpresaUtilizadores");
                 });
+            modelBuilder
+                .Entity<AGesLocEn>(locEn => {
+                    locEn.HasNoKey();
+                    locEn.ToView("vwLocEn");
+                });
+
             modelBuilder.Entity<EmpDat>(entity =>
             {
                 entity.HasKey(e => new { e.Cemp, e.Capl, e.AnoIn, e.AnoFi })
@@ -326,6 +334,10 @@ namespace toDoList.Models
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
         public DbSet<toDoList.ViewModels.EmpresasViewModel> EmpresasViewModel { get; set; }
+
+        public DbSet<toDoList.Models.CLab> CLab { get; set; }
+
+        public DbSet<toDoList.ViewModels.GabineteEditViewModel> GabineteEditViewModel { get; set; }
     }
 }
 

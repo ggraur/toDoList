@@ -1,0 +1,264 @@
+﻿@model toDoList.ViewModels.CLabViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    var @anoFiscal = ViewBag.AnoFiscal;
+}
+
+<div class="card">
+    <form method="post" enctype="multipart/form-data">
+        <div class="card-header">
+            <h1>CONVERTER C-LAB PARA SAGE</h1>
+            <hr />
+
+        </div>
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group disabled">
+                <label asp-for="Ano" class="control-label"></label>  <br />
+                <input id="clabAno" type="text" disabled style="width:80px !important;" value="@Model.Ano" />
+                @*@Html.TextBoxFor(model => model.Ano, new { disabled = "disabled", style = "width:80px !important;" })*@
+            </div>
+            <div class="form-group disabled">
+                <label asp-for="EmpresaSageId" class="control-label"></label><br />
+                <input id="clabEmpresaSageID" type="text" disabled style="width:80px !important;" value="@Model.EmpresaSageId" />
+                @*@Html.TextBoxFor(model => model.EmpresaSageId, new { disabled = "disabled", style = "width:80px !important;" })*@
+                <label>@ViewBag.NomeEmpresa</label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DataLancamento" class="control-label"></label>
+                @*@Html.TextBoxFor(model => model.DataLancamento, new { style = "width:200px !important;", type = "date" })*@
+                <input id="clabDataLancamento" type="date" style="width:200px !important;" class="form-control" value="@Model.DataLancamento.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="DataLancamento" class="text-danger"></span>
+            </div>
+            <div class="form-group ">
+                <div>
+                     <div class="custom-file">
+                        <input type="file" accept=".asc" class="custom-file-input" id="clabInputFilePath">
+                        <label id="inputFileLabel" class="custom-file-label" asp-for="InputFilePath">Caminho do ficheiro '.asc'</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="OutputFilePAth" class="control-label"></label>
+                <input id="clabOutputFilePAth" value="@Model.OutputFilePAth" disabled class="form-control" />
+                <span asp-validation-for="OutputFilePAth" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="UserID" class="control-label"></label>
+                <input id="clabUserID" value="@Model.UserID" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="form-group">
+                @*<input id="btnConvert" value="Create" asp-controller="ExportDocs" asp-action="UploadFile" class="btn btn-primary" />*@
+                <a id="btnConvert" asp-controller="CLab" asp-action="Create" class="btn btn-primary"  >Create</a>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+    $('#clabInputFilePath').on('change',
+        function ()
+        {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).next('.custom-file-label').html(fileName);
+        }); 
+
+    //$('#btnConvert').on('click', function (evt) {
+
+    //    var _EmpresaSageId = $('#clabEmpresaSageID').val();
+    //    var _Ano = $('#clabAno').val();
+    //    var _DataLancamento = $('#clabDataLancamento').val();
+    //    var _InputFilePath = $('#clabInputFilePath').val();
+    //    var _OutputFilePAth = $('#clabOutputFilePAth').val();
+    //    var _UserID = $('#clabUserID').val();
+
+    //    var _data = {
+    //        EmpresaSageId: _EmpresaSageId,
+    //        Ano: _Ano,
+    //        DataLancamento: _DataLancamento,
+    //        InputFilePath: _InputFilePath,
+    //        OutputFilePAth: _OutputFilePAth,
+    //        UserID: _UserID
+    //    };
+
+    //    $.ajax({
+    //        url: "/ExportDocs/UploadFile",
+    //        type: "post",
+    //        cache: false,
+    //        data: _data,
+    //        success: function (message) {
+    //            alert(message);
+    //        },
+    //        error: function () {
+    //            alert("there was error uploading files!");
+    //        }
+    //    });
+
+    //});
+
+</script>
+
+@*<script>
+
+        //$('#btnConvert').click(function () {
+        //    var a = Converter();
+        //});
+
+        $('#btnConvert').on('click', function () {
+
+            var _EmpresaSageId = $('#clabEmpresaSageID').val();
+            var _Ano = $('#clabAno').val();
+            var _DataLancamento = $('#clabDataLancamento').val();
+            var _InputFilePath = $('#clabInputFilePath').val();
+            var _OutputFilePAth = $('#clabOutputFilePAth').val();
+            var _UserID = $('#clabUserID').val();
+
+            var _data = {
+                EmpresaSageId: _EmpresaSageId,
+                Ano: _Ano,
+                DataLancamento: _DataLancamento,
+                InputFilePath: _InputFilePath,
+                OutputFilePAth: _OutputFilePAth,
+                UserID: _UserID
+            };
+
+
+            $.ajax({
+                url: "/ExportDocs/UploadFile",
+                type: "post",
+                cache: false,
+                data: _data,
+                success: function (message) {
+                    alert(message);
+                },
+                error: function () {
+                    alert("there was error uploading files!");
+                }
+            });
+
+        });
+
+
+        //$('#clabInputFilePath').on('click', function (evt) {
+        //    evt.preventDefault();
+        //    var fileupload = $("#files").get(0);
+        //    var files = fileupload.files;
+        //    var data = new FormData();
+        //    for (var i = 0; i < files.length; i++) {
+        //        data.append(files[i].name, files[i]);
+        //    }
+
+        //    // You can update the jquery selector to use a css class if you want
+        //    $("input[type='text'").each(function (x, y) {
+        //        data.append($(y).attr("name"), $(y).val());
+        //    });
+
+        //    alert(data);
+
+        //    $.ajax({
+        //        type: "post",
+        //        url: "/ExportDocs/UploadFilesAjax",
+        //        contentType: false,
+        //        processData: false,
+        //        data: data,
+        //        success: function (message) {
+        //            alert(message);
+        //        },
+        //        error: function () {
+        //            alert("there was error uploading files!");
+        //        }
+        //    });
+
+        //        //$.ajax({
+        //        //    type: "post",
+        //        //    url: "/ExportDocs/UploadFilesAjax",
+        //        //    contentType: false,
+        //        //    processData: false,
+        //        //    data: data
+        //        //}).done(function (res) {
+        //        //    if (res.status === "success") {
+        //        //        alert(res.message);
+        //        //    } else {
+        //        //        $.each(res.errors, function (a, b) {
+        //        //            alert(b);
+        //        //        });
+        //        //    }
+        //        //}).fail(function (xhr, b, error) {
+        //        //    alert(error);
+        //        //});
+        //    });
+
+
+        //$('input[type="file"]').change(function (e) {
+
+        //$(function () {
+        //    $('#clabInputFilePath').on('change', function () {
+        //        var filePath = $(this).val();
+        //        alert(filePath);
+        //        var fullPath = Request.Form.Files["myFile"].FileName;
+        //    });
+        //});
+
+        //function Converter() {
+
+        //    var _EmpresaSageId = $('#clabEmpresaSageID').val();
+        //    var _Ano = $('#clabAno').val();
+        //    var _DataLancamento = $('#clabDataLancamento').val();
+        //    var _InputFilePath = $('#clabInputFilePath').val();
+        //    var _OutputFilePAth = $('#clabOutputFilePAth').val();
+        //    var _UserID = $('#clabUserID').val();
+
+        //    var _data = {
+        //        EmpresaSageId: _EmpresaSageId,
+        //        Ano: _Ano,
+        //        DataLancamento: _DataLancamento,
+        //        InputFilePath: _InputFilePath,
+        //        OutputFilePAth: _OutputFilePAth,
+        //        UserID: _UserID
+        //    };
+        //    alert("ola");
+        //    $.ajax({
+        //        url: "/CLab/Create",
+        //        type: "post",
+        //        cache: false,
+        //        data: _data,
+        //        success:
+        //            function (data) {
+        //                if (data.success === true) {
+
+        //                    //RenderWithNoRefreshWithData("/ConConfig/Index/", { EmpresaId: _emprId }, "GET");
+        //                };
+        //                if (data.success === false) {
+        //                    //if (data.field === "NomeServidor") {
+        //                    //    $('#myNomeServidorSpan').text(data.msg);
+        //                    //    $('#myNomeServidorSpan').show().css("display", "inline").fadeOut(3000);
+        //                    //};
+        //                    //if (data.field === "Utilizador") {
+        //                    //    $('#myUtilizadorSpan').text(data.msg);
+        //                    //    $('#myUtilizadorSpan').show().css("display", "inline").fadeOut(3000);
+        //                    //};
+        //                    //if (data.field === "Password") {
+        //                    //    $('#myPasswordSpan').text(data.msg);
+        //                    //    $('#myPasswordSpan').show().css("display", "inline").fadeOut(3000);
+        //                    //};
+        //                };
+        //            },
+        //        error:
+        //            function (xhr) {
+        //                ProcessError(xhr);//alert(xhr.responseText);
+        //            }
+        //    });
+        //};
+
+    </script>*@
+
+
+
+

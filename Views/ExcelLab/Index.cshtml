@@ -1,0 +1,108 @@
+﻿
+@model toDoList.ViewModels.ExcelLabViewModel
+
+
+@{
+    ViewData["Title"] = "Excel Converter";
+}
+
+<div class="card">
+    <div class="card-header">
+        <p class="h3 text-center">CONVERTER EXCEL PARA SAGE</p>
+        <hr />
+    </div>
+    <div class="card-body">
+        <p class="h5">Parâmetros</p>
+        <hr />
+        <form>
+            <div class="form-group" disabled>
+                <label asp-for="CodEmpresa" class="control-label col-3"></label>
+                <input id="expEmpresaSageId" asp-for="CodEmpresa" disabled />
+                <span asp-validation-for="CodEmpresa" class="text-danger"></span>
+            </div>
+            <div class="form-group" disabled>
+                <label asp-for="AnoLancamento" class="control-label col-3"></label>
+                <input id="expEmpresaSageId" asp-for="AnoLancamento" disabled />
+                <span asp-validation-for="AnoLancamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MesLancamento" class="control-label  col-3"></label>
+                @Html.DropDownListFor(o => o.MesLancamento, Enum.GetValues(typeof(MonthEnum)).Cast<MonthEnum>
+                    ().Select(x => new SelectListItem { Text = x.ToString(), Value = ((int)x).ToString() }))
+                <span asp-validation-for="MesLancamento" class="text-danger"></span>
+            </div>
+            <div class="table">
+                <div class="row" style="margin-left:-4px;">
+                    <div class="row-cols-1" style="width:300px !important;">
+                        <div class="form-group">
+                            <label asp-for="DiarioLancamento" class="control-label"></label>
+                            @Html.DropDownListFor(x => x.DiarioLancamento, new SelectList(Model.DiarioLancamento, "Value", "Text"),
+                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "idDiarioLancamento" })
+                        </div>
+                    </div>
+                    <div class="row-cols-2" style="width:300px !important;">
+                        <div class="form-group">
+                            <label asp-for="TipoLancamento" class="control-label"></label>
+                            @Html.DropDownListFor(x => x.TipoLancamento, new SelectList(Model.TipoLancamento, "Value", "Text"),
+                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "idTipoLancamento" })
+                        </div>
+                    </div>
+                    <div class="row-cols-3" style="width:300px !important;">
+                        <div class="form-group" style="white-space: nowrap !important; display: inline-block; text-align: center !important;">
+                            <label asp-for="TipoDocumento" class="control-label"></label>
+                            @Html.DropDownListFor(x => x.TipoDocumento, new SelectList(Model.TipoDocumento, "Value", "Text"),
+                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "idTipoDocumento" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table">
+                <div class="row" style="margin-left:7px;">
+                    <div class="row-cols-1">
+                        @*<div class="form-group"  >*@
+                            <label asp-for="LancamentoUnico" class="control-label" style="position:relative;top:7px;"></label>&nbsp;
+                            <input type="checkbox" value="@Model.LancamentoUnico" style="position:relative;top:7px; "  class="form-check-inline"/>
+                        @*</div>*@
+                    </div>&nbsp;&nbsp;
+                    <div class="row-cols-2">
+                        <div class="form-group" style="white-space: nowrap !important; display: inline-block; text-align: center !important;" >
+                            <label asp-for="DataLancamento" class="control-label"></label> &nbsp;
+                            <input id="clabDataLancamento" type="date" style="width:200px !important;display:inline-block;position:relative; " class="form-control" value="@Model.DataLancamento.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+
+                </div> 
+                <div class="form-group" style="white-space: nowrap !important; display: inline-block; text-align: center !important;">
+                    <a id="btnTransfExemplo" class="btn btn-warning float-right" style="width:180px !important;"><i class="bi bi-download"></i>&nbsp;Transferir Exemplo</a>
+                </div>
+            </div>
+            <div class="form-group ">
+                <div>
+                    <div class="custom-file">
+                        <input type="file" accept=".xls,.xlsx" class="custom-file-input col-3" id="clabInputFilePath">
+                        <label id="inputFileLabel" class="custom-file-label" asp-for="InputFilePath">Caminho do ficheiro '.xls/.xlsx'</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="OutputFilePath" class="control-label col-3"></label>
+                <input id="clabOutputFilePAth" value="@Model.OutputFilePath" disabled class="form-control" />
+                <span asp-validation-for="OutputFilePath" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer">
+        <a id="btnConverter" class="btn btn-primary">Converter</a>
+        <a id="btnLimpar" class="btn btn-warning">Limpar</a>
+    </div>
+</div>
+
+<script>
+    $('#btnTransfExemplo').on('click', function () {
+        window.location.href = "@Url.Action("GetExample", "ExcelLab", new { httproute = "" })";
+    });
+    $('#btnLimpar').on('click', function () {
+        RenderWithNoRefresh("/ExcelLab/Index")
+    });
+</script>
+
