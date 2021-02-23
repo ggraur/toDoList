@@ -363,9 +363,10 @@
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a asp-action="register" asp-controller="account" class="nav-link"><span class="glyphicon glyphicon-user"></span>&nbsp;Register&nbsp;</a>
-                            </li>
+                    <li class="nav-item">
+                        @*<a id="idRegister" asp-action="register" asp-controller="account" class="nav-link"><span class="glyphicon glyphicon-user"></span>&nbsp;Register&nbsp;</a>*@
+                        <a id="idRegister" class="nav-link"><span class="glyphicon glyphicon-user"></span>&nbsp;Register&nbsp;</a>
+                    </li>
                             <li class="nav-item">
                                 <a asp-action="login" asp-controller="account" class="nav-link"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login&nbsp;</a>
                             </li>
@@ -440,21 +441,56 @@
     </div>
 
     <script type="text/javascript">
+
+        document.onkeydown = fkey;
+        document.onkeypress = fkey
+        document.onkeyup = fkey;
+
+        var wasPressed = false;
+
+        function fkey(e) {
+            e = e || window.event;
+            if (wasPressed) return;
+
+            if (e.keyCode == 116) {
+                localStorage.removeItem('sessionIDGabContab');
+                localStorage.removeItem('sessionIDEmpresaContab');
+                localStorage.removeItem('sessionIDAnoEmpresaContab');
+                Storage.removeItem('sessionIDGabContab');
+                Storage.removeItem('sessionIDEmpresaContab');
+                Storage.removeItem('sessionIDAnoEmpresaContab');
+                sessionStorage.removeItem('sessionIDGabContab');
+                sessionStorage.removeItem('sessionIDEmpresaContab');
+                sessionStorage.removeItem('sessionIDAnoEmpresaContab');
+                wasPressed = true;
+            }
+        }
+
+
+
+
+        //$(window).onunload = function () {
+        //    alert('refresh')
+        //    sessionStorage.removeItem('sessionIDGabContab');
+        //    sessionStorage.removeItem('sessionIDEmpresaContab');
+        //    sessionStorage.removeItem('sessionIDAnoEmpresaContab');
+        //}
+
         function goHome() {
             var b = RenderWithNoRefresh("/Home/Index")
         }
         $('#GabContab').on('change', (function () {
             var selectedGab = $("#GabContab").val();
-           // alert(selectedGab);
+            sessionStorage.setItem('sessionIDGabContab', selectedGab);
+            var b = sessionStorage.getItem('sessionIDGabContab');
+          //  alert(b);
+ 
             var a = GabContabSelectChanged(selectedGab);
         }));
 
-
         $(document).ready(function () {
-    
-           
-            $('#EmprGab').change(function () {
-                var a = EmpresaContabSelectChanged();
+            $('#EmprGab').on('change', function () {
+                 var a = EmpresaContabSelectChanged();
             });
             $('#AnoEmprGab').change(function () {
                 var d = AnoSelectChanged();
@@ -508,6 +544,11 @@
             $('#mnuExcelLab').click(function () {
                 var b = RenderWithNoRefresh("/ExcelLab/Index")
             });
+
+            $('#idRegister').click(function () {
+                var b = RenderWithNoRefresh("/Account/Register")
+            });
+            
 
         /*Exportacao*/
             $('#mnuExportDocs').click(function () {

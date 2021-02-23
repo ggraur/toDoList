@@ -16,11 +16,11 @@ namespace toDoList.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<AccountController> logger;
-        private readonly IForgotPassword  passwordRepo;
+        private readonly IForgotPassword passwordRepo;
 
         public AccountController(UserManager<ApplicationUser> userManager,
                                 SignInManager<ApplicationUser> signInManager,
-                                ILogger<AccountController> logger, 
+                                ILogger<AccountController> logger,
                                 IForgotPassword passwordRepo)
         {
             this.userManager = userManager;
@@ -45,6 +45,7 @@ namespace toDoList.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email
+
                 };
                 var result = await userManager.CreateAsync(user, model.Password);
 
@@ -67,23 +68,82 @@ namespace toDoList.Controllers
                         {
                             return RedirectToAction("ListUsers", "Administration");
                         }
-                        else
-                        {
-                            ViewBag.Signal = "ok";
-                            ViewBag.ErrorTitle = "Registration successful";
-                            ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
-                                "email, by cliking on the confirmation link we have emailed you!.";
-                            return View("~/Views/Error/GeneralError.cshtml");
-                        }
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
+
+
                 }
             }
             return View(model);
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> RegisterAjax(RegisterViewModel model, string returnUrl)
+        {
+            if (model.Password != model.ConfirmPassword)
+            {
+                return Json(new { success = false, error = "PassNotEgual", message = "A senha não corresponde à senha de confirmação!" });
+            }
+
+            if (ModelState.IsValid )
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email
+
+                };
+                var result = await userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account",
+                        new { userId = user.Id, token = token }, Request.Scheme);
+
+                    logger.Log(LogLevel.Warning, confirmationLink);
+
+                    return Json(new { success = true, error = "UserCreated", message = $"O usuário '{model.Email}' foi criado com successo!" });
+
+                    //if (!string.IsNullOrEmpty(returnUrl))
+                    //{
+                    //    return LocalRedirect(returnUrl);
+                    //}
+                    //else
+                    //{
+                    //    if (signInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                    //    {
+                    //        return RedirectToAction("ListUsers", "Administration");
+                    //    }
+                    //}
+                }
+
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                    switch (error.Code)
+                    {
+                        case "PasswordTooShort":
+                            return Json(new { success = false, error = "PasswordTooShort", message = "A senha deve ter pelo menos 10 caracteres!" });
+                        case "PasswordRequiresDigit":
+                            return Json(new { success = false, error = "PasswordRequiresDigit", message = "As senhas devem ter pelo menos um dígito ('0' - '9')." });
+                        case "DuplicateUserName":
+                            return Json(new { success = false, error = "DuplicateUserName", message = $"O nome de usuário '{model.Email}' já está em uso." });
+                        default:
+                            return Json(new { success = false, error = error.Code ,message = error.Description });
+                    }
+                }
+            }
+            return View(model);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()
@@ -202,7 +262,7 @@ namespace toDoList.Controllers
                 {
                     ViewBag.Signal = "ok";
                     ViewBag.ErrorTitle = "Resset password link!";
-                    ViewBag.ErrorMessage = "Password reset link successfully sent  to your email."  +
+                    ViewBag.ErrorMessage = "Password reset link successfully sent  to your email." +
                                            "Please check your email and click on the link on your email to be redirected to reset password form.";
 
                     var token = await userManager.GeneratePasswordResetTokenAsync(user);
@@ -213,11 +273,11 @@ namespace toDoList.Controllers
                     model.ResetLinkCreatedTime = DateTime.Now;
                     model.ResetLinkValidity = model.ResetLinkCreatedTime.AddHours(24);
 
-                    ForgotPasswordViewModel resInsertLink =  passwordRepo.InsertResetLink(model);
+                    ForgotPasswordViewModel resInsertLink = passwordRepo.InsertResetLink(model);
 
                     if (resInsertLink != null)
                     {
-                        return View("~/Views/Error/GeneralError.cshtml"); 
+                        return View("~/Views/Error/GeneralError.cshtml");
                     }
                     logger.Log(LogLevel.Warning, "Reset Password link insertion into DB failed");
                 }
@@ -253,7 +313,7 @@ namespace toDoList.Controllers
             }
 
             ViewBag.Signal = "notok";
-            ViewBag.ErrorTitle   = "Reset password link is not valid or is expired!";
+            ViewBag.ErrorTitle = "Reset password link is not valid or is expired!";
             ViewBag.ErrorMessage = "Please reset you password again to receive a new reset password link!";
             return View("~/Views/Error/GeneralError.cshtml");
         }
@@ -265,16 +325,16 @@ namespace toDoList.Controllers
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByEmailAsync(model.Email);
-                if (user != null )
+                if (user != null)
                 {
                     ViewBag.Signal = "ok";
                     ViewBag.ErrorTitle = "Password sucessfully reseted!";
                     ViewBag.ErrorMessage = "Your password have ben reseted, now you can log in.";
 
-                    var result = await userManager.ResetPasswordAsync(user,model.Token,model.Password);
+                    var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
                     if (result.Succeeded)
                     {
-                        bool  updateResetLinkDate = passwordRepo.ConfirmResetLink(model.Email,model.Token);
+                        bool updateResetLinkDate = passwordRepo.ConfirmResetLink(model.Email, model.Token);
                         //ConfirmResetLink
                         if (updateResetLinkDate)
                         {
@@ -283,9 +343,9 @@ namespace toDoList.Controllers
                         ViewBag.Signal = "notok";
                         ViewBag.ErrorTitle = "Error to update /reset password!";
                         ViewBag.ErrorMessage = "Please contact our suport team if the error persist!";
-                       
+
                         logger.Log(LogLevel.Warning, "Error to update [ResetLinkConfirmationDate] !");
-                        
+
                         return View("~/Views/Error/GeneralError.cshtml");
                     }
                     foreach (var err in result.Errors)
@@ -293,7 +353,7 @@ namespace toDoList.Controllers
                         ModelState.AddModelError("", err.Description);
                     }
                     return View(model);
-                    
+
                 }
                 ViewBag.Signal = "notok";
                 ViewBag.ErrorTitle = "User not found!";

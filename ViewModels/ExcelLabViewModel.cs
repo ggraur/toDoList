@@ -19,19 +19,32 @@ namespace toDoList.ViewModels
         public Int16 AnoLancamento { get; set; }
         [Display(Name = "Mês de Lançamento")]
         public MonthEnum MesLancamento { get; set; }
+        [NotMapped]
+        public string MesLancamentoStr { get; set; }
 
         [Display(Name = "Diário de Lançamento")]
         public IEnumerable<SelectListItem> DiarioLancamento { get; set; }
+
+        [NotMapped]
+        public string DiarioLancamentoInt { get; set; }
 
         [NotMapped]
         public string  DiarioLancamentoStr { get; set; }
 
         [Display(Name = "Tipo de Lançamento")] 
         public IEnumerable<SelectListItem> TipoLancamento { get; set; }
+
+        [NotMapped]
+        public string TipoLancamentoInt { get; set; }
+
         [NotMapped]
         public string TipoLancamentoStr { get; set; }
         [Display(Name = "Tipo de Documento")]
         public IEnumerable<SelectListItem> TipoDocumento { get; set; }
+        
+        [NotMapped]
+        public string TipoDocumentoInt { get; set; }
+        
         [NotMapped]
         public string TipoDocumentoStr { get; set; }
 

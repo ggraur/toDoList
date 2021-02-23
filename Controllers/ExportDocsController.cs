@@ -79,9 +79,9 @@ namespace toDoList.Controllers
         public IActionResult Index(string _EmpSage, string _Ano)
         {
             //PlanoContasViewModelPath planoContasView
-            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idGabContab");
-            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idEmpresaContab");
-            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "idAnoEmpresaContab");
+            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDGabContab");
+            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDEmpresaContab");
+            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "sessionIDAnoEmpresaContab");
 
             if (idGabContab == 0)
             {

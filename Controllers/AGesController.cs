@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ using toDoList.ViewModels;
 
 namespace toDoList.Controllers
 {
+    [Authorize]
     public class AGesController : Controller
     {
         private readonly AGesContext agesContext;

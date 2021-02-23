@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using toDoClassLibrary;
 using toDoClassLibrary47;
 using toDoList.Models;
 using toDoList.ViewModels;
@@ -49,31 +50,33 @@ namespace toDoList.Class
         private bool LancUnico;
 
         public List<ErrorLine> errors;
-        private readonly StreamReader streamReader;
+        private string baseDados;
+        private DadosEmpresaImportada dadosEmpresaImportada;
+
+        // private readonly StreamReader streamReader;
         private readonly ExcelLabViewModel model;
-        private readonly string month;
-        private readonly string db;
+        //private readonly string month;
+        //private readonly string db;
         private readonly DadosEmpresaImportada dadosEmpresaView;
         private readonly ConConfigViewModel conConfigViewModel;
         private readonly EmpresasViewModel empresaViewModel;
         private readonly Empr empr;
 
-        public ConvertExcelToXML(StreamReader _streamReader,
-                                ExcelLabViewModel _model,
-                                string _Month,
-                                string _db,
-                                DadosEmpresaImportada _dadosEmpresaView,
-                                ConConfigViewModel _conConfigViewModel,
-                                EmpresasViewModel _empresaViewModel,
-                                Empr _empr)
+        public ConvertExcelToXML(ExcelLabViewModel _model, string baseDados, DadosEmpresaImportada dadosEmpresaImportada, ConConfigViewModel conConfigViewModel, EmpresasViewModel empresaViewModel, Empr _empr)
         {
-            this.streamReader = _streamReader;
             this.model = _model;
-            this.month = _Month;
-            this.db = _db;
-            this.dadosEmpresaView = _dadosEmpresaView;
-            this.conConfigViewModel = _conConfigViewModel;
-            this.empresaViewModel = _empresaViewModel;
+            this.baseDados = baseDados;
+            this.dadosEmpresaImportada = dadosEmpresaImportada;
+            this.conConfigViewModel = conConfigViewModel;
+            this.empresaViewModel = empresaViewModel;
+        
+            //this.streamReader = _streamReader;
+    
+            Month = (int)Enum.Parse(typeof(MonthEnum), _model.MesLancamento.ToString());
+    
+            this.dadosEmpresaView = dadosEmpresaImportada;
+            this.conConfigViewModel = conConfigViewModel;
+            this.empresaViewModel = empresaViewModel;
             this.empr = _empr;
 
             data = new List<ExcelFileLine>();
@@ -101,14 +104,14 @@ namespace toDoList.Class
             string[] fileNameNoExtArray = fileNameNoExtRep.Split('_');
             NIF = Convert.ToInt32(fileNameNoExtArray[0]);
             Year = Convert.ToInt32(fileNameNoExtArray[1]);
-            string[] monthArray = fileNameNoExtArray[2].Split(' ');
-            Month = int.Parse(month);
+           // string[] monthArray = fileNameNoExtArray[3];
+            //Month = int.Parse(fileNameNoExtArray[3]);
             this.CodEmpSage = dadosEmpresaView.CodeEmpresa;
-            SedeFiscal = "";
-            NomeEmpresa = "";
-            Morada = "";
-            CodPostal = "";
-            Localidade = "";
+            SedeFiscal = empr.Sede;
+            NomeEmpresa =empr.Nome;
+            Morada =empr.Morada;
+            CodPostal = empr.CodPostal;
+            Localidade = empr.Localidade;
 
             this.CodDiario = model.DiarioLancamentoStr;
             this.TipoLanc = model.TipoLancamentoStr;
@@ -118,23 +121,15 @@ namespace toDoList.Class
             EncryptionHelper encryptionHelper = new EncryptionHelper();
 
             this.EmpSageCon = "Data Source=" + conConfigViewModel.NomeServidor +
-                              ";Initial Catalog=" + db +
+                              ";Initial Catalog=" + baseDados +
                               ";Persist Security Info=True" +
                               ";User ID=" + conConfigViewModel.Utilizador +
                               ";Password=" + encryptionHelper.Decrypt(conConfigViewModel.Password) + ";";
- 
-
-            SedeFiscal = empr.Sede;
-            NomeEmpresa = empr.Nome;
-            Morada = empr.Morada;
-            CodPostal = empr.CodPostal;
-            Localidade = empr.Localidade;
-
-
             this.errors = new List<ErrorLine>();
 
         }
 
+       
 
         public void ConvertFile()
         {

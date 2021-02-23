@@ -14,8 +14,13 @@ using toDoList.Models;
 using toDoList.Models.SQL;
 using toDoList.ViewModels;
 using toDoList.Class;
+using toDoClassLibrary47;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+
 namespace toDoList.Controllers
 {
+    [Authorize]
     public class ExcelLabController : Controller
     {
         private int idGabContab = 0; 
@@ -24,22 +29,28 @@ namespace toDoList.Controllers
         private readonly IWebHostEnvironment env;
 
         private readonly ILogger<AdministrationController> logger;
+        private readonly AGesContext aGesContext;
         private readonly IEmpresa empresaContext;
         private readonly AppDbContext appDbContext;
+        private readonly IConConfig conConfig;
 
-        public ExcelLabController(ILogger<AdministrationController> _logger, IWebHostEnvironment _env, IEmpresa _empresaContext, AppDbContext _appDbContext)
+        EncryptionHelper encryptionHelper = new EncryptionHelper();
+
+        public ExcelLabController(ILogger<AdministrationController> _logger, AGesContext _aGesContext, IWebHostEnvironment _env, IEmpresa _empresaContext, AppDbContext _appDbContext, IConConfig _conConfig)
         {
             this.logger = _logger;
+            this.aGesContext = _aGesContext;
             this.empresaContext = _empresaContext;
             this.appDbContext = _appDbContext;
+            this.conConfig = _conConfig;
             this.env = _env;
         }
 
         public IActionResult Index()
         {
-            idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idGabContab");
-            idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idEmpresaContab");
-            AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "idAnoEmpresaContab");
+            idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDGabContab");
+            idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDEmpresaContab");
+            AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "sessionIDAnoEmpresaContab");
 
             int EmpresaID;
             if (idGabContab == 0)
@@ -101,7 +112,7 @@ namespace toDoList.Controllers
             tmp.TipoDocumento = GetTipoDocumento(connString);
             tmp.LancamentoUnico = false;
             tmp.InputFilePath = "";
-            tmp.OutputFilePath = "";
+            tmp.OutputFilePath = "C:\\Sage Data\\Sage Accountants\\" + dadosEmpresaImportada.CodeEmpresa + AnoEmpresaContab + dadosEmpresaImportada.CodeAplicacao ; 
 
             return PartialView("~/Views/ExcelLab/Index.cshtml", tmp);
    
@@ -153,9 +164,9 @@ namespace toDoList.Controllers
         [HttpGet]
         public JsonResult FillDiarioLancamento()
         {
-            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idGabContab");
-            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idEmpresaContab");
-            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "idAnoEmpresaContab");
+            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDGabContab");
+            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDEmpresaContab");
+            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "sessionIDAnoEmpresaContab");
 
             IEnumerable<EmpresasViewModel> tmp_empVmodel = empresaContext.GetModelByID(idEmpresaContab);
 
@@ -182,8 +193,8 @@ namespace toDoList.Controllers
             string fileName = "NIFempresaSage_Ano_MesNumero.xlsx";
             string excelFileFullPath = Path.Combine($"{remoteUri}", fileName).Replace("/", "\\");
 
-            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idEmpresaContab");
-            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "idAnoEmpresaContab");
+            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDEmpresaContab");
+            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "sessionIDAnoEmpresaContab");
 
             IEnumerable<EmpresasViewModel> tmp_empVmodel = empresaContext.GetModelByID(idEmpresaContab);
             GabContabilidadeRepository gabContabilidade = new GabContabilidadeRepository(appDbContext);
@@ -199,7 +210,7 @@ namespace toDoList.Controllers
             var tExt = GetMimeTypes()[ext];
             int _year = DateTime.Now.Year;
             int _month = DateTime.Now.Month;
-            string outputFileName = $"{tmp_empVmodel.ToList()[0].NIF}{dadosEmpresaImportada.CodeEmpresa}{dadosEmpresaImportada.CodeAplicacao}_{_year.ToString()}_{_month.ToString()}.xlsx";
+            string outputFileName = $"{tmp_empVmodel.ToList()[0].NIF}_{dadosEmpresaImportada.CodeEmpresa}{dadosEmpresaImportada.CodeAplicacao}_{_year.ToString()}_{_month.ToString()}.xlsx";
             
             return File(memory, GetMimeTypes()[ext], outputFileName);
         }
@@ -223,8 +234,30 @@ namespace toDoList.Controllers
 
         [HttpGet]
         [Route("ExcelLab/ConvertFile")]
-        public async Task<JsonResult> ConvertFile(ExcelLabViewModel model)
+        public JsonResult ConvertFile(ExcelLabViewModel model)
         {
+            if (model.DiarioLancamentoInt == "0")
+            {
+                return Json(new { success = false, message = "Escolha um diário de lançamento!" });
+            }
+
+            if (model.TipoLancamentoInt == "0")
+            {
+                return Json(new { success = false, message = "Escolha o tipo de lançamento!" });
+            }
+
+            if (model.TipoDocumentoInt == "0")
+            {
+                return Json(new { success = false, message = "Escolha o tipo de documento!" });
+            }
+            if (model.InputFilePath == null)
+            {
+                return Json(new { success = false, message = "Escolha um ficheiro *.xlsx para importar" });
+            }
+
+            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDGabContab");
+            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDEmpresaContab");
+            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "sessionIDAnoEmpresaContab");
 
             IEnumerable<EmpresasViewModel> tmp_empVmodel = empresaContext.GetModelByID(idEmpresaContab);
             GabContabilidadeRepository gabContabilidade = new GabContabilidadeRepository(appDbContext);
@@ -233,33 +266,37 @@ namespace toDoList.Controllers
             string baseDados = dadosEmpresaImportada.CodeEmpresa + AnoEmpresaContab + dadosEmpresaImportada.CodeAplicacao;
 
             string connString = "server=.;database=" + baseDados + ";Trusted_Connection=true;MultipleActiveResultSets=true;";
-            
+
             using var context = new CustomDbContext(connString);
 
-            string importedExcelFilePath = model.InputFilePath;
+            string importedExcelFilePath = encryptionHelper.Decrypt(model.InputFilePath);
+
+            model.InputFilePath = importedExcelFilePath;
 
             //FileUpload1.SaveAs(ExcelFilePath);
 
-            //string XMLFilePath = this.txtOutput.Text;
+            string XMLFilePath = model.OutputFilePath;
 
             //string LocalCon = Session["LocalConnection"].ToString();
-            //string CodEmpSage = Session["EmpSage"].ToString();
+
+            string CodEmpSage = dadosEmpresaImportada.CodeEmpresa;
+
             //string EmpSageCon = Session["EmpSageConnection"].ToString();
 
-            //string CodDiario = this.ddrDiarioLanc.SelectedValue;
-            //string TipoLanc = this.ddrTipoLanc.SelectedValue;
-            //string TipoDoc = this.ddrTipoDoc.SelectedValue;
-            //bool LancUnico = this.chkLancUnico.Checked;
+            string CodDiario = model.DiarioLancamentoInt; //this.ddrDiarioLanc.SelectedValue;
+            string TipoLanc = model.TipoLancamentoInt;//this.ddrTipoLanc.SelectedValue;
+            string TipoDoc = model.TipoDocumentoInt; //this.ddrTipoDoc.SelectedValue;
+            bool LancUnico = model.LancamentoUnico;
 
-            //string[] ExcelPathArray = ExcelFilePath.Split('\\');
-            //string fileName = ExcelPathArray[ExcelPathArray.Length - 1];
-            //string[] fileNameArray = fileName.Split('.');
-            //string fileNameNoExt = fileNameArray[0];
-            //int index = fileNameNoExt.IndexOf(" (");
-            //string fileNameNoExtRep = index >= 0 ? fileNameNoExt.Remove(index) : fileNameNoExt;
-            //string[] fileNameNoExtArray = fileNameNoExtRep.Split('_');
-            //string NIF = fileNameNoExtArray[0];
-            //string Year = fileNameNoExtArray[1];
+            string[] ExcelPathArray = importedExcelFilePath.Split('\\');
+            string fileName = ExcelPathArray[ExcelPathArray.Length - 1];
+            string[] fileNameArray = fileName.Split('.');
+            string fileNameNoExt = fileNameArray[0];
+            int index = fileNameNoExt.IndexOf(" (");
+            string fileNameNoExtRep = index >= 0 ? fileNameNoExt.Remove(index) : fileNameNoExt;
+            string[] fileNameNoExtArray = fileNameNoExtRep.Split('_');
+            string NIF = fileNameNoExtArray[0];
+            string Year = fileNameNoExtArray[1];
 
             //using (SqlConnection con = new SqlConnection(Session["LocalConnection"].ToString()))
             //{
@@ -269,45 +306,49 @@ namespace toDoList.Controllers
             //    SqlCommand selectEmpresaSage = new SqlCommand(selectEmpresaSage_query, con);
             //    string NifEmpSage = selectEmpresaSage.ExecuteScalar().ToString();
 
-            //    if (NIF != NifEmpSage && Year != Session["Ano"].ToString())
-            //    {
-            //        ShowMessage("O NIF e ano presentes no nome do ficheiro Excel não correspondem ao NIF e ano da empresa selecionada.", false, false, false, true);
-            //        return;
-            //    }
-            //    else if (NIF != NifEmpSage)
-            //    {
-            //        ShowMessage("O NIF presente no nome do ficheiro Excel não corresponde ao NIF da empresa selecionada.", false, false, false, true);
-            //        return;
-            //    }
-
-            //    con.Close();
-            //    con.Dispose();
-            //}
-
-            //if (Year != Session["Ano"].ToString())
-            //{
-            //    ShowMessage("O ano presente no nome do ficheiro Excel não corresponde ao ano selecionado.", false, false, false, true);
-            //    return;
-            //}
-
-            //string DataLanc = Convert.ToDateTime(this.txtDataLanc.Text).ToString("yyyy-MM-dd");
-
-            //var conv = new ConvertExcelToXML( DataLanc, ExcelFilePath, XMLFilePath, LocalCon, CodEmpSage, EmpSageCon, CodDiario, TipoLanc, TipoDoc, LancUnico);
-            //conv.ConvertFile();
-
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(importedExcelFilePath, FileMode.Open))
+            if (NIF != tmp_empVmodel.ToList()[0].NIF)
             {
-                await stream.CopyToAsync(memory);
+                return Json(new { success = false, message = "Contribuinte nao coincide, verifique o contribuinte a importar!" });
             }
-            memory.Position = 0;
-            var ext = Path.GetExtension(importedExcelFilePath).ToLowerInvariant();
-            var tExt = GetMimeTypes()[ext];
-            int _year = DateTime.Now.Year;
-            int _month = DateTime.Now.Month;
-            string outputFileName = $"{tmp_empVmodel.ToList()[0].NIF}{dadosEmpresaImportada.CodeEmpresa}{dadosEmpresaImportada.CodeAplicacao}_{_year.ToString()}_{_month.ToString()}.xlsx";
+            if (Year != AnoEmpresaContab)
+            {
+                return Json(new { success = false, message = "O Ano seleccionado nao coresponde com o Ano do ficheiro a importar!" });
+            }
 
-            return Json(new { success = true });
+
+            string DataLanc = model.DataLancamento.ToString("yyyy-MM-dd");//Convert.ToDateTime(this.txtDataLanc.Text).ToString("yyyy-MM-dd");
+
+            ConConfigViewModel conConfigViewModel = conConfig.FindByEmpresaId(idEmpresaContab).ToList()[0];
+            EmpresasViewModel empresaViewModel = appDbContext.EmpresasViewModel.FirstOrDefault(x => x.EmpresaID == idEmpresaContab);
+            Empr empr = aGesContext.Emprs.FirstOrDefault(x => x.Ncontrib == NIF && x.Cemp == dadosEmpresaImportada.CodeEmpresa);
+
+            var conv = new ConvertExcelToXML(model, baseDados, dadosEmpresaImportada, conConfigViewModel, empresaViewModel, empr);
+
+            List<ErrorLine> Errors = new List<ErrorLine>();
+
+            conv.ConvertFile();
+            Errors = conv.errors;
+
+            if (Errors.Count > 0)
+            {
+                return Json(new { success = true, message = "Arquivo parcialmente exportado com sucesso! Verifique os erros!", errors = JsonSerializer.Serialize(Errors) });
+            }
+
+            return Json(new { success = true, message = "Ficheiro convertido com sucesso!" });
+
+            //    var memory = new MemoryStream();
+            //using (var stream = new FileStream(importedExcelFilePath, FileMode.Open))
+            //{
+            //    await stream.CopyToAsync(memory);
+            //}
+            //memory.Position = 0;
+            //var ext = Path.GetExtension(importedExcelFilePath).ToLowerInvariant();
+            //var tExt = GetMimeTypes()[ext];
+            //int _year = DateTime.Now.Year;
+            //int _month = DateTime.Now.Month;
+            //string outputFileName = $"{tmp_empVmodel.ToList()[0].NIF}_{dadosEmpresaImportada.CodeEmpresa}{dadosEmpresaImportada.CodeAplicacao}_{_year.ToString()}_{_month.ToString()}.xlsx";
+
+
         }
 
     }

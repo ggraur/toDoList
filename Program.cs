@@ -31,6 +31,9 @@ namespace toDoList
                     logging.AddDebug();
                     logging.AddEventSourceLogger();
                     logging.AddNLog();
-                });
+                })
+             
+            ;
+        
     }
 }
