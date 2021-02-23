@@ -13,13 +13,13 @@ namespace toDoList.ViewModels
         public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Senha")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm Password")]
-        [Compare("Password", ErrorMessage = "Password and confirmation password do not match")]
+        [Display(Name = "Confirmar a Senha")]
+        [Compare("Password", ErrorMessage = "A senha não corresponde à senha de confirmação!")]
         public string ConfirmPassword { get; set; }
-
-        public string City { get; set; }
+    
     }
 }

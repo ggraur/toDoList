@@ -5,7 +5,23 @@
 @{
     ViewData["Title"] = "Excel Converter";
 }
+<style>
+    .btnClose {
+        /*position: absolute;*/
+        /*right: 25px;
+        top: 0;*/
+        float: right;
+        color: #000;
+        font-size: 35px;
+        font-weight: bold;
+    }
 
+        .btnClose:hover,
+        .btnClose:focus {
+            color: red;
+            cursor: pointer;
+        }
+</style>
 <div class="card">
     <div class="card-header">
         <p class="h3 text-center">CONVERTER EXCEL PARA SAGE</p>
@@ -17,18 +33,19 @@
         <form>
             <div class="form-group" disabled>
                 <label asp-for="CodEmpresa" class="control-label col-3"></label>
-                <input id="expEmpresaSageId" asp-for="CodEmpresa" disabled />
+                <input id="expCodEmpresa" asp-for="CodEmpresa" disabled />
                 <span asp-validation-for="CodEmpresa" class="text-danger"></span>
             </div>
             <div class="form-group" disabled>
                 <label asp-for="AnoLancamento" class="control-label col-3"></label>
-                <input id="expEmpresaSageId" asp-for="AnoLancamento" disabled />
+                <input id="expAnoLancamento" asp-for="AnoLancamento" disabled />
                 <span asp-validation-for="AnoLancamento" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MesLancamento" class="control-label  col-3"></label>
                 @Html.DropDownListFor(o => o.MesLancamento, Enum.GetValues(typeof(MonthEnum)).Cast<MonthEnum>
-                    ().Select(x => new SelectListItem { Text = x.ToString(), Value = ((int)x).ToString() }))
+                    ().Select(x => new SelectListItem { Text = x.ToString(), Value = ((int)x).ToString() }),
+                                                    htmlAttributes: new { @class = "form-control DropDownListFor", id = "expMesLancamento" })
                 <span asp-validation-for="MesLancamento" class="text-danger"></span>
             </div>
             <div class="table">
@@ -37,21 +54,21 @@
                         <div class="form-group">
                             <label asp-for="DiarioLancamento" class="control-label"></label>
                             @Html.DropDownListFor(x => x.DiarioLancamento, new SelectList(Model.DiarioLancamento, "Value", "Text"),
-                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "idDiarioLancamento" })
+                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "expDiarioLancamento" })
                         </div>
                     </div>
                     <div class="row-cols-2" style="width:300px !important;">
                         <div class="form-group">
                             <label asp-for="TipoLancamento" class="control-label"></label>
                             @Html.DropDownListFor(x => x.TipoLancamento, new SelectList(Model.TipoLancamento, "Value", "Text"),
-                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "idTipoLancamento" })
+                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "expTipoLancamento" })
                         </div>
                     </div>
                     <div class="row-cols-3" style="width:300px !important;">
                         <div class="form-group" style="white-space: nowrap !important; display: inline-block; text-align: center !important;">
                             <label asp-for="TipoDocumento" class="control-label"></label>
                             @Html.DropDownListFor(x => x.TipoDocumento, new SelectList(Model.TipoDocumento, "Value", "Text"),
-                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "idTipoDocumento" })
+                                                       htmlAttributes: new { @class = "form-control DropDownListFor", id = "expTipoDocumento" })
                         </div>
                     </div>
                 </div>
@@ -60,18 +77,18 @@
                 <div class="row" style="margin-left:7px;">
                     <div class="row-cols-1">
                         @*<div class="form-group"  >*@
-                            <label asp-for="LancamentoUnico" class="control-label" style="position:relative;top:7px;"></label>&nbsp;
-                            <input type="checkbox" value="@Model.LancamentoUnico" style="position:relative;top:7px; "  class="form-check-inline"/>
+                        <label asp-for="LancamentoUnico" class="control-label" style="position:relative;top:7px;"></label>&nbsp;
+                        <input id="expLancamentoUnico" type="checkbox" value="@Model.LancamentoUnico" style="position:relative;top:7px; " class="form-check-inline" />
                         @*</div>*@
                     </div>&nbsp;&nbsp;
                     <div class="row-cols-2">
-                        <div class="form-group" style="white-space: nowrap !important; display: inline-block; text-align: center !important;" >
+                        <div class="form-group" style="white-space: nowrap !important; display: inline-block; text-align: center !important;">
                             <label asp-for="DataLancamento" class="control-label"></label> &nbsp;
-                            <input id="clabDataLancamento" type="date" style="width:200px !important;display:inline-block;position:relative; " class="form-control" value="@Model.DataLancamento.ToString("yyyy-MM-dd")" />
+                            <input id="expDataLancamento" type="date" style="width:200px !important;display:inline-block;position:relative; " class="form-control" value="@Model.DataLancamento.ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
 
-                </div> 
+                </div>
                 <div class="form-group" style="white-space: nowrap !important; display: inline-block; text-align: center !important;">
                     <a id="btnTransfExemplo" class="btn btn-warning float-right" style="width:180px !important;"><i class="bi bi-download"></i>&nbsp;Transferir Exemplo</a>
                 </div>
@@ -79,14 +96,20 @@
             <div class="form-group ">
                 <div>
                     <div class="custom-file">
-                        <input type="file" accept=".xls,.xlsx" class="custom-file-input col-3" id="clabInputFilePath">
+                        <input type="file" accept=".xls,.xlsx" class="custom-file-input col-3" id="expInputFilePath">
                         <label id="inputFileLabel" class="custom-file-label" asp-for="InputFilePath">Caminho do ficheiro '.xls/.xlsx'</label>
+                        <input id="encPath" style="width:auto" hidden />
+                        <div id="idWell" class="well" style="display:none;">
+                            <div class="alert-success">
+                                <h5 id="idUpload"></h5>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="OutputFilePath" class="control-label col-3"></label>
-                <input id="clabOutputFilePAth" value="@Model.OutputFilePath" disabled class="form-control" />
+                <input id="expOutputFilePath" value="@Model.OutputFilePath" disabled class="form-control" />
                 <span asp-validation-for="OutputFilePath" class="text-danger"></span>
             </div>
         </form>
@@ -95,14 +118,194 @@
         <a id="btnConverter" class="btn btn-primary">Converter</a>
         <a id="btnLimpar" class="btn btn-warning">Limpar</a>
     </div>
+    <div id="idDivError" class="well" style="display:none;">
+        <div class="alert-danger">
+            <h5 id="idErroExport"></h5>
+        </div>
+    </div>
+    <div id="idDivSuccess" class="well" style="display:none;">
+        <div class="alert-success">
+            <h5 id="idSuccessExport"></h5>
+        </div>
+    </div>
+    <br />
+    <div id="idDivListError" class="card" style="display:none;">
+        <div class="card-header">
+            <span onclick="document.getElementById('idDivListError').style.display='none'" class="btnClose float-right">&times;</span>
+            <p class="h2">Lista com erros!</p>
+        </div>
+        <br />
+        <div class="card-body">
+            <div class="well">
+                <div class="alert-danger">
+                    <p id="idListErrorsExport" class="h3"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+    $('.custom-file-input').on('change',
+        function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+
     $('#btnTransfExemplo').on('click', function () {
         window.location.href = "@Url.Action("GetExample", "ExcelLab", new { httproute = "" })";
     });
     $('#btnLimpar').on('click', function () {
         RenderWithNoRefresh("/ExcelLab/Index")
     });
+
+
+    $('#expInputFilePath').on('change', function (e) {
+        //how upload files
+        // https://stackoverflow.com/questions/2320069/jquery-ajax-file-upload
+        var file = $(this)[0].files[0];
+
+        // alert("file" + file);
+        var upload = new Upload(file);
+
+        // maby check size or type here with upload.getSize() and upload.getType()
+
+        // execute upload
+        upload.doUpload("CLab/UploadFile", "POST");
+    });
+
+    var Upload = function (file) {
+        this.file = file;
+    };
+
+    Upload.prototype.getType = function () {
+        return this.file.type;
+    };
+    Upload.prototype.getSize = function () {
+        return this.file.size;
+    };
+    Upload.prototype.getName = function () {
+        return this.file.name;
+    };
+    Upload.prototype.doUpload = function (_url, method) {
+        var that = this;
+        var formData = new FormData();
+
+        // add assoc key values, this will be posts values
+        formData.append("file", this.file, this.getName());
+        formData.append("upload_file", true);
+
+        $.ajax({
+            type: method, //"POST",
+            url: _url, //"CLab/UploadFile",
+            data: formData,
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', that.progressHandling, false);
+                }
+                return myXhr;
+            },
+            success: function (data) {
+                $('#idUpload').html(data.message);
+                $('#encPath').attr('value', data.filePath)
+                $('#idWell').show().css("display", "inline").fadeOut(3000);
+            },
+            error: function (error) {
+                // handle error
+            },
+            async: true,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            timeout: 60000
+        });
+    };
+    Upload.prototype.progressHandling = function (event) {
+        var percent = 0;
+        var position = event.loaded || event.position;
+        var total = event.total;
+        var progress_bar_id = "#progress-wrp";
+        if (event.lengthComputable) {
+            percent = Math.ceil(position / total * 100);
+        }
+        // update progressbars classes so it fits your code
+        $(progress_bar_id + " .progress-bar").css("width", +percent + "%");
+        $(progress_bar_id + " .status").text(percent + "%");
+    };
+    $('#btnConverter').on('click', function () {
+        var _CodEmpresa = $('#expCodEmpresa').val();
+        var _AnoLancamento = $('#expAnoLancamento').val();
+        var _MesLancamento = $('#expMesLancamento option:selected').val();
+        var _MesLancamentoTxt = $('#expMesLancamento option:selected').text();
+
+        var _DiarioLancamento = $('#expDiarioLancamento option:selected').val();
+        var _DiarioLancamentoStr = $('#expDiarioLancamento option:selected').text();
+
+        var _TipoLancamento = $('#expTipoLancamento option:selected').val();
+        var _TipoLancamentoStr = $('#expTipoLancamento option:selected').text();
+
+        var _TipoDocumento = $('#expTipoDocumento option:selected').val();
+        var _TipoDocumentoStr = $('#expTipoDocumento option:selected').text();
+
+        var _LancamentoUnico = $('#expLancamentoUnico').prop('checked');
+        var _DataLancamento = $('#expDataLancamento').val();
+        var _InputFilePath = $('#encPath').val();// $('#expInputFilePath').val();
+        var _OutputFilePath = $('#expOutputFilePath').val();
+
+        var _data =
+        {
+            CodEmpresa: _CodEmpresa,
+            AnoLancamento: _AnoLancamento,
+            MesLancamento: _MesLancamento,
+            MesLancamentoTxt: _MesLancamentoTxt,
+
+            DiarioLancamentoInt: _DiarioLancamento,
+            DiarioLancamentoStr: _DiarioLancamentoStr,
+
+            TipoLancamentoInt: _TipoLancamento,
+            TipoLancamentoStr: _TipoLancamentoStr,
+
+            TipoDocumentoInt: _TipoDocumento,
+            TipoDocumentoStr: _TipoDocumentoStr,
+
+            LancamentoUnico: _LancamentoUnico,
+            DataLancamento: _DataLancamento,
+            InputFilePath: _InputFilePath,
+            OutputFilePath: _OutputFilePath
+        }
+
+      //  alert(_DiarioLancamento);
+
+        $.ajax({
+            url: "/ExcelLab/ConvertFile",
+            type: "GET",
+            cache: false,
+            data: _data,
+            success: function (data) {
+                if (data.success === true) {
+                    $('#idSuccessExport').html(data.message);
+                    $('#idDivSuccess').show().css("display", "inline").fadeOut(10000);
+                    var obj = data.errors;
+
+                    $.each(JSON.parse(obj), function (key, value) {
+                        $('#idListErrorsExport').append("Erro:N " + key + ": Conta: " + value.AccountID + " Erro: " + value.ErrorMsg + "<br/>");
+                    });
+
+                    $('#idDivListError').show().css("display", "inline");
+
+                }
+                if (data.success === false) {
+                    $('#idErroExport').html(data.message);
+                    $('#idDivError').show().css("display", "inline").fadeOut(10000);
+                }
+            }
+            , error: function (error) {
+                alert("there was error convert/export file!");
+            }
+        }, 'json');
+    });
+
 </script>
 

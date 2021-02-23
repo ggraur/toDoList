@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ using toDoList.Models;
 using toDoList.ViewModels;
 namespace toDoList.Controllers
 {
+    [Authorize]
     public class CLabController : Controller
     {
 
@@ -44,9 +46,9 @@ namespace toDoList.Controllers
         public ActionResult Export()
         {
             int EmpresaID;
-            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idGabContab");
-            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idEmpresaContab");
-            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "idAnoEmpresaContab");
+            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDGabContab");
+            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDEmpresaContab");
+            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "sessionIDAnoEmpresaContab");
 
             if (idGabContab == 0)
             {
@@ -135,9 +137,9 @@ namespace toDoList.Controllers
             EncryptionHelper encryptionHelper = new EncryptionHelper();
             string ASCFilePath = encryptionHelper.Decrypt(model.InputFilePathStr);
 
-            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idGabContab");
-            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idEmpresaContab");
-            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "idAnoEmpresaContab");
+            int idGabContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDGabContab");
+            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDEmpresaContab");
+            string AnoEmpresaContab = SessionHelper.GetObjectFromJson<string>(HttpContext.Session, "sessionIDAnoEmpresaContab");
 
             //string ASCFilePath = $"{env.WebRootPath}/SageData/InputSageFiles/{model.InputFilePath.FileName}".Replace("/", "\\");
 

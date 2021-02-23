@@ -52,7 +52,7 @@ namespace toDoList.Controllers
                 GabContabilidadeRepository gabContabilidade = new GabContabilidadeRepository(context);
                 IEnumerable<SelectListItem> emprGabContab = gabContabilidade.GetEmprGabContabilidade(EmpresaID);
 
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "idGabContab", EmpresaID.ToString());
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "sessionIDGabContab", EmpresaID.ToString());
            
                 return JsonSerializer.Serialize(emprGabContab);
             }
@@ -67,7 +67,7 @@ namespace toDoList.Controllers
                 GabContabilidadeRepository gabContabilidade = new GabContabilidadeRepository(context);
                 IEnumerable<SelectListItem> emprGabContabAno = gabContabilidade.GetEmprGabContabilidadeAno(EmpresaID);
                 
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "idEmpresaContab", EmpresaID.ToString());
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "sessionIDEmpresaContab", EmpresaID.ToString());
                 return JsonSerializer.Serialize(emprGabContabAno);
             }
             return null;
@@ -75,14 +75,14 @@ namespace toDoList.Controllers
         
         [HttpGet]
         public string SaveSessionAnoEmprContab(string AnoSelectionado) {
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "idAnoEmpresaContab", AnoSelectionado.ToString());
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "sessionIDAnoEmpresaContab", AnoSelectionado.ToString());
 
-            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "idEmpresaContab");
+            int idEmpresaContab = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "sessionIDEmpresaContab");
 
             GabContabilidadeRepository gabContabilidade = new GabContabilidadeRepository(context);
             DadosEmpresaImportada empVmodel = gabContabilidade.GetEmpresaModel(idEmpresaContab,Int16.Parse(AnoSelectionado));
             
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "CodeEmpresa", empVmodel.CodeEmpresa.ToString());
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "sessionCodeEmpresa", empVmodel.CodeEmpresa.ToString());
 
             return JsonSerializer.Serialize(AnoSelectionado);
         }

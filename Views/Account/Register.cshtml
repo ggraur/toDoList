@@ -4,7 +4,7 @@
     ViewBag.Title = "User Registration";
     //Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<form method="post">
+<form method="post" asp-action="Register">
     <div class="card">
         <div class="card-header">
             <h1>New User Registration</h1>
@@ -13,27 +13,97 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
+                    <div id="divError" class="well  hide">
+                        <div id="idDivAlert" class="hide">
+                            <p id="iddivError" class="h3 font-weight-bold"></p>
+                        </div>
+                    </div>
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Email"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <input id="idEmail" asp-for="Email" class="form-control" />
+                        <span id="idEmailSpan" asp-validation-for="Email" class="text-danger hide"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Password"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <input id="idPassword" asp-for="Password" class="form-control" />
+                        <span id="idPasswordSpan" asp-validation-for="Password" class="text-danger hide"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="ConfirmPassword"></label>
-                        <input asp-for="ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        <input id="idConfirmPassword" asp-for="ConfirmPassword" class="form-control" />
+                        <span id="idConfirmPasswordSpan" asp-validation-for="ConfirmPassword" class="text-danger hide"></span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary" style="width:auto">Register User</button>
+            @*<button type="submit" class="btn btn-primary" style="width:auto">Register User</button>*@
+            <a id="btnRegister" class="btn btn-primary" style="width:auto">Register User</a>
         </div>
     </div>
 </form>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#btnRegister').on('click', function () {
+            var _Email = $('#idEmail').val();
+            var _Password = $('#idPassword').val();
+            var _ConfirmPassword = $('#idConfirmPassword').val();
+            var _data = {
+                Email: _Email,
+                Password: _Password,
+                ConfirmPassword: _ConfirmPassword
+            };
+
+            $.ajax({
+                url: '/Account/RegisterAjax',
+                async: true,
+                type: 'post',
+                cache: false,
+                data: _data,
+                success: function (data) {
+                    if (data.success === true) {
+                        $('#iddivError').html(data.message);
+                        $("#idDivAlert").addClass("alert alert-success");
+                        $('#divError').show().css("display", "inline").fadeOut(5000);
+                     }
+                    if (data.success === false)
+                    {
+                        if (data.error === "PasswordTooShort"
+                            || data.error === "PasswordRequiresDigit"
+                            || data.error === "PassNotEgual"
+                            || data.error === "DuplicateUserName"
+                        )
+                        {
+                            if (data.error === "PasswordTooShort" || data.error === "PasswordRequiresDigit" )
+                            {
+                                $('#idPasswordSpan').html(data.message);
+                                $('#idPasswordSpan').show().css("display", "inline").fadeOut(5000);
+                            };
+                            if (data.error === "PassNotEgual") {
+                                $('#idPasswordSpan').html(data.message);
+                                $('#idPasswordSpan').show().css("display", "inline").fadeOut(5000);
+                                $('#idConfirmPasswordSpan').html(data.message);
+                                $('#idConfirmPasswordSpan').show().css("display", "inline").fadeOut(5000);
+                            };
+                            if (data.error === "DuplicateUserName") {
+                                $('#idEmailSpan').html(data.message);
+                                $('#idEmailSpan').show().css("display", "inline").fadeOut(5000);
+                            };
+                        }
+                    }
+                },
+                error: function (error) {
+                    // handle error
+                    alert(error.message);
+                }
+            },'json');
+        });
+    });
+
+
+
+</script>
